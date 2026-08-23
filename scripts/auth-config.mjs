@@ -101,18 +101,18 @@ const CONFIG = {
 
   // --- rate limits ----------------------------------------------------
   //
-  // Raised for development. Testing signup and password reset repeatedly hits
-  // the defaults within minutes and the failure surfaces as "too many
-  // attempts", which looks like a bug in the app rather than a limit.
+  // Sized to be generous for a real madrasa — an owner enrolling a class of
+  // thirty will not notice — while still closing the door on credential
+  // stuffing. They were briefly raised to 200-500 for signup testing; that is
   //
-  // These are brute-force protection and section 10.4 depends on them. Before
-  // real families use this, bring them back down — sign-in especially. The
-  // per-IP and per-email lockouts in the spec are the ones that matter, and
-  // they are not free to leave wide open.
-  rate_limit_anonymous_users: 200,
-  rate_limit_verify: 200,
-  rate_limit_token_refresh: 500,
-  rate_limit_otp: 200,
+  // fine on a laptop and not on a system holding children's records, where
+  // these limits ARE the brute-force protection required by section 10.4.
+  //
+  //
+  rate_limit_anonymous_users: 30,
+  rate_limit_verify: 30,
+  rate_limit_token_refresh: 150,
+  rate_limit_otp: 30,
   rate_limit_email_sent: 100,
 
   // --- sessions (spec 10.5) -------------------------------------------
