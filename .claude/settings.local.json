@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(node --version)",
+      "PowerShell(npm --version)",
+      "Bash(npm run *)",
+      "Bash(node -e \"for \\(const f of ['en','sw','so','ar']\\) { JSON.parse\\(require\\('fs'\\).readFileSync\\('apps/mobile/src/i18n/locales/'+f+'.json','utf8'\\)\\); console.log\\(f+'.json OK'\\); }\")",
+      "Bash(cd \"c:/Users/Mohammednur/OneDrive/Desktop/ONLINE MADRASA APP/apps/mobile\" && ls node_modules/phosphor-react-native/src/icons/ 2>/dev/null | grep -i \"videocamera\\\\|linksimple\" ; ls ../../node_modules/phosphor-react-native/lib/icons/ 2>/dev/null | grep -i \"videocamera\\\\|linksimple\")",
+      "Read(//c/Users/Mohammednur/OneDrive/node_modules/phosphor-react-native/lib/**)",
+      "Bash(node -e ' *)",
+      "Bash(npx expo *)",
+      "Bash(rm -rf /tmp/dm-export-check && echo cleaned)"
+    ],
+    "additionalDirectories": [
+      "\\tmp"
+    ]
+  }
+}

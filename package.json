@@ -1,0 +1,40 @@
+{
+  "name": "digital-madrasa",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "services/*"
+  ],
+  "scripts": {
+    "mobile": "npm run start --workspace @digital-madrasa/mobile",
+    "mobile:android": "npm run android --workspace @digital-madrasa/mobile",
+    "mobile:ios": "npm run ios --workspace @digital-madrasa/mobile",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "secret-scan": "node scripts/secret-scan.mjs",
+    "db:run": "node scripts/db-run.mjs",
+    "db:migrate": "node scripts/db-run.mjs supabase/migrations/*.sql",
+    "db:verify": "node scripts/db-run.mjs supabase/tests/verify_core_guarantees.sql",
+    "auth:config": "node scripts/auth-config.mjs",
+    "auth:config:apply": "node scripts/auth-config.mjs --apply",
+    "db:verify:subs": "node scripts/db-run.mjs supabase/tests/verify_subscription.sql",
+    "db:seed": "node scripts/seed-remote.mjs",
+    "db:check-auth": "node scripts/check-supabase-auth.mjs",
+    "db:types": "npx supabase gen types typescript --project-id rblnistltccysizdcnvt > packages/shared/src/database.types.ts",
+    "db:check-admin": "node scripts/check-admin-guard.mjs",
+    "grant-admin": "node scripts/grant-admin.mjs",
+    "ai:dev": "node --env-file=services/ai-gateway/.env --watch services/ai-gateway/src/server.ts",
+    "ai:start": "node --env-file=services/ai-gateway/.env services/ai-gateway/src/server.ts",
+    "ai:check": "node scripts/check-ai-gateway.mjs",
+    "db:seed:learning": "node scripts/seed-learning-data.mjs",
+    "ai:url": "node scripts/set-gateway-url.mjs",
+    "check:screens": "node scripts/check-screens.mjs",
+    "db:seed:ops": "node scripts/seed-operations.mjs"
+  },
+  "engines": {
+    "node": ">=20.19.4"
+  }
+}

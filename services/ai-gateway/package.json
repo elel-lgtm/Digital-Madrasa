@@ -1,0 +1,22 @@
+{
+  "name": "@digital-madrasa/ai-gateway",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Role-aware AI gateway. Sits between the mobile app and Ollama; never holds a privileged database key.",
+  "scripts": {
+    "dev": "node --watch src/server.ts",
+    "start": "node src/server.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.60.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "typescript": "~5.9.2"
+  },
+  "engines": {
+    "node": ">=22.6.0"
+  }
+}
