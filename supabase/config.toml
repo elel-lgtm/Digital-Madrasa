@@ -26,3 +26,6 @@ verify_jwt = true
 
 [functions.madrasa-lifecycle]
 verify_jwt = true
+
+[functions.health]
+verify_jwt = false

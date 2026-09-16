@@ -30,7 +30,7 @@ interface Body {
 
 const GENERIC_FAILURE = 'We couldn\u2019t verify that admission number.';
 
-export default handler(async (req) => {
+Deno.serve(handler(async (req) => {
   if (req.method !== 'POST') throw new PublicError(405, 'method', 'POST required.');
 
   const caller = await authenticate(req);
@@ -153,4 +153,4 @@ export default handler(async (req) => {
     .maybeSingle();
 
   return json({ madrasaName: madrasa?.name ?? '' }, 201);
-});
+}));

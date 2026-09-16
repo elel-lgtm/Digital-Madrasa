@@ -38,7 +38,7 @@ function derivedEmail(fullName: string, madrasaSlug: string): string {
   return `${handle}.${suffix}@${madrasaSlug}.students.local`;
 }
 
-export default handler(async (req) => {
+Deno.serve(handler(async (req) => {
   if (req.method !== 'POST') throw new PublicError(405, 'method', 'POST required.');
 
   const caller = await authenticate(req);
@@ -158,4 +158,4 @@ export default handler(async (req) => {
     console.error('[create-student]', error);
     throw new PublicError(500, 'internal', 'Could not enrol the student.');
   }
-});
+}));

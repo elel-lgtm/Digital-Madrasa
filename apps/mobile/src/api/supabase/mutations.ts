@@ -207,8 +207,9 @@ export async function markAttendance(input: MarkAttendanceInput): Promise<Attend
 
   const { data, error } = await supabase
     .from('attendance')
-    // One session per student per day: re-marking corrects rather than duplicates.
-    .upsert(rows, { onConflict: 'class_id,student_id,session_date' })
+    // One session per student per day — the unique key is (student_id,
+    // session_date), so re-marking corrects rather than duplicates.
+    .upsert(rows, { onConflict: 'student_id,session_date' })
     .select('*');
 
   if (error) fail(error, 'Could not save attendance.');

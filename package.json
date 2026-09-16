@@ -35,7 +35,8 @@
     "db:seed:ops": "node scripts/seed-operations.mjs",
     "db:query": "node scripts/db-query.mjs",
     "db:backup": "node scripts/db-backup.mjs",
-    "db:restore": "node scripts/db-restore.mjs"
+    "db:restore": "node scripts/db-restore.mjs",
+    "db:storage": "node scripts/setup-storage.mjs"
   },
   "engines": {
     "node": ">=20.19.4"
