@@ -1,0 +1,28 @@
+# Supabase project configuration.
+#
+# Only the parts we actually use are declared. Local stack settings are
+# deliberately omitted: this project deploys straight to the hosted project
+# via `supabase functions deploy --use-api`, which needs no Docker.
+
+project_id = "rblnistltccysizdcnvt"
+
+[functions.create-student]
+verify_jwt = true
+
+[functions.issue-invoices]
+verify_jwt = true
+
+[functions.link-child]
+verify_jwt = true
+
+[functions.decide-link]
+verify_jwt = true
+
+[functions.attendance-qr]
+verify_jwt = true
+
+[functions.evaluate-recitation]
+verify_jwt = true
+
+[functions.madrasa-lifecycle]
+verify_jwt = true

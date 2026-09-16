@@ -1,0 +1,71 @@
+name: Backup and keep-alive
+
+# Free-tier Supabase projects pause after about a week of inactivity, and a
+# paused project can come back EMPTY — this repository has already lost a
+# database that way. This job does two things every few days:
+#
+#   1. Touches the database, which resets the inactivity timer.
+#   2. Takes a logical backup and keeps it as an artifact.
+#
+# It runs on GitHub's schedule, so it works whether or not the laptop is on —
+# which is the whole point, since the laptop being off is what caused the
+# pause in the first place.
+
+on:
+  schedule:
+    # 03:00 UTC every third day. Comfortably inside the ~7 day pause window
+    # even if one run is skipped.
+    - cron: '0 3 */3 * *'
+  workflow_dispatch:
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Write credentials
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
+        run: |
+          mkdir -p supabase
+          printf 'SUPABASE_ACCESS_TOKEN=%s\n' "$SUPABASE_ACCESS_TOKEN" > supabase/.env
+          printf 'SUPABASE_PROJECT_REF=%s\n' "$SUPABASE_PROJECT_REF" >> supabase/.env
+
+      - name: Wake the project if paused
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
+        run: |
+          STATUS=$(curl -s -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" \
+            "https://api.supabase.com/v1/projects/$SUPABASE_PROJECT_REF" \
+            | node -e "let d='';process.stdin.on('data',c=>d+=c).on('end',()=>{try{console.log(JSON.parse(d).status)}catch{console.log('UNKNOWN')}})")
+          echo "status: $STATUS"
+          if [ "$STATUS" = "INACTIVE" ]; then
+            echo "Project is paused — restoring"
+            curl -s -X POST -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" \
+              -H "Content-Type: application/json" -d '{}' \
+              "https://api.supabase.com/v1/projects/$SUPABASE_PROJECT_REF/restore"
+            sleep 180
+          fi
+
+      - name: Take backup
+        run: node scripts/db-backup.mjs --out backup
+
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: supabase-backup-${{ github.run_number }}
+          path: backup/
+          # Long enough to notice a problem and recover from it, short enough
+          # that children's records are not kept indefinitely in CI storage.
+          retention-days: 60
+
+      - name: Remove credentials
+        if: always()
+        run: rm -f supabase/.env

@@ -32,7 +32,10 @@
     "db:seed:learning": "node scripts/seed-learning-data.mjs",
     "ai:url": "node scripts/set-gateway-url.mjs",
     "check:screens": "node scripts/check-screens.mjs",
-    "db:seed:ops": "node scripts/seed-operations.mjs"
+    "db:seed:ops": "node scripts/seed-operations.mjs",
+    "db:query": "node scripts/db-query.mjs",
+    "db:backup": "node scripts/db-backup.mjs",
+    "db:restore": "node scripts/db-restore.mjs"
   },
   "engines": {
     "node": ">=20.19.4"

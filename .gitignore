@@ -51,3 +51,7 @@ Thumbs.db
 .idea/
 .vscode/*
 !.vscode/extensions.json
+
+# Local backup output — never commit children's records to git.
+backups/
+backup/
