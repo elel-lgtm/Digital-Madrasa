@@ -26,7 +26,10 @@
       "permissions": [
         "RECORD_AUDIO",
         "CAMERA",
-        "VIBRATE"
+        "VIBRATE",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS",
+        "android.permission.CAMERA"
       ],
       "versionCode": 1
     },
@@ -52,7 +55,10 @@
       "typedRoutes": false
     },
     "extra": {
-      "eas": {}
+      "eas": {
+        "projectId": "da47a3f7-f339-482e-997d-dc4889a9e96d"
+      },
+      "router": {}
     },
     "owner": "el_noury7"
   }
