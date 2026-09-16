@@ -1,0 +1,61 @@
+{
+  "cli": {
+    "version": ">= 24.0.0",
+    "appVersionSource": "remote"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      },
+      "env": {
+        "EXPO_PUBLIC_API_MODE": "mock",
+        "EXPO_PUBLIC_SUPABASE_URL": "https://rblnistltccysizdcnvt.supabase.co",
+        "EXPO_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJibG5pc3RsdGNjeXNpemRjbnZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY2NDMyNDUsImV4cCI6MjEwMjIxOTI0NX0.mN2y7dVFXNFIXNv7DmnHJk0BIxEJG69NxHElEJp5UBM",
+        "EXPO_PUBLIC_SENTRY_DSN": "",
+        "EXPO_PUBLIC_POSTHOG_KEY": "",
+        "EXPO_PUBLIC_POSTHOG_HOST": "https://eu.i.posthog.com",
+        "EXPO_PUBLIC_ENV": "development"
+      }
+    },
+    "preview": {
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      },
+      "ios": {
+        "simulator": false
+      },
+      "env": {
+        "EXPO_PUBLIC_API_MODE": "mock",
+        "EXPO_PUBLIC_SUPABASE_URL": "https://rblnistltccysizdcnvt.supabase.co",
+        "EXPO_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJibG5pc3RsdGNjeXNpemRjbnZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY2NDMyNDUsImV4cCI6MjEwMjIxOTI0NX0.mN2y7dVFXNFIXNv7DmnHJk0BIxEJG69NxHElEJp5UBM",
+        "EXPO_PUBLIC_SENTRY_DSN": "",
+        "EXPO_PUBLIC_POSTHOG_KEY": "",
+        "EXPO_PUBLIC_POSTHOG_HOST": "https://eu.i.posthog.com",
+        "EXPO_PUBLIC_ENV": "development"
+      }
+    },
+    "production": {
+      "distribution": "store",
+      "android": {
+        "buildType": "app-bundle"
+      },
+      "autoIncrement": true,
+      "env": {
+        "EXPO_PUBLIC_API_MODE": "mock",
+        "EXPO_PUBLIC_SUPABASE_URL": "https://rblnistltccysizdcnvt.supabase.co",
+        "EXPO_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJibG5pc3RsdGNjeXNpemRjbnZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY2NDMyNDUsImV4cCI6MjEwMjIxOTI0NX0.mN2y7dVFXNFIXNv7DmnHJk0BIxEJG69NxHElEJp5UBM",
+        "EXPO_PUBLIC_SENTRY_DSN": "",
+        "EXPO_PUBLIC_POSTHOG_KEY": "",
+        "EXPO_PUBLIC_POSTHOG_HOST": "https://eu.i.posthog.com",
+        "EXPO_PUBLIC_ENV": "development"
+      }
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}

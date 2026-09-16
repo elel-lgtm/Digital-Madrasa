@@ -8,19 +8,27 @@
     "userInterfaceStyle": "automatic",
     "backgroundColor": "#12100E",
     "primaryColor": "#C9A227",
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "app.digitalmadrasa.mobile",
       "infoPlist": {
         "NSMicrophoneUsageDescription": "Digital Madrasa records your recitation so your teacher and the tajweed assistant can give you feedback.",
         "NSCameraUsageDescription": "The camera is used to scan the attendance QR code shown by your teacher."
-      }
+      },
+      "buildNumber": "1"
     },
     "android": {
       "package": "app.digitalmadrasa.mobile",
       "edgeToEdgeEnabled": true,
-      "permissions": ["RECORD_AUDIO", "CAMERA", "VIBRATE"]
+      "permissions": [
+        "RECORD_AUDIO",
+        "CAMERA",
+        "VIBRATE"
+      ],
+      "versionCode": 1
     },
     "plugins": [
       "expo-router",
@@ -44,7 +52,8 @@
       "typedRoutes": false
     },
     "extra": {
-      "apiMode": "mock"
-    }
+      "eas": {}
+    },
+    "owner": "el_noury7"
   }
 }

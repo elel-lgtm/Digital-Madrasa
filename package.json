@@ -36,7 +36,8 @@
     "db:query": "node scripts/db-query.mjs",
     "db:backup": "node scripts/db-backup.mjs",
     "db:restore": "node scripts/db-restore.mjs",
-    "db:storage": "node scripts/setup-storage.mjs"
+    "db:storage": "node scripts/setup-storage.mjs",
+    "check:functions": "node scripts/check-functions.mjs"
   },
   "engines": {
     "node": ">=20.19.4"
