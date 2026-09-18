@@ -25,5 +25,9 @@ jobs:
       - name: Secret scan
         run: npm run secret-scan
 
+      # A release profile pointing at mock data shipped once already.
+      - name: Build config guard
+        run: npm run check:build-config
+
       - name: Typecheck
         run: npm run typecheck

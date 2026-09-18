@@ -20,6 +20,7 @@ import {
 } from '../types';
 import { supabase } from './client';
 import { mapStudent, mapTeacher } from './mappers';
+import { getFeesSummary } from './queries-fees';
 
 /**
  * Read queries against Supabase.
@@ -57,10 +58,16 @@ export async function listStudents(): Promise<{ items: Student[]; nextCursor: st
 }
 
 export async function listClasses(): Promise<Klass[]> {
+  // `students(count)` is an aggregate over the embedded relation, so enrolment
+  // arrives with the classes rather than as a query per card. The nested
+  // `deleted_at` filter applies to the students before they are counted —
+  // without it a withdrawn pupil would still be billed as enrolled here. RLS
+  // scopes the embedded rows too, so the count cannot span madrasas.
   const { data, error } = await supabase
     .from('classes')
-    .select('*, teachers(profile_id, profiles!teachers_profile_id_fkey(full_name))')
+    .select('*, teachers(profile_id, profiles!teachers_profile_id_fkey(full_name)), students(count)')
     .is('deleted_at', null)
+    .is('students.deleted_at', null)
     .order('name');
 
   if (error) fail(error, 'Could not load classes.');
@@ -74,7 +81,7 @@ export async function listClasses(): Promise<Klass[]> {
     teacherName: row.teachers?.profiles?.full_name ?? null,
     schedule: row.schedule ?? [],
     capacity: row.capacity,
-    studentCount: 0,
+    studentCount: row.students?.[0]?.count ?? 0,
   }));
 }
 
@@ -121,10 +128,82 @@ export async function listLessons(params: { classId?: string | null }): Promise<
   }));
 }
 
-export async function listAttendance(): Promise<AttendanceRecord[]> {
+/**
+ * The marking roster for one class on one date: exactly one row per enrolled
+ * student, carrying their record for that date when it exists.
+ *
+ * The roster is driven from `students`, not from `attendance`. Reading
+ * attendance rows directly cannot answer this question: a student who has not
+ * been marked yet has no row and would vanish from the list, while a student
+ * with a term of history would appear once per past session — which is what
+ * happened before, duplicating React keys and letting the screen mark
+ * attendance against a historical list.
+ *
+ * The embedded `attendance` is filtered to the session date, and
+ * `(student_id, session_date)` is unique, so each student carries at most one
+ * record. Anyone unmarked gets a draft defaulting to `present`, matching the
+ * mock's contract so the screen behaves identically on either backend.
+ */
+export async function listAttendance(params: {
+  classId: string;
+  sessionDate: string;
+}): Promise<AttendanceRecord[]> {
+  const { data, error } = await supabase
+    .from('students')
+    .select(
+      'id, class_id, profiles!students_profile_id_fkey(full_name), attendance(id, status, method, note, session_date, deleted_at)',
+    )
+    .eq('class_id', params.classId)
+    .is('deleted_at', null)
+    .eq('attendance.session_date', params.sessionDate)
+    .is('attendance.deleted_at', null);
+
+  if (error) fail(error, 'Could not load attendance.');
+
+  return (data ?? [])
+    .map((row: Row): AttendanceRecord => {
+      const studentName = row.profiles?.full_name ?? '';
+      const existing = (row.attendance ?? [])[0];
+
+      if (existing) {
+        return {
+          id: existing.id,
+          studentId: row.id,
+          studentName,
+          classId: row.class_id,
+          sessionDate: existing.session_date,
+          status: existing.status,
+          method: existing.method ?? 'manual',
+          note: existing.note ?? null,
+        };
+      }
+
+      return {
+        // Draft ids are never sent back to the server — `markAttendance` posts
+        // student ids and statuses — but they keep list keys unique and stable.
+        id: `draft-${row.id}-${params.sessionDate}`,
+        studentId: row.id,
+        studentName,
+        classId: params.classId,
+        sessionDate: params.sessionDate,
+        status: 'present',
+        method: 'manual',
+        note: null,
+      };
+    })
+    .sort((a, b) => a.studentName.localeCompare(b.studentName));
+}
+
+/**
+ * Recent attendance rows across the caller's whole scope, for the dashboard
+ * percentages. This is the aggregate question, not the roster question, so it
+ * deliberately reads the attendance table directly.
+ */
+async function recentAttendance(): Promise<AttendanceRecord[]> {
   const { data, error } = await supabase
     .from('attendance')
     .select('*, students(profiles!students_profile_id_fkey(full_name))')
+    .is('deleted_at', null)
     .order('session_date', { ascending: false })
     .limit(200);
 
@@ -348,14 +427,24 @@ function findLive(lessons: Lesson[]): Lesson | null {
 }
 
 export async function getTeacherDashboard(): Promise<TeacherDashboard> {
-  const [madrasaName, students, classes, lessons, attendance, announcements] = await Promise.all([
-    currentMadrasaName(),
-    listStudents(),
-    listClasses(),
-    listLessons({}),
-    listAttendance(),
-    listAnnouncements(),
-  ]);
+  const [madrasaName, students, classes, lessons, attendance, announcements, fees] =
+    await Promise.all([
+      currentMadrasaName(),
+      listStudents(),
+      listClasses(),
+      listLessons({}),
+      recentAttendance(),
+      listAnnouncements(),
+      // The same summary the Fees screen renders. The dashboard previously
+      // hardcoded zeroes, so the two screens disagreed about the same money:
+      // Ksh 0 here against Ksh 6,500 collected there.
+      //
+      // `collected` is the sum of `invoices.amount_paid` — what has been
+      // recorded as settled against each invoice, which is the ledger the rest
+      // of the app already treats as authoritative. It is not a count of
+      // invoices issued, so an unpaid invoice never inflates it.
+      getFeesSummary(),
+    ]);
 
   const { count: pendingLinks } = await supabase
     .from('parent_student_links')
@@ -369,8 +458,8 @@ export async function getTeacherDashboard(): Promise<TeacherDashboard> {
     todaysClasses: classes.map((klass) => ({ klass, attendanceMarked: false })),
     studentCount: students.items.length,
     attendanceRateThisWeek: attendanceRate(attendance),
-    feesCollected: 0,
-    feesOutstanding: 0,
+    feesCollected: fees.collected,
+    feesOutstanding: fees.outstanding,
     onboarding: [
       { key: 'add_class', done: classes.length > 0 },
       { key: 'add_student', done: students.items.length > 0 },
@@ -394,7 +483,7 @@ export async function getStudentDashboard(): Promise<StudentDashboard> {
 
   const [hifz, attendance, lessons] = await Promise.all([
     listHifzProgress(),
-    listAttendance(),
+    recentAttendance(),
     listLessons({ classId: student.classId }),
   ]);
 

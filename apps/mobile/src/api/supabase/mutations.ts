@@ -7,7 +7,6 @@ import {
   type CreateClassInput,
   type CreateFeeStructureInput,
   type CreateLessonInput,
-  type CreateStudentInput,
   type FeeStructure,
   type Grade,
   type Klass,
@@ -18,7 +17,6 @@ import {
   type SavedCard,
   type SendMessageInput,
   type SetLessonMeetingInput,
-  type Student,
   type Subscription,
   type SubscriptionInvoice,
   type SubscriptionPayment,
@@ -69,20 +67,9 @@ async function currentUserId(): Promise<string> {
 
 // ------------------------------------------------------------------ people
 
-/**
- * Enrols a student.
- *
- * Creating the auth user requires admin privileges the client does not have,
- * so this is the one place a Supabase-only implementation genuinely cannot go
- * the whole way — it needs an Edge Function to mint the login. Reported
- * honestly rather than half-done.
- */
-export async function createStudent(_input: CreateStudentInput): Promise<Student> {
-  throw new ApiError(
-    'not_implemented',
-    'Adding a student needs an Edge Function to create their login. Not built yet.',
-  );
-}
+// `createStudent` lives in edge.ts — it needs the Auth admin API to mint
+// the child’s login, which only an Edge Function can hold.
+
 
 export async function createClass(input: CreateClassInput): Promise<Klass> {
   const madrasaId = await currentMadrasaId();
@@ -300,19 +287,9 @@ export async function createFeeStructure(
   };
 }
 
-/**
- * Issues invoices for a fee structure.
- *
- * Invoice numbers must be unique and gapless per madrasa, which is a
- * server-side sequence problem, not something a client should attempt with a
- * count query. Needs an Edge Function.
- */
-export async function issueInvoices(): Promise<{ created: number }> {
-  throw new ApiError(
-    'not_implemented',
-    'Issuing invoices needs an Edge Function to allocate invoice numbers safely. Not built yet.',
-  );
-}
+// `issueInvoices` lives in edge.ts — gapless invoice numbering needs a
+// server-side sequence under a row lock.
+
 
 // ---------------------------------------------------------- communication
 

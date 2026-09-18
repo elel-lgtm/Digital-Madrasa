@@ -1,6 +1,7 @@
 import { ApiError, type ApiClient } from '../types';
 import * as auth from './auth';
 import { bindAuthRefreshToAppState } from './client';
+import * as edge from './edge';
 import * as m from './mutations';
 import * as q from './queries';
 import * as c from './queries-comms';
@@ -70,7 +71,7 @@ const implemented: Partial<ApiClient> = {
   getFeesSummary: fees.getFeesSummary,
   listPayments: fees.listPayments,
   createFeeStructure: m.createFeeStructure,
-  issueInvoices: m.issueInvoices,
+  issueInvoices: edge.issueInvoices,
 
   // ---------------------------------------------------------- recitations
   listRecitations: fees.listRecitations,
@@ -95,7 +96,7 @@ const implemented: Partial<ApiClient> = {
 
   // ---------------------------------------------------------------- writes
   createClass: m.createClass,
-  createStudent: m.createStudent,
+  createStudent: edge.createStudent,
   createLesson: m.createLesson,
   setLessonMeetingUrl: m.setLessonMeetingUrl,
   createAssignment: m.createAssignment as ApiClient['createAssignment'],
@@ -103,6 +104,13 @@ const implemented: Partial<ApiClient> = {
   recordGrade: m.recordGrade,
   createAnnouncement: m.createAnnouncement,
   sendMessage: m.sendMessage,
+
+  // ------------------------------------------- backed by Edge Functions
+  linkChild: edge.linkChild,
+  decideLinkRequest: edge.decideLinkRequest,
+  revokeLink: edge.revokeLink,
+  getAttendanceQrToken: edge.getAttendanceQrToken,
+  markAttendanceByQr: edge.markAttendanceByQr,
 
   // ----------------------------------------------------------- subscription
   getSubscription: m.getSubscription,

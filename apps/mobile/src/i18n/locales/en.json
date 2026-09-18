@@ -181,7 +181,7 @@
     "genericTitle": "Something went wrong",
     "genericBody": "We couldn't complete that. Please try again.",
     "networkTitle": "No connection",
-    "networkBody": "We couldn't reach the server. Your work is saved and will sync when you're back online.",
+    "networkBody": "We couldn't reach the server, so that change wasn't saved. Check your connection and try again.",
     "invalidCredentials": "That email or password isn't right.",
     "rateLimited": "Too many attempts. Try again in {{minutes}} minutes.",
     "notFound": "We couldn't find that.",

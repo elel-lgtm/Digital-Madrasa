@@ -18,7 +18,7 @@ import {
   Segmented,
   SkeletonList,
 } from '@/components/ui';
-import { useApiError } from '@/hooks/useApiError';
+import { useApiError, type FriendlyError } from '@/hooks/useApiError';
 import { useTheme } from '@/theme/ThemeProvider';
 import { relativeTime } from '@/utils/dates';
 
@@ -41,14 +41,27 @@ export default function LinkRequests() {
     queryFn: () => api.listLinkRequests(filter),
   });
 
+  /**
+   * Approve, reject and revoke all reach an Edge Function that can refuse the
+   * decision — the request may already be decided, the teacher may have lost
+   * access to the class, or the madrasa's subscription may have lapsed. Without
+   * an `onError` the rejection was swallowed and the row simply stayed put,
+   * which reads as "the tap did nothing" rather than as a refusal.
+   */
+  const [actionError, setActionError] = useState<FriendlyError | null>(null);
+
   const decide = useMutation({
     mutationFn: api.decideLinkRequest,
+    onMutate: () => setActionError(null),
     onSuccess: () => void queryClient.invalidateQueries(),
+    onError: (error) => setActionError(describeError(error)),
   });
 
   const revoke = useMutation({
     mutationFn: api.revokeLink,
+    onMutate: () => setActionError(null),
     onSuccess: () => void queryClient.invalidateQueries(),
+    onError: (error) => setActionError(describeError(error)),
   });
 
   const confirmRevoke = (linkId: string, parentName: string) => {
@@ -75,6 +88,19 @@ export default function LinkRequests() {
           value={filter}
           onChange={setFilter}
         />
+
+        {actionError ? (
+          <Card accent="danger">
+            <View style={{ gap: 4 }}>
+              <AppText variant="bodyStrong" color="danger">
+                {actionError.title}
+              </AppText>
+              <AppText variant="caption" color="textMuted">
+                {actionError.body}
+              </AppText>
+            </View>
+          </Card>
+        ) : null}
 
         {requests.isPending ? (
           <SkeletonList count={3} />

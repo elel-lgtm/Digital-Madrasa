@@ -70,6 +70,8 @@ export type ApiErrorCode =
   | 'conflict'
   | 'validation'
   | 'madrasa_suspended'
+  /** The madrasa's subscription has lapsed; admin features are locked. */
+  | 'subscription_lapsed'
   /** Signup succeeded but the address must be confirmed before signing in. */
   | 'email_confirmation_required'
   /** The Supabase client has no implementation for this call yet. */

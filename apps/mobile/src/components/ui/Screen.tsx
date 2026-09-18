@@ -26,6 +26,13 @@ interface ScreenProps {
 /**
  * The page frame: safe-area aware, themed background, and a consistent
  * pull-to-refresh affordance so every list refreshes the same way.
+ *
+ * The top inset is applied to the outer frame rather than to the scroll
+ * content. Both keep the first element clear of the status bar, but only the
+ * frame keeps it clear while scrolling — and because these screens draw their
+ * own headers (the navigator runs with `headerShown: false`), a header action
+ * that slides under the status bar stops receiving touches entirely: the
+ * system window swallows them, so the control looks present and does nothing.
  */
 export function Screen({
   children,
@@ -43,6 +50,15 @@ export function Screen({
   const padding: ViewStyle = {
     paddingHorizontal: flush ? 0 : theme.spacing.lg,
     paddingBottom: theme.spacing.xxxl + insets.bottom,
+  };
+
+  // Left and right matter for landscape and for display cutouts; they are zero
+  // in the common portrait case, so this costs nothing where it is not needed.
+  const frame: ViewStyle = {
+    backgroundColor: theme.colors.background,
+    paddingTop: insets.top,
+    paddingLeft: insets.left,
+    paddingRight: insets.right,
   };
 
   const body = scroll ? (
@@ -70,7 +86,7 @@ export function Screen({
   );
 
   return (
-    <View style={[styles.fill, { backgroundColor: theme.colors.background }]}>
+    <View style={[styles.fill, frame]}>
       {body}
       {footer ? (
         <View

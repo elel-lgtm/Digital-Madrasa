@@ -21,6 +21,7 @@
     "auth:config": "node scripts/auth-config.mjs",
     "auth:config:apply": "node scripts/auth-config.mjs --apply",
     "db:verify:subs": "node scripts/db-run.mjs supabase/tests/verify_subscription.sql",
+    "db:verify:invoices": "node scripts/db-run.mjs supabase/tests/verify_invoice_numbering.sql",
     "db:seed": "node scripts/seed-remote.mjs",
     "db:check-auth": "node scripts/check-supabase-auth.mjs",
     "db:types": "npx supabase gen types typescript --project-id rblnistltccysizdcnvt > packages/shared/src/database.types.ts",
@@ -37,7 +38,8 @@
     "db:backup": "node scripts/db-backup.mjs",
     "db:restore": "node scripts/db-restore.mjs",
     "db:storage": "node scripts/setup-storage.mjs",
-    "check:functions": "node scripts/check-functions.mjs"
+    "check:functions": "node scripts/check-functions.mjs",
+    "check:build-config": "node scripts/check-build-config.mjs"
   },
   "engines": {
     "node": ">=20.19.4"
