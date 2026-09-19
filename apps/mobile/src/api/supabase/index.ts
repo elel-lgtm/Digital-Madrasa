@@ -76,6 +76,8 @@ const implemented: Partial<ApiClient> = {
   // ---------------------------------------------------------- recitations
   listRecitations: fees.listRecitations,
   getRecitation: fees.getRecitation,
+  createRecitation: edge.createRecitation,
+  awaitTajweedFeedback: edge.awaitTajweedFeedback,
   listCertificates: fees.listCertificates,
 
   // ------------------------------------------------ assignments & links

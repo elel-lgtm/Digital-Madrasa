@@ -27,6 +27,24 @@ import { useApiError } from '@/hooks/useApiError';
 import { useTheme } from '@/theme/ThemeProvider';
 import { formatDuration } from '@/utils/dates';
 
+/**
+ * Recording settings for a recitation.
+ *
+ * `LOW_QUALITY` cannot be used: on Android it records 3GP/AMR-NB, which is in
+ * neither the bucket's MIME allowlist nor the Edge Function's, so every upload
+ * from an Android device would be refused. `HIGH_QUALITY` records M4A/AAC on
+ * both platforms, which both accept.
+ *
+ * Its 128 kbps would put a long recitation over the bucket's 10 MB limit — the
+ * ayah range allows up to fifteen minutes, which is roughly 11.5 MB — so the
+ * bitrate is halved. At 64 kbps a full fifteen minutes lands near 7 MB, which
+ * also matters on the mobile connections this is built for.
+ */
+const RECITATION_RECORDING = {
+  ...RecordingPresets.HIGH_QUALITY,
+  bitRate: 64000,
+};
+
 type Phase = 'setup' | 'recording' | 'review';
 
 export default function Recite() {
@@ -35,7 +53,7 @@ export default function Recite() {
   const router = useRouter();
   const describeError = useApiError();
 
-  const recorder = useAudioRecorder(RecordingPresets.LOW_QUALITY);
+  const recorder = useAudioRecorder(RECITATION_RECORDING);
   const recorderState = useAudioRecorderState(recorder, 120);
 
   const [phase, setPhase] = useState<Phase>('setup');

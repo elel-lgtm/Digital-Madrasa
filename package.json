@@ -39,6 +39,7 @@
     "db:restore": "node scripts/db-restore.mjs",
     "db:storage": "node scripts/setup-storage.mjs",
     "check:functions": "node scripts/check-functions.mjs",
+    "check:storage": "node scripts/check-storage.mjs",
     "check:build-config": "node scripts/check-build-config.mjs"
   },
   "engines": {

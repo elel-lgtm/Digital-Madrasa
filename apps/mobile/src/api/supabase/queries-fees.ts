@@ -1,4 +1,4 @@
-import { surahName, type Certificate, type FeeStructure, type Invoice, type Payment, type Recitation } from '@digital-madrasa/shared';
+import { surahName, type Certificate, type FeeStructure, type Invoice, type Payment, type Recitation, type TajweedFinding } from '@digital-madrasa/shared';
 import { ApiError, type FeesSummary } from '../types';
 import { supabase } from './client';
 
@@ -159,6 +159,30 @@ export async function getRecitation(recitationId: string): Promise<Recitation> {
   return mapRecitation(data);
 }
 
+/**
+ * Findings are stored exactly as the evaluation function emitted them, in
+ * snake_case and without the surah — `{ ayah, word_index, rule, severity,
+ * note }`. `TajweedFinding` is camelCase and carries `surahNo`, so the two are
+ * reconciled here rather than in the screen, which is where the rest of the
+ * snake-to-camel translation already happens.
+ *
+ * Both spellings are accepted so rows written before and after any change to
+ * the function render the same way; without this the feedback screen showed
+ * "Ayah · word NaN" for every finding.
+ */
+function mapFindings(raw: unknown, surahNo: number): TajweedFinding[] {
+  if (!Array.isArray(raw)) return [];
+
+  return raw.map((f: Row) => ({
+    surahNo: f.surahNo ?? f.surah_no ?? surahNo,
+    ayahNo: f.ayahNo ?? f.ayah_no ?? f.ayah ?? 0,
+    wordIndex: f.wordIndex ?? f.word_index ?? 0,
+    rule: f.rule,
+    severity: f.severity,
+    note: f.note ?? '',
+  })) as TajweedFinding[];
+}
+
 function mapRecitation(row: Row): Recitation {
   const fb = Array.isArray(row.tajweed_feedback) ? row.tajweed_feedback[0] : row.tajweed_feedback;
 
@@ -178,14 +202,20 @@ function mapRecitation(row: Row): Recitation {
     feedback: fb
       ? {
           overallScore: Number(fb.overall_score),
-          findings: fb.errors ?? [],
+          // The column is `errors` and so is the field on `Recitation`. This
+          // was emitted as `findings`, which left `feedback.errors` undefined
+          // and crashed the feedback screen on `result.errors.length` the
+          // moment a real recitation existed. The `as Recitation` below hid
+          // it from the compiler, so it only showed up on a device.
+          errors: mapFindings(fb.errors, row.surah_no),
           modelVersion: fb.model_version,
-          processingMs: fb.processing_ms,
+          processingMs: fb.processing_ms ?? 0,
           reviewedByTeacherId: fb.reviewed_by_teacher_id ?? null,
           teacherOverride: fb.teacher_override ?? null,
         }
       : null,
-  } as Recitation;
+    syncState: 'synced',
+  } satisfies Recitation;
 }
 
 export async function listCertificates(studentId: string): Promise<Certificate[]> {

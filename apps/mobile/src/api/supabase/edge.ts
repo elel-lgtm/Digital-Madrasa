@@ -1,13 +1,17 @@
 import type {
+  CreateRecitationInput,
   CreateStudentInput,
   DecideLinkInput,
   IssueInvoicesInput,
   ParentLink,
+  Recitation,
   Student,
 } from '@digital-madrasa/shared';
 import { ApiError } from '../types';
 import { invokeFunction } from './functions';
 import { listLinkRequests } from './queries-comms';
+import { getRecitation } from './queries-fees';
+import { uploadRecitationAudio } from './storage';
 
 /**
  * API methods backed by deployed Edge Functions.
@@ -191,4 +195,54 @@ export async function markAttendanceByQr(params: {
   // The function only ever records a scan as present; a different status can
   // only come from a teacher marking manually.
   return { status: 'present' };
+}
+
+/**
+ * `createRecitation` -> Storage upload, then `evaluate-recitation` (POST)
+ *
+ * This is the one method that does real work before it reaches a function.
+ * The app records to a local `file://` URI, and the evaluation endpoint wants
+ * a path inside the private bucket — the two are both strings and mean
+ * entirely different things, so the upload happens here rather than being
+ * papered over by passing the local URI along.
+ *
+ * Order matters. The audio must exist in Storage before the row is created,
+ * because the function checks the path is inside the caller's tenant folder
+ * and then stores it as `audio_url`. A row written first would point at
+ * nothing.
+ *
+ * Feedback is produced synchronously by the same call, so the recitation is
+ * re-read afterwards and returned complete rather than being reconstructed
+ * from the response — the screen then renders the same shape it would get
+ * from any later read.
+ */
+export async function createRecitation(input: CreateRecitationInput): Promise<Recitation> {
+  const storagePath = await uploadRecitationAudio(input.localUri);
+
+  const result = await invokeFunction<{ id: string }>('evaluate-recitation', {
+    body: {
+      action: 'evaluate',
+      storagePath,
+      durationMs: input.durationMs,
+      surahNo: input.surahFrom,
+      ayahFrom: input.ayahFrom,
+      ayahTo: input.ayahTo,
+      qiraahStyle: input.qiraahStyle,
+    },
+  });
+
+  return getRecitation(result.id);
+}
+
+/**
+ * `awaitTajweedFeedback` -> a plain read.
+ *
+ * The mock models evaluation as a background job that the screen polls for.
+ * The deployed function scores during `evaluate` and returns once the
+ * `tajweed_feedback` row exists, so by the time the feedback screen mounts
+ * there is nothing left to wait for and reading the recitation is the whole
+ * job. The name is kept because the screen and the mock share it.
+ */
+export async function awaitTajweedFeedback(recitationId: string): Promise<Recitation> {
+  return getRecitation(recitationId);
 }

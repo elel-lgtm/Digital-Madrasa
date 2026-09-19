@@ -73,28 +73,38 @@ async function call(fn, token, body, method = 'POST') {
 }
 
 /**
- * Runs SQL as the project owner. Used only to create and remove this run's
- * throwaway fixture — never to read or alter anything the tests assert on.
+ * Admin calls for this run's throwaway fixture, made with the service-role key.
+ *
+ * Deliberately not the Management API: that needs a personal access token,
+ * which expires. When it did, this script could no longer create a fixture and
+ * failed before running a single check — an expired credential looked exactly
+ * like a broken backend. The service-role key belongs to the project and does
+ * not expire that way.
+ *
+ * These touch nothing the tests assert on: they create the fixture parent and
+ * remove it again.
  */
-async function adminSql(query) {
+function adminAuth() {
   const admin = loadEnv('supabase/.env');
-  if (!admin.SUPABASE_PROJECT_REF || !admin.SUPABASE_ACCESS_TOKEN) {
-    throw new Error('supabase/.env is missing SUPABASE_PROJECT_REF or SUPABASE_ACCESS_TOKEN');
+  if (!admin.SUPABASE_URL || !admin.SUPABASE_SERVICE_ROLE_KEY) {
+    throw new Error('supabase/.env is missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY');
   }
-  const res = await fetch(
-    `https://api.supabase.com/v1/projects/${admin.SUPABASE_PROJECT_REF}/database/query`,
-    {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${admin.SUPABASE_ACCESS_TOKEN}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ query }),
+  return {
+    url: admin.SUPABASE_URL,
+    headers: {
+      apikey: admin.SUPABASE_SERVICE_ROLE_KEY,
+      Authorization: `Bearer ${admin.SUPABASE_SERVICE_ROLE_KEY}`,
+      'Content-Type': 'application/json',
     },
-  );
+  };
+}
+
+async function adminFetch(path, init) {
+  const { url, headers } = adminAuth();
+  const res = await fetch(url + path, { ...init, headers: { ...headers, ...(init && init.headers) } });
   const text = await res.text();
-  if (!res.ok) throw new Error(text.slice(0, 200));
-  return text;
+  if (!res.ok) throw new Error(`${res.status} ${text.slice(0, 160)}`);
+  return text ? JSON.parse(text) : null;
 }
 
 let failures = 0;
@@ -124,32 +134,27 @@ const created = { authUsers: [], studentId: null };
  * never written to disk or logged.
  */
 async function createFixtureParent() {
-  const id = randomUUID();
-  const email = `fixture-parent-${id.slice(0, 8)}@digital-madrasa.test`;
+  const email = `fixture-parent-${randomUUID().slice(0, 8)}@digital-madrasa.test`;
   const password = `Fx-${randomBytes(18).toString('base64url')}`;
 
-  // GoTrue reads the token columns as strings, not nullables: leaving them
-  // NULL makes sign-in fail with an opaque "Database error querying schema"
-  // rather than a credentials error, so they are set to empty explicitly.
-  // The role is not carried in app metadata on purpose — `authenticate()`
-  // reads it from `profiles`, which is what the trigger populates.
-  await adminSql(`
-    insert into auth.users (
-      id, instance_id, aud, role, email, encrypted_password,
-      email_confirmed_at, created_at, updated_at,
-      raw_app_meta_data, raw_user_meta_data,
-      confirmation_token, recovery_token, email_change,
-      email_change_token_new, email_change_token_current,
-      phone_change, phone_change_token, reauthentication_token
-    ) values (
-      '${id}'::uuid, '00000000-0000-0000-0000-000000000000', 'authenticated',
-      'authenticated', '${email}', crypt('${password}', gen_salt('bf')),
-      now(), now(), now(),
-      '{"provider":"email","providers":["email"]}'::jsonb,
-      '{"signup_kind":"parent","full_name":"Fixture Parent"}'::jsonb,
-      '', '', '', '', '', '', '', ''
-    )
-  `);
+  // The admin create-user endpoint writes the auth row properly — GoTrue fills
+  // in the token columns and password hash itself, which a hand-written INSERT
+  // has to get exactly right or sign-in fails with an opaque schema error.
+  // `signup_kind` in the user metadata is what the app's own signup sends, so
+  // the existing handle_new_auth_user trigger provisions the profile and
+  // `parents` row exactly as it would for a real registration.
+  const user = await adminFetch('/auth/v1/admin/users', {
+    method: 'POST',
+    body: JSON.stringify({
+      email,
+      password,
+      email_confirm: true,
+      user_metadata: { signup_kind: 'parent', full_name: 'Fixture Parent' },
+    }),
+  });
+
+  const id = user && user.id;
+  if (!id) throw new Error('fixture parent was not created');
 
   // Recorded before anything can fail, so cleanup always has the id.
   created.authUsers.unshift(id);
@@ -175,7 +180,7 @@ async function cleanup() {
   const failed = [];
   for (const id of created.authUsers) {
     try {
-      await adminSql(`delete from auth.users where id = '${id}'::uuid`);
+      await adminFetch(`/auth/v1/admin/users/${id}`, { method: 'DELETE' });
     } catch (error) {
       failed.push(`${id}: ${String(error.message).slice(0, 160)}`);
     }
@@ -187,7 +192,7 @@ async function cleanup() {
     // adds a third key for the same caller; a uuid generated this run cannot
     // appear at the end of anyone else's key.
     try {
-      await adminSql(`delete from public.rate_limits where key like '%' || '${id}'`);
+      await adminFetch(`/rest/v1/rate_limits?key=like.*${id}`, { method: 'DELETE' });
     } catch (error) {
       failed.push(`rate_limits for ${id}: ${String(error.message).slice(0, 160)}`);
     }
