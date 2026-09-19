@@ -18,8 +18,18 @@
  * the pupil created here is called "Function Test Pupil", and standing
  * verification records from earlier phases share that name. Deleting by name
  * would take them too.
+ *
+ * The parent side runs as a throwaway account created per run rather than the
+ * shared parent@example.com. `link-child` is rate limited at five calls an
+ * hour keyed on the caller's user id, and each run spends two of them, so
+ * using the shared account made this script safely re-runnable only twice an
+ * hour — and a rate-limited run reports as a failure, which is indistinguishable
+ * at a glance from a real regression. A fresh user has a fresh counter, so the
+ * production limiter is left exactly as it is and the test simply stops
+ * competing with itself.
  */
 import { readFileSync } from 'node:fs';
+import { randomBytes, randomUUID } from 'node:crypto';
 
 function loadEnv(path) {
   const out = {};
@@ -62,39 +72,15 @@ async function call(fn, token, body, method = 'POST') {
   return { status: res.status, body: await res.json().catch(() => ({})) };
 }
 
-let failures = 0;
-const check = (label, ok, detail = '') => {
-  console.log(`  ${ok ? '✓' : '✗'} ${label}${detail ? ` — ${detail}` : ''}`);
-  if (!ok) failures += 1;
-};
-
 /**
- * Ids created by this run. Only these are ever deleted.
+ * Runs SQL as the project owner. Used only to create and remove this run's
+ * throwaway fixture — never to read or alter anything the tests assert on.
  */
-const created = { profileId: null, studentId: null };
-
-/**
- * Removing the auth user is enough: `profiles.id` cascades from
- * `auth.users`, `students.profile_id` cascades from `profiles`, and the link
- * request, attendance and invoices cascade from `students`. One delete,
- * addressed by primary key, with no broad predicate to go wrong.
- */
-async function cleanup() {
-  if (!created.profileId) return;
-
-  let admin;
-  try {
-    admin = loadEnv('supabase/.env');
-  } catch {
-    console.log(`\n! supabase/.env not readable — could not remove test user ${created.profileId}.`);
-    return;
-  }
-
+async function adminSql(query) {
+  const admin = loadEnv('supabase/.env');
   if (!admin.SUPABASE_PROJECT_REF || !admin.SUPABASE_ACCESS_TOKEN) {
-    console.log(`\n! No management credentials — could not remove test user ${created.profileId}.`);
-    return;
+    throw new Error('supabase/.env is missing SUPABASE_PROJECT_REF or SUPABASE_ACCESS_TOKEN');
   }
-
   const res = await fetch(
     `https://api.supabase.com/v1/projects/${admin.SUPABASE_PROJECT_REF}/database/query`,
     {
@@ -103,22 +89,126 @@ async function cleanup() {
         Authorization: `Bearer ${admin.SUPABASE_ACCESS_TOKEN}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        query: `delete from auth.users where id = '${created.profileId}'::uuid`,
-      }),
+      body: JSON.stringify({ query }),
     },
   );
+  const text = await res.text();
+  if (!res.ok) throw new Error(text.slice(0, 200));
+  return text;
+}
 
-  if (!res.ok) {
-    console.log(`\n! Cleanup failed for ${created.profileId}: ${(await res.text()).slice(0, 160)}`);
+let failures = 0;
+const check = (label, ok, detail = '') => {
+  console.log(`  ${ok ? '✓' : '✗'} ${label}${detail ? ` — ${detail}` : ''}`);
+  if (!ok) failures += 1;
+};
+
+/**
+ * Auth user ids created by this run, newest first. Only these are ever
+ * deleted, and only by primary key — there is no predicate here that could
+ * widen to someone else's row.
+ */
+const created = { authUsers: [], studentId: null };
+
+/**
+ * Creates a throwaway parent and returns credentials for it.
+ *
+ * The row goes in with `signup_kind: 'parent'`, which is the same metadata the
+ * app's signup sends, so the existing `handle_new_auth_user` trigger provisions
+ * the profile and `parents` row exactly as it would for a real registration.
+ * Writing the auth row directly rather than calling the signup endpoint keeps
+ * the fixture independent of whether email confirmation happens to be enabled.
+ *
+ * The address uses the reserved `.test` TLD (RFC 2606) so it can never collide
+ * with, or deliver to, a real inbox. The password is generated per run and is
+ * never written to disk or logged.
+ */
+async function createFixtureParent() {
+  const id = randomUUID();
+  const email = `fixture-parent-${id.slice(0, 8)}@digital-madrasa.test`;
+  const password = `Fx-${randomBytes(18).toString('base64url')}`;
+
+  // GoTrue reads the token columns as strings, not nullables: leaving them
+  // NULL makes sign-in fail with an opaque "Database error querying schema"
+  // rather than a credentials error, so they are set to empty explicitly.
+  // The role is not carried in app metadata on purpose — `authenticate()`
+  // reads it from `profiles`, which is what the trigger populates.
+  await adminSql(`
+    insert into auth.users (
+      id, instance_id, aud, role, email, encrypted_password,
+      email_confirmed_at, created_at, updated_at,
+      raw_app_meta_data, raw_user_meta_data,
+      confirmation_token, recovery_token, email_change,
+      email_change_token_new, email_change_token_current,
+      phone_change, phone_change_token, reauthentication_token
+    ) values (
+      '${id}'::uuid, '00000000-0000-0000-0000-000000000000', 'authenticated',
+      'authenticated', '${email}', crypt('${password}', gen_salt('bf')),
+      now(), now(), now(),
+      '{"provider":"email","providers":["email"]}'::jsonb,
+      '{"signup_kind":"parent","full_name":"Fixture Parent"}'::jsonb,
+      '', '', '', '', '', '', '', ''
+    )
+  `);
+
+  // Recorded before anything can fail, so cleanup always has the id.
+  created.authUsers.unshift(id);
+  return { id, email, password };
+}
+
+/**
+ * Removes every auth user this run created, one primary-key delete each.
+ *
+ * Deleting the auth user is enough to take the whole subtree with it:
+ * `profiles.id` cascades from `auth.users`, then `students.profile_id` and
+ * `parents.profile_id` cascade from `profiles`, and the link request,
+ * attendance and invoices cascade from those. One id in, one subtree out.
+ *
+ * A failure here is reported against the specific id and nothing else is
+ * attempted for it. Widening the predicate to "clean up anything that looks
+ * like test data" is precisely how a cleanup routine ends up deleting the
+ * standing verification records, so it is not done.
+ */
+async function cleanup() {
+  if (created.authUsers.length === 0) return;
+
+  const failed = [];
+  for (const id of created.authUsers) {
+    try {
+      await adminSql(`delete from auth.users where id = '${id}'::uuid`);
+    } catch (error) {
+      failed.push(`${id}: ${String(error.message).slice(0, 160)}`);
+    }
+
+    // `rate_limits` has no foreign key to `auth.users`, so removing the user
+    // leaves its counters behind. They are harmless but they accumulate, one
+    // pair per run forever. Matching on the captured uuid as a suffix rather
+    // than listing the two key shapes keeps this correct if the limiter ever
+    // adds a third key for the same caller; a uuid generated this run cannot
+    // appear at the end of anyone else's key.
+    try {
+      await adminSql(`delete from public.rate_limits where key like '%' || '${id}'`);
+    } catch (error) {
+      failed.push(`rate_limits for ${id}: ${String(error.message).slice(0, 160)}`);
+    }
+  }
+
+  if (failed.length) {
+    console.log(`\n! Cleanup incomplete — these rows remain and need removing by hand:`);
+    failed.forEach((f) => console.log(`    ${f}`));
     return;
   }
-  console.log('\n  cleaned up the records this run created');
+  console.log(`\n  cleaned up ${created.authUsers.length} record(s) this run created`);
 }
 
 try {
+  // The parent is disposable so its rate-limit counters start clean; the other
+  // three are read-only or refusal cases and consume no limited quota.
+  const fixture = await createFixtureParent();
+  console.log(`fixture parent: ${fixture.email}`);
+
   const owner = await signIn('owner@annur.example');
-  const parent = await signIn('parent@example.com');
+  const parent = await signIn(fixture.email, fixture.password);
   const student = await signIn('aisha.hassan@annur.example');
   const admin = await signIn('mohammednursukyan98@gmail.com', 'Roman@4567');
 
@@ -128,7 +218,7 @@ try {
     dateOfBirth: '2015-04-02',
     gender: 'female',
   });
-  created.profileId = made.body.profileId ?? null;
+  if (made.body.profileId) created.authUsers.unshift(made.body.profileId);
   created.studentId = made.body.id ?? null;
   check('owner can enrol', made.status === 201, `HTTP ${made.status}`);
   check(
