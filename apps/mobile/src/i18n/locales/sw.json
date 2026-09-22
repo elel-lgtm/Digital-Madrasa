@@ -41,7 +41,10 @@
     "select": "Chagua",
     "clear": "Futa",
     "filter": "Chuja",
-    "all": "Zote"
+    "all": "Zote",
+    "play": "Cheza",
+    "pause": "Simamisha",
+    "replay": "Anza upya"
   },
   "nav": {
     "home": "Nyumbani",
@@ -185,7 +188,9 @@
     "assignments": "Kazi",
     "dueToday": "Inaisha leo",
     "overdue": "Imepitwa na wakati",
-    "attendanceRate": "Mahudhurio"
+    "attendanceRate": "Mahudhurio",
+    "myRecitations": "Tilawa zangu",
+    "aiOnly": "AI pekee"
   },
   "parent": {
     "greeting": "Assalamu alaikum, {{name}}",
@@ -371,5 +376,8 @@
     "chooseChildTitle": "Mtoto yupi?",
     "chooseChildBody": "Chagua kwanza mtoto unayemuulizia.",
     "disclaimer": "Msaada wa AI husaidia masomo; tathmini ya mwalimu wako ndiyo ya mwisho."
+  },
+  "teacher": {
+    "reviewed": "Imekaguliwa"
   }
 }

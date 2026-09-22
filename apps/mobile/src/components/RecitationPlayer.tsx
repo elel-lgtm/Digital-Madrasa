@@ -150,7 +150,7 @@ export function RecitationPlayer({ storagePath, fallbackMs }: Props) {
 
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel={t('common.retry')}
+          accessibilityLabel={t('common.replay')}
           onPress={() => void player.seekTo(0)}
           disabled={!status.isLoaded}
           hitSlop={8}

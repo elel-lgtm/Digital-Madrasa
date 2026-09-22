@@ -41,7 +41,10 @@
     "select": "Dooro",
     "clear": "Nadiifi",
     "filter": "Kala sooc",
-    "all": "Dhammaan"
+    "all": "Dhammaan",
+    "play": "Ciyaar",
+    "pause": "Jooji",
+    "replay": "Dib u bilow"
   },
   "nav": {
     "home": "Guriga",
@@ -176,7 +179,9 @@
     "assignments": "Hawlaha",
     "dueToday": "Maanta ayay dhacaysaa",
     "overdue": "Waa dib u dhacday",
-    "attendanceRate": "Xaadirinta"
+    "attendanceRate": "Xaadirinta",
+    "myRecitations": "Akhriskayga",
+    "aiOnly": "AI kaliya"
   },
   "parent": {
     "greeting": "Assalaamu calaykum, {{name}}",
@@ -360,5 +365,8 @@
     "chooseChildTitle": "Ilmaha kee?",
     "chooseChildBody": "Marka hore dooro ilmaha aad wax ka weydiinayso.",
     "disclaimer": "Talada AI way caawisaa waxbarashada; qiimaynta macallinkaagu waa tan kama dambaysta ah."
+  },
+  "teacher": {
+    "reviewed": "La eegay"
   }
 }

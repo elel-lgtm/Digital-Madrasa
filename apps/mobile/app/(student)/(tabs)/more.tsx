@@ -1,12 +1,5 @@
 import { useRouter } from 'expo-router';
-import {
-  CalendarCheck,
-  DownloadSimple,
-  Info,
-  Question,
-  ShieldCheck,
-  Sparkle,
-} from 'phosphor-react-native';
+import { CalendarCheck, DownloadSimple, Info, Microphone, Question, ShieldCheck, Sparkle } from 'phosphor-react-native';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 import {
@@ -38,6 +31,12 @@ export default function StudentMore() {
                 subtitle={t('ai.subtitle')}
                 left={<Sparkle size={20} color={theme.colors.accent} weight="duotone" />}
                 onPress={() => router.push('/(student)/assistant')}
+              />
+              <Divider />
+              <ListRow
+                title={t('student.myRecitations')}
+                left={<Microphone size={20} color={theme.colors.textMuted} weight="duotone" />}
+                onPress={() => router.push('/(student)/recitations')}
               />
               <Divider />
               <ListRow

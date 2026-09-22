@@ -46,7 +46,10 @@
     "apply": "Apply",
     "clear": "Clear",
     "filter": "Filter",
-    "all": "All"
+    "all": "All",
+    "play": "Play",
+    "pause": "Pause",
+    "replay": "Start again"
   },
   "nav": {
     "home": "Home",
@@ -266,7 +269,9 @@
     "offlineLibrary": "Offline library",
     "offlineLibraryBody": "Download a juz to practise without data.",
     "downloaded": "Downloaded",
-    "download": "Download"
+    "download": "Download",
+    "myRecitations": "My recitations",
+    "aiOnly": "AI only"
   },
   "live": {
     "liveNow": "Live now",
@@ -381,7 +386,8 @@
     "onboarding_add_student": "Add a student",
     "onboarding_invite_teacher": "Invite a teacher",
     "onboarding_set_fees": "Set up fees",
-    "onboarding_invite_parents": "Invite parents to link"
+    "onboarding_invite_parents": "Invite parents to link",
+    "reviewed": "Reviewed"
   },
   "parent": {
     "greeting": "Assalamu alaikum, {{name}}",

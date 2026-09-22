@@ -41,7 +41,10 @@
     "select": "اختيار",
     "clear": "مسح",
     "filter": "تصفية",
-    "all": "الكل"
+    "all": "الكل",
+    "play": "تشغيل",
+    "pause": "إيقاف مؤقت",
+    "replay": "إعادة من البداية"
   },
   "nav": {
     "home": "الرئيسية",
@@ -177,7 +180,9 @@
     "assignments": "الواجبات",
     "dueToday": "مستحق اليوم",
     "overdue": "متأخر",
-    "attendanceRate": "الحضور"
+    "attendanceRate": "الحضور",
+    "myRecitations": "تلاواتي",
+    "aiOnly": "الذكاء الاصطناعي فقط"
   },
   "parent": {
     "greeting": "السلام عليكم، {{name}}",
@@ -361,5 +366,8 @@
     "chooseChildTitle": "أي طفل؟",
     "chooseChildBody": "اختر أولاً الطفل الذي تسأل عنه.",
     "disclaimer": "إرشاد الذكاء الاصطناعي يساعد على الدراسة؛ وتقييم معلّمك هو الفيصل."
+  },
+  "teacher": {
+    "reviewed": "تمت المراجعة"
   }
 }

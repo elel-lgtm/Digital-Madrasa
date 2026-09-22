@@ -109,6 +109,7 @@ try {
   const pathOk = /^madrasa\/[0-9a-f-]{36}\/recitations\/[0-9a-f-]{36}$/.test(up.body.path || '');
   ck('server chooses a tenant-scoped path', pathOk, up.body.path);
   if (up.body.path) created.paths.push(up.body.path);
+  const madrasaId = String(up.body.path || '').split('/')[1];
 
   console.log('\n8. unsupported format');
   const badType = await fn(student, { action: 'upload-url', contentType: 'application/zip' });
@@ -332,6 +333,64 @@ try {
   ck('AI score NOT overwritten', Boolean(after[0]) && Number(after[0].overall_score) !== 88,
      after[0] && 'ai ' + after[0].overall_score);
   ck('model version preserved', Boolean(after[0]) && after[0].model_version === 'placeholder-v1');
+
+  // ------------------------------------------------ storage read authorization
+  //
+  // The property under test is not "can this user open the screen" but "can
+  // this user obtain a usable signed URL for this object". Minting is what the
+  // Storage SELECT policy governs, so each case asks Storage directly rather
+  // than going through getRecitation.
+  console.log('\nstorage read authorization (signed URL minting)');
+
+  const peerEmail = 'fixture-peer-' + randomUUID().slice(0, 8) + '@digital-madrasa.test';
+  const peerPass = 'Fx-' + randomUUID();
+  const peerUser = await fetch(URL_BASE + '/auth/v1/admin/users', {
+    method: 'POST',
+    headers: { ...SERVICE_HEADERS, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      email: peerEmail, password: peerPass, email_confirm: true,
+      user_metadata: { signup_kind: 'parent', full_name: 'Unlinked Parent' },
+    }),
+  }).then((r) => r.json());
+  if (peerUser && peerUser.id) created.authUsers.push(peerUser.id);
+
+  // Put the unlinked parent in the same madrasa as the recitation. This is the
+  // exact shape of the Phase 4D finding: same tenant, no approved link.
+  await rest('profiles?id=eq.' + peerUser.id, {
+    method: 'PATCH',
+    headers: { Prefer: 'return=minimal' },
+    body: JSON.stringify({ madrasa_id: madrasaId }),
+  });
+  await rest('parents?profile_id=eq.' + peerUser.id, {
+    method: 'PATCH',
+    headers: { Prefer: 'return=minimal' },
+    body: JSON.stringify({ madrasa_id: madrasaId }),
+  });
+  const unlinkedToken = await signIn(peerEmail, peerPass);
+
+  const expectAllow = async (label, token) => {
+    const r = await signAs(token, up.body.path);
+    ck(label + ' -> ALLOW', r.status === 200, 'HTTP ' + r.status);
+  };
+  const expectDeny = async (label, token) => {
+    const r = token
+      ? await signAs(token, up.body.path)
+      : { status: (await fetch(URL_BASE + '/storage/v1/object/sign/recitations/' + up.body.path, {
+            method: 'POST',
+            headers: { apikey: ANON, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ expiresIn: 600 }),
+          })).status };
+    ck(label + ' -> DENY', r.status !== 200, 'HTTP ' + r.status);
+  };
+
+  await expectAllow('1. teacher, same madrasa', teacher);
+  await expectDeny('2. teacher, another madrasa', otherToken);
+  await expectAllow('3. student, own recording', student);
+  await expectDeny('6. parent, same madrasa but NO approved link', unlinkedToken);
+  await expectDeny('8. unauthenticated', null);
+
+  const bogus = await signAs(teacher, 'madrasa/' + madrasaId + '/recitations/' + randomUUID());
+  ck('9. nonexistent object path -> DENY', bogus.status !== 200, 'HTTP ' + bogus.status);
 
   console.log('\n10. subscription enforcement');
   const src = readFileSync('supabase/functions/evaluate-recitation/index.ts', 'utf8');

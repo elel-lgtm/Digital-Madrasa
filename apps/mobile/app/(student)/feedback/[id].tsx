@@ -4,6 +4,7 @@ import { CheckCircle } from 'phosphor-react-native';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, View } from 'react-native';
 import { api } from '@/api';
+import { RecitationPlayer } from '@/components/RecitationPlayer';
 import { qk } from '@/api/keys';
 import { AiDisclaimer, FindingList, ScoreRing } from '@/components/TajweedFeedback';
 import {
@@ -92,6 +93,16 @@ export default function RecitationFeedback() {
             {formatDuration(recitation.durationMs)} · {recitation.qiraahStyle}
           </AppText>
         </View>
+
+        {/* Hearing the recording back is most of what makes a correction
+            useful. The same player the teacher uses, on the same short-lived
+            signed URL — the bucket stays private for both. */}
+        <Card>
+          <RecitationPlayer
+            storagePath={recitation.audioUrl}
+            fallbackMs={recitation.durationMs}
+          />
+        </Card>
 
         {result.teacherOverride ? (
           <Card accent="success">
