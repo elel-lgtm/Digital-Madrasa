@@ -4,6 +4,7 @@ import { bindAuthRefreshToAppState } from './client';
 import * as edge from './edge';
 import * as m from './mutations';
 import * as q from './queries';
+import * as storage from './storage';
 import * as c from './queries-comms';
 import * as fees from './queries-fees';
 
@@ -78,6 +79,8 @@ const implemented: Partial<ApiClient> = {
   getRecitation: fees.getRecitation,
   createRecitation: edge.createRecitation,
   awaitTajweedFeedback: edge.awaitTajweedFeedback,
+  saveTeacherOverride: m.saveTeacherOverride,
+  getRecitationAudioUrl: storage.getRecitationAudioUrl,
   listCertificates: fees.listCertificates,
 
   // ------------------------------------------------ assignments & links

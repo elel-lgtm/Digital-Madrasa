@@ -254,6 +254,12 @@ export interface ApiClient {
   // -- recitation & AI ----------------------------------------------------
   listRecitations(params: { studentId?: string; pendingReviewOnly?: boolean }): Promise<Recitation[]>;
   getRecitation(recitationId: string): Promise<Recitation>;
+  /**
+   * A short-lived URL for playing a stored recitation. Takes the storage path
+   * from `Recitation.audioUrl`; the bucket stays private and no permanent URL
+   * is ever created.
+   */
+  getRecitationAudioUrl(storagePath: string): Promise<string>;
   createRecitation(input: CreateRecitationInput): Promise<Recitation>;
   /** Resolves once the evaluation job finishes; mirrors the Edge Function. */
   awaitTajweedFeedback(recitationId: string): Promise<Recitation>;

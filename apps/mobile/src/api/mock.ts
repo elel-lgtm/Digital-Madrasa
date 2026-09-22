@@ -1295,6 +1295,21 @@ export const mockApi: ApiClient = {
     return recitation;
   },
 
+  /**
+   * The mock keeps the local recording URI rather than uploading anywhere, so
+   * the "signed URL" is that URI. It is still gated by the same visibility
+   * check the real client relies on RLS for, so an unauthorised viewer is
+   * refused here too rather than only in Supabase mode.
+   */
+  async getRecitationAudioUrl(storagePath) {
+    await bootstrap();
+    await delay(100, 200);
+    const recitation = requireDb().recitations.find((r) => r.audioUrl === storagePath);
+    if (!recitation) throw new ApiError('not_found', 'That recording is unavailable.');
+    assertCanSeeStudent(recitation.studentId);
+    return recitation.audioUrl;
+  },
+
   async createRecitation(input) {
     await bootstrap();
     await delay(500, 900);

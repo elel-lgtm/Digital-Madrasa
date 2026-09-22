@@ -7,6 +7,8 @@ import {
   type CreateClassInput,
   type CreateFeeStructureInput,
   type CreateLessonInput,
+  type Recitation,
+  type TeacherOverrideInput,
   type FeeStructure,
   type Grade,
   type Klass,
@@ -24,6 +26,7 @@ import {
 import { ApiError } from '../types';
 import { supabase } from './client';
 import { listLessons } from './queries';
+import { getRecitation } from './queries-fees';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type Row = Record<string, any>;
@@ -500,3 +503,59 @@ export async function removeSavedCard(cardId: string): Promise<void> {
   if (error) fail(error, 'Could not remove that card.');
 }
 
+/**
+ * Records the teacher's assessment of a recitation.
+ *
+ * Authorization is not done here. The `tajweed: staff override` policy allows
+ * UPDATE only when `current_role_name() = 'teacher'` and the row is in the
+ * caller's own madrasa, so a parent or student reaching this code — or forging
+ * the request entirely — updates nothing. The filters below are how the right
+ * row is found, not how permission is decided.
+ *
+ * The AI result is left exactly as it was. `overall_score`, `errors` and
+ * `model_version` still say what the model produced, and the teacher's verdict
+ * goes into `teacher_override` alongside it. Nothing overwrites the other, so
+ * a report card can show the authoritative score while the provisional one
+ * remains inspectable. `updated_at` and `reviewed_by_teacher_id` record who
+ * decided and when.
+ */
+export async function saveTeacherOverride(input: TeacherOverrideInput): Promise<Recitation> {
+  const { data: auth } = await supabase.auth.getUser();
+  if (!auth.user) throw new ApiError('forbidden', 'You are not signed in.');
+
+  // `reviewed_by_teacher_id` references `teachers`, not `profiles`.
+  const { data: teacher } = await supabase
+    .from('teachers')
+    .select('id')
+    .eq('profile_id', auth.user.id)
+    .maybeSingle();
+
+  if (!teacher) {
+    throw new ApiError('forbidden', 'Only a teacher can record an assessment.');
+  }
+
+  const { data, error } = await supabase
+    .from('tajweed_feedback')
+    .update({
+      teacher_override: {
+        overallScore: input.overallScore,
+        remarks: input.remarks,
+        dismissedErrorIndexes: input.dismissedErrorIndexes ?? [],
+      },
+      reviewed_by_teacher_id: teacher.id,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('recitation_id', input.recitationId)
+    .select('recitation_id')
+    .maybeSingle();
+
+  if (error) fail(error, 'Could not save your assessment.');
+
+  // RLS turns a forbidden update into zero rows rather than an error, so an
+  // empty result is the refusal and must not be reported as success.
+  if (!data) {
+    throw new ApiError('not_found', 'That recitation could not be updated.');
+  }
+
+  return getRecitation(input.recitationId);
+}

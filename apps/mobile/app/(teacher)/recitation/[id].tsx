@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 import { api } from '@/api';
+import { RecitationPlayer } from '@/components/RecitationPlayer';
 import { qk } from '@/api/keys';
 import { AiDisclaimer, FindingList, ScoreRing } from '@/components/TajweedFeedback';
 import {
@@ -146,11 +147,7 @@ export default function ReviewRecitation() {
               <Badge label={formatDuration(data.durationMs)} />
               <Badge label={longDate(data.createdAt)} />
             </View>
-            <AppText variant="caption" color="textSubtle">
-              {/* Recorded audio lives in a private bucket; playback arrives with
-                  the storage integration. */}
-              {data.audioUrl}
-            </AppText>
+            <RecitationPlayer storagePath={data.audioUrl} fallbackMs={data.durationMs} />
           </View>
         </Card>
 

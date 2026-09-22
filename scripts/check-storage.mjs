@@ -96,7 +96,7 @@ async function readObject(path, token) {
   return r.status;
 }
 
-const created = { paths: [], recitationIds: [] };
+const created = { paths: [], recitationIds: [], authUsers: [], madrasaIds: [] };
 
 try {
   const student = await signIn('aisha.hassan@annur.example');
@@ -209,6 +209,130 @@ try {
   });
   ck('11 MB refused by the bucket limit', !bigRes.ok, 'HTTP ' + bigRes.status);
 
+  // ------------------------------------------------- teacher review access
+  console.log('\nreview: signed playback URL');
+  const signAs = async (token, path) => {
+    const r = await fetch(URL_BASE + '/storage/v1/object/sign/recitations/' + path, {
+      method: 'POST',
+      headers: { apikey: ANON, Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ expiresIn: 600 }),
+    });
+    return { status: r.status, body: await r.json().catch(() => ({})) };
+  };
+
+  const teacherSign = await signAs(teacher, up.body.path);
+  ck('teacher can mint a playback URL', teacherSign.status === 200, 'HTTP ' + teacherSign.status);
+  ck('  ...and it is a signature, not a public link',
+     /token=/.test(teacherSign.body.signedURL || teacherSign.body.signedUrl || ''));
+
+  const studentSign = await signAs(student, up.body.path);
+  ck('student can mint one for their own recitation', studentSign.status === 200, 'HTTP ' + studentSign.status);
+
+  const parentSign = await signAs(parent, up.body.path);
+  console.log('  . parent with no approved link to this pupil: HTTP ' + parentSign.status);
+
+  const anonSign = await fetch(URL_BASE + '/storage/v1/object/sign/recitations/' + up.body.path, {
+    method: 'POST',
+    headers: { apikey: ANON, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ expiresIn: 600 }),
+  });
+  ck('unauthenticated cannot mint one', !anonSign.ok, 'HTTP ' + anonSign.status);
+
+  console.log('\nreview: teacher override authorization');
+  const override = async (token, recitationId, score, reviewerId) => {
+    const r = await fetch(
+      URL_BASE + '/rest/v1/tajweed_feedback?recitation_id=eq.' + recitationId,
+      {
+        method: 'PATCH',
+        headers: {
+          apikey: ANON,
+          Authorization: 'Bearer ' + token,
+          'Content-Type': 'application/json',
+          Prefer: 'return=representation',
+        },
+        body: JSON.stringify({
+          teacher_override: { overallScore: score, remarks: 'check', dismissedErrorIndexes: [] },
+          ...(reviewerId ? { reviewed_by_teacher_id: reviewerId } : {}),
+        }),
+      },
+    );
+    return { status: r.status, rows: await r.json().catch(() => []) };
+  };
+
+  // Resolve the reviewing teacher the same way saveTeacherOverride does.
+  const teacherRow = await rest('teachers?select=id,profiles!teachers_profile_id_fkey(email)&limit=50');
+  const reviewer = teacherRow.find((t) => t.profiles && t.profiles.email === 'owner@annur.example');
+
+  const byTeacher = await override(teacher, ev.body.id, 88, reviewer && reviewer.id);
+  ck('1. teacher in the madrasa may override',
+     byTeacher.status === 200 && byTeacher.rows.length === 1, 'HTTP ' + byTeacher.status);
+  const byStudent = await override(student, ev.body.id, 100);
+  ck('4. student may not override', byStudent.rows.length === 0, 'rows ' + byStudent.rows.length);
+  const byParent = await override(parent, ev.body.id, 100);
+  ck('3. parent may not override', byParent.rows.length === 0, 'rows ' + byParent.rows.length);
+
+  // PostgREST answers 204 when RLS matches no rows, so the status alone does
+  // not distinguish "blocked" from "applied". What matters is that nothing
+  // changed, which is asserted by re-reading below.
+  const byAnon = await fetch(
+    URL_BASE + '/rest/v1/tajweed_feedback?recitation_id=eq.' + ev.body.id,
+    {
+      method: 'PATCH',
+      headers: { apikey: ANON, 'Content-Type': 'application/json', Prefer: 'return=representation' },
+      body: JSON.stringify({ teacher_override: { overallScore: 1, remarks: 'anon' } }),
+    },
+  );
+  const anonRows = await byAnon.json().catch(() => []);
+  ck('5. unauthenticated may not override',
+     !Array.isArray(anonRows) || anonRows.length === 0, 'HTTP ' + byAnon.status);
+
+  const missing = await override(teacher, randomUUID(), 50);
+  ck('6. unknown recitation id changes nothing', missing.rows.length === 0, 'rows ' + missing.rows.length);
+
+  console.log('\n2. teacher from another madrasa');
+  const otherEmail = 'fixture-teacher-' + randomUUID().slice(0, 8) + '@digital-madrasa.test';
+  const otherPass = 'Fx-' + randomUUID();
+  const otherUser = await fetch(URL_BASE + '/auth/v1/admin/users', {
+    method: 'POST',
+    headers: { ...SERVICE_HEADERS, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      email: otherEmail,
+      password: otherPass,
+      email_confirm: true,
+      user_metadata: {
+        signup_kind: 'madrasa_owner',
+        full_name: 'Other Owner',
+        madrasa_name: 'Other Madrasa ' + randomUUID().slice(0, 6),
+      },
+    }),
+  }).then((r) => r.json());
+  if (otherUser && otherUser.id) created.authUsers.push(otherUser.id);
+
+  // The signup trigger creates a madrasa for this owner. `madrasas.owner_id`
+  // blocks deleting the profile while it exists, so the id is captured and the
+  // madrasa is removed first during cleanup.
+  const otherMadrasa = await rest('madrasas?select=id&owner_id=eq.' + otherUser.id);
+  if (otherMadrasa[0]) created.madrasaIds.push(otherMadrasa[0].id);
+
+  const otherToken = await signIn(otherEmail, otherPass);
+  const byForeign = await override(otherToken, ev.body.id, 5);
+  ck('foreign-madrasa teacher may not override', byForeign.rows.length === 0, 'rows ' + byForeign.rows.length);
+  const foreignSign = await signAs(otherToken, up.body.path);
+  ck('foreign-madrasa teacher cannot mint a playback URL', foreignSign.status !== 200, 'HTTP ' + foreignSign.status);
+
+  console.log('\nreview: override stored, AI result preserved');
+  const after = await rest('tajweed_feedback?select=overall_score,model_version,teacher_override,reviewed_by_teacher_id&recitation_id=eq.' + ev.body.id);
+  ck('teacher_override persisted',
+     Boolean(after[0] && after[0].teacher_override && after[0].teacher_override.overallScore === 88),
+     after[0] && JSON.stringify(after[0].teacher_override));
+  ck('reviewed_by_teacher_id recorded', Boolean(after[0] && after[0].reviewed_by_teacher_id),
+     after[0] && String(after[0].reviewed_by_teacher_id).slice(0, 8));
+  ck('the anonymous attempt left no trace',
+     Boolean(after[0] && after[0].teacher_override && after[0].teacher_override.remarks !== 'anon'));
+  ck('AI score NOT overwritten', Boolean(after[0]) && Number(after[0].overall_score) !== 88,
+     after[0] && 'ai ' + after[0].overall_score);
+  ck('model version preserved', Boolean(after[0]) && after[0].model_version === 'placeholder-v1');
+
   console.log('\n10. subscription enforcement');
   const src = readFileSync('supabase/functions/evaluate-recitation/index.ts', 'utf8');
   const hasSub = src.includes('requireActiveSubscription');
@@ -224,6 +348,24 @@ try {
       await rest('recitations?id=eq.' + id, { method: 'DELETE' });
     } catch (e) {
       console.log('  ! recitation ' + id + ': ' + e.message.slice(0, 120));
+    }
+  }
+  for (const id of created.madrasaIds) {
+    try {
+      await rest('madrasas?id=eq.' + id, { method: 'DELETE' });
+    } catch (e) {
+      console.log('  ! madrasa ' + id + ': ' + e.message.slice(0, 120));
+    }
+  }
+  for (const id of created.authUsers) {
+    try {
+      const r = await fetch(URL_BASE + '/auth/v1/admin/users/' + id, {
+        method: 'DELETE',
+        headers: SERVICE_HEADERS,
+      });
+      if (!r.ok) console.log('  ! auth user ' + id + ': HTTP ' + r.status);
+    } catch (e) {
+      console.log('  ! auth user ' + id + ': ' + e.message.slice(0, 120));
     }
   }
   for (const p of created.paths) {
@@ -249,7 +391,7 @@ try {
   }
   console.log(
     '  removed ' + created.recitationIds.length + ' row(s) and ' +
-      created.paths.length + ' object path(s)',
+      created.paths.length + ' object path(s) and ' + created.authUsers.length + ' auth user(s)',
   );
 }
 

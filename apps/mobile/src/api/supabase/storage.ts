@@ -102,3 +102,52 @@ export async function uploadRecitationAudio(localUri: string): Promise<string> {
 
   return upload.path;
 }
+
+/**
+ * How long a playback URL stays valid.
+ *
+ * Long enough to listen to a fifteen-minute recitation without the link dying
+ * mid-playback, short enough that a URL copied out of a device log is worthless
+ * by the time anyone tries it. The URL is requested when playback starts, not
+ * stored, so this never needs to cover a whole session.
+ */
+const PLAYBACK_URL_TTL_SECONDS = 20 * 60;
+
+/**
+ * A short-lived URL for listening to a recitation.
+ *
+ * The bucket stays private and no permanent public URL is ever created. The
+ * signature is minted through the caller's own session, so Storage's
+ * `recitations: tenant read` policy decides whether it is issued at all — a
+ * teacher in the madrasa gets one, another madrasa does not. There is no
+ * service-role key anywhere near this path.
+ *
+ * `audio_url` on the row stays what it has always been: the storage path. The
+ * URL is derived on demand and deliberately not persisted, because a stored
+ * URL either expires and looks broken or does not expire and becomes a way
+ * around the bucket being private.
+ */
+export async function getRecitationAudioUrl(storagePath: string): Promise<string> {
+  if (!storagePath) {
+    throw new ApiError('not_found', 'That recording is unavailable.');
+  }
+
+  // A row written before the storage integration holds a local file:// URI,
+  // which no signature can make playable. Say so rather than failing obscurely.
+  if (storagePath.startsWith('file://') || storagePath.startsWith('content://')) {
+    throw new ApiError('not_found', 'This recording was made before recordings were stored.');
+  }
+
+  const { data, error } = await supabase.storage
+    .from('recitations')
+    .createSignedUrl(storagePath, PLAYBACK_URL_TTL_SECONDS);
+
+  if (error || !data?.signedUrl) {
+    // Refused signatures are the normal case for an object the caller may not
+    // read, so this is a not_found rather than an unexpected failure.
+    console.warn('[recitation playback]', error?.message);
+    throw new ApiError('not_found', 'That recording could not be opened.');
+  }
+
+  return data.signedUrl;
+}
