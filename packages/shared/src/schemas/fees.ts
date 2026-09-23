@@ -23,11 +23,35 @@ export const createFeeStructureSchema = z
   });
 export type CreateFeeStructureInput = z.infer<typeof createFeeStructureSchema>;
 
-export const issueInvoicesSchema = z.object({
-  feeStructureId: uuidSchema,
-  dueDate: isoDateSchema,
-  notes: plainTextSchema(300).optional(),
-});
+/**
+ * Who a billing run charges.
+ *
+ * Stated rather than inferred. The scope used to be left out entirely and the
+ * server read an absent target as "every student in the madrasa", so the only
+ * thing the screen could do was bill everyone. Requiring the scope here means
+ * a request that forgets it fails on the device instead of quietly becoming
+ * the broadest possible run.
+ */
+export const billingScopeSchema = z.enum(['student', 'class', 'madrasa']);
+export type BillingScope = z.infer<typeof billingScopeSchema>;
+
+export const issueInvoicesSchema = z
+  .object({
+    feeStructureId: uuidSchema,
+    dueDate: isoDateSchema,
+    scope: billingScopeSchema,
+    studentId: uuidSchema.optional(),
+    classId: uuidSchema.optional(),
+    notes: plainTextSchema(300).optional(),
+  })
+  .refine((v) => v.scope !== 'student' || !!v.studentId, {
+    message: 'validation.student_required',
+    path: ['studentId'],
+  })
+  .refine((v) => v.scope !== 'class' || !!v.classId, {
+    message: 'validation.class_required',
+    path: ['classId'],
+  });
 export type IssueInvoicesInput = z.infer<typeof issueInvoicesSchema>;
 
 /**

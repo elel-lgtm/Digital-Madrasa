@@ -138,7 +138,8 @@
     "card_expiry_invalid": "Isticmaal MM/YY",
     "card_expired": "Kaarkaas wuu dhacay",
     "card_cvv_invalid": "Hubi koodhka amniga",
-    "no_invoices_selected": "Dooro ugu yaraan hal qaansheegad"
+    "no_invoices_selected": "Dooro ugu yaraan hal qaansheegad",
+    "scope_required": "Dooro cidda la biilayo"
   },
   "errors": {
     "genericTitle": "Wax baa qaldamay",
@@ -386,5 +387,41 @@
     "wrongClass": "Koodhkaas waa fasal kale.",
     "notStudent": "Kaliya ardayda ayaa iskaan samayn karta.",
     "unreadable": "Koodhkaas lama akhriyi karin. Isku day mar kale."
+  },
+  "invoicing": {
+    "chooseFee": "Dooro khidmad-bixin",
+    "chooseTarget": "Yaa la biilayo?",
+    "setupBody": "Dooro khidmadda, kaddibna sheeg cidda ay si sax ah ugu socoto.",
+    "target": "Bartilmaameedka biilka",
+    "scope": {
+      "student": "Hal arday",
+      "class": "Hal fasal",
+      "madrasa": "Madrasada oo dhan"
+    },
+    "appliesTo": {
+      "all": "Qof walba",
+      "class": "Hal fasal",
+      "student": "Hal arday"
+    },
+    "fixedByFee": "Waxaa dejiyay khidmaddan",
+    "wholeMadrasaWarning": "Tani waxay biilaysaa arday kasta oo diiwaangashan madrasada. Hubi tirada shaashadda xigta ka hor inta aadan xaqiijin.",
+    "studentsInClass": "{{count}} arday",
+    "studentsInClass_other": "{{count}} arday",
+    "continueToReview": "Dib u eeg ka hor bixinta",
+    "review": "Dib u eegis biilka",
+    "reviewBody": "Hubi bartilmaameedka iyo wadarta. Waxba lama bixinayo ilaa aad xaqiijiso.",
+    "eligibleStudents": "Ardayda u qalanta",
+    "alreadyBilled": "Hore ayaa loogu biilay khidmaddan",
+    "amountPerStudent": "Qadarka arday kasta",
+    "invoicesToIssue": "Biilasha la bixinayo",
+    "confirmIssue": "Bixi {{count}} biil · {{total}}",
+    "confirmIssue_other": "Bixi {{count}} biil · {{total}}",
+    "nothingToIssue": "Qof kasta oo bartilmaameedkan ku jira hore ayuu u haystaa biil khidmaddan, sidaas darteed waxba lama bixinayo.",
+    "issued": "Biilasha waa la bixiyay",
+    "invoicesIssued": "biil ayaa la bixiyay",
+    "invoicesIssued_other": "biil ayaa la bixiyay",
+    "invoiceNumbers": "Lambarrada biilasha",
+    "allAlreadyBilled": "Biil lama bixin: {{count}} arday ayaa hore u haystay mid khidmaddan ah.",
+    "allAlreadyBilled_other": "Biil lama bixin: {{count}} arday ayaa hore u haystay mid khidmaddan ah."
   }
 }

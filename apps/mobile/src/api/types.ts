@@ -16,6 +16,8 @@ import type {
   InitiatePaymentInput,
   InviteTeacherInput,
   Invoice,
+  InvoiceBatchPreview,
+  InvoiceBatchResult,
   IssueInvoicesInput,
   Klass,
   Lesson,
@@ -78,6 +80,8 @@ export type ApiErrorCode =
   | 'expired_code'
   /** A scanned attendance code belongs to a class the student is not in. */
   | 'wrong_class'
+  /** The chosen billing target is wider or narrower than the fee allows. */
+  | 'scope_mismatch'
   /** The Supabase client has no implementation for this call yet. */
   | 'not_implemented'
   | 'network'
@@ -282,7 +286,13 @@ export interface ApiClient {
   // -- fees ---------------------------------------------------------------
   listFeeStructures(): Promise<FeeStructure[]>;
   createFeeStructure(input: CreateFeeStructureInput): Promise<FeeStructure>;
-  issueInvoices(input: IssueInvoicesInput): Promise<{ created: number }>;
+  /**
+   * What a billing run would charge, and to whom, without raising anything.
+   * Answered by the server so the review step shows the set the issue will
+   * actually use rather than one the device worked out for itself.
+   */
+  previewInvoices(input: IssueInvoicesInput): Promise<InvoiceBatchPreview>;
+  issueInvoices(input: IssueInvoicesInput): Promise<InvoiceBatchResult>;
   listInvoices(params: { studentId?: string; status?: Invoice['status'] }): Promise<Invoice[]>;
   getFeesSummary(): Promise<FeesSummary>;
   getChildBalances(): Promise<ChildBalance[]>;

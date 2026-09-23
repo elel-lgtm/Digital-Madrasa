@@ -146,7 +146,8 @@
     "card_expiry_invalid": "Tumia MM/YY",
     "card_expired": "Kadi hiyo imeisha muda",
     "card_cvv_invalid": "Angalia namba ya siri",
-    "no_invoices_selected": "Chagua angalau ankara moja"
+    "no_invoices_selected": "Chagua angalau ankara moja",
+    "scope_required": "Chagua nani analipishwa"
   },
   "errors": {
     "genericTitle": "Kuna hitilafu",
@@ -397,5 +398,41 @@
     "wrongClass": "Msimbo huo ni wa darasa lingine.",
     "notStudent": "Wanafunzi pekee ndio wanaweza kuchanganua.",
     "unreadable": "Msimbo huo haukusomeka. Jaribu tena."
+  },
+  "invoicing": {
+    "chooseFee": "Chagua ada",
+    "chooseTarget": "Nani analipishwa?",
+    "setupBody": "Chagua ada, kisha eleza ni kwa ajili ya nani hasa.",
+    "target": "Lengo la malipo",
+    "scope": {
+      "student": "Mwanafunzi mmoja",
+      "class": "Darasa moja",
+      "madrasa": "Madrasa nzima"
+    },
+    "appliesTo": {
+      "all": "Wote",
+      "class": "Darasa moja",
+      "student": "Mwanafunzi mmoja"
+    },
+    "fixedByFee": "Imewekwa na ada hii",
+    "wholeMadrasaWarning": "Hii inalipisha kila mwanafunzi aliyesajiliwa katika madrasa. Angalia idadi kwenye skrini ifuatayo kabla ya kuthibitisha.",
+    "studentsInClass": "mwanafunzi {{count}}",
+    "studentsInClass_other": "wanafunzi {{count}}",
+    "continueToReview": "Kagua kabla ya kutoa",
+    "review": "Kagua utoaji wa ankara",
+    "reviewBody": "Angalia lengo na jumla. Hakuna kinacholipishwa hadi uthibitishe.",
+    "eligibleStudents": "Wanafunzi wanaostahili",
+    "alreadyBilled": "Tayari wamelipishwa ada hii",
+    "amountPerStudent": "Kiasi kwa kila mwanafunzi",
+    "invoicesToIssue": "Ankara za kutolewa",
+    "confirmIssue": "Toa ankara {{count}} · {{total}}",
+    "confirmIssue_other": "Toa ankara {{count}} · {{total}}",
+    "nothingToIssue": "Kila mtu katika lengo hili tayari ana ankara ya ada hii, hivyo hakuna cha kutoa.",
+    "issued": "Ankara zimetolewa",
+    "invoicesIssued": "ankara imetolewa",
+    "invoicesIssued_other": "ankara zimetolewa",
+    "invoiceNumbers": "Nambari za ankara",
+    "allAlreadyBilled": "Hakuna ankara iliyotolewa: mwanafunzi {{count}} tayari alikuwa nayo kwa ada hii.",
+    "allAlreadyBilled_other": "Hakuna ankara iliyotolewa: wanafunzi {{count}} tayari walikuwa nayo kwa ada hii."
   }
 }

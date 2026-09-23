@@ -269,6 +269,7 @@ export async function createFeeStructure(
       currency: 'KES',
       applies_to: input.appliesTo,
       class_id: input.classId ?? null,
+      student_id: input.studentId ?? null,
       is_active: true,
     })
     .select()
@@ -286,6 +287,7 @@ export async function createFeeStructure(
     currency: data.currency ?? 'KES',
     appliesTo: data.applies_to,
     classId: data.class_id ?? null,
+    studentId: data.student_id ?? null,
     isActive: data.is_active,
   };
 }

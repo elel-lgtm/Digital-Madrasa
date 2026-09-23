@@ -41,6 +41,9 @@ const CODE_MAP: Record<string, ApiErrorCode> = {
   // instead — it is English only, and this app ships in four languages.
   expired_code: 'expired_code',
   wrong_class: 'wrong_class',
+  // A fee that belongs to one class or one pupil, asked to bill wider. The
+  // generic validation copy would not say which fee or which way it is wrong.
+  scope_mismatch: 'scope_mismatch',
   method: 'unknown',
   internal: 'unknown',
 };

@@ -2,6 +2,8 @@ import type {
   CreateRecitationInput,
   CreateStudentInput,
   DecideLinkInput,
+  InvoiceBatchPreview,
+  InvoiceBatchResult,
   IssueInvoicesInput,
   ParentLink,
   Recitation,
@@ -143,19 +145,37 @@ export async function revokeLink(linkId: string): Promise<void> {
  * a client-side `count + 1` cannot do without racing.
  *
  * Schema difference: the client schema has `notes`, which the function does
- * not accept — it composes the description from the fee structure instead. The
- * function additionally supports `classId` / `studentIds` narrowing, which the
- * current screen does not expose.
+ * not accept — it composes the description from the fee structure instead.
+ *
+ * The target travels with the request and the function refuses one without it.
+ * Both calls send the same body; `preview` only decides whether anything is
+ * written, so what the review step counts and what the confirm step charges
+ * cannot drift apart.
  */
-export async function issueInvoices(input: IssueInvoicesInput): Promise<{ created: number }> {
-  const body = await invokeFunction<{ created?: number }>('issue-invoices', {
-    body: {
-      feeStructureId: input.feeStructureId,
-      dueDate: input.dueDate,
-    },
+function issueBody(input: IssueInvoicesInput, preview: boolean) {
+  return {
+    feeStructureId: input.feeStructureId,
+    dueDate: input.dueDate,
+    scope: input.scope,
+    studentId: input.studentId,
+    classId: input.classId,
+    preview,
+  };
+}
+
+export async function previewInvoices(input: IssueInvoicesInput): Promise<InvoiceBatchPreview> {
+  return invokeFunction<InvoiceBatchPreview>('issue-invoices', {
+    body: issueBody(input, true),
+  });
+}
+
+export async function issueInvoices(input: IssueInvoicesInput): Promise<InvoiceBatchResult> {
+  const body = await invokeFunction<InvoiceBatchResult>('issue-invoices', {
+    body: issueBody(input, false),
   });
 
-  return { created: body.created ?? 0 };
+  // The invoice numbers are the server's. Nothing here fills a gap in them.
+  return { ...body, created: body.created ?? 0, invoices: body.invoices ?? [] };
 }
 
 // -------------------------------------------------------------- attendance

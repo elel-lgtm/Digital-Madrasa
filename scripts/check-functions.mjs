@@ -118,7 +118,7 @@ const check = (label, ok, detail = '') => {
  * deleted, and only by primary key — there is no predicate here that could
  * widen to someone else's row.
  */
-const created = { authUsers: [], studentId: null };
+const created = { authUsers: [], studentId: null, feeStructures: [], madrasas: [] };
 
 /**
  * Creates a throwaway parent and returns credentials for it.
@@ -162,6 +162,112 @@ async function createFixtureParent() {
 }
 
 /**
+ * Creates a second madrasa with one pupil in it, so the cross-tenant refusal
+ * can be tested against a real foreign row rather than asserted in the
+ * abstract. Without one, "another madrasa's pupil is refused" is a case that
+ * silently never runs.
+ *
+ * The auth user is recorded for cleanup first; `profiles.id` cascades from
+ * `auth.users` and `students.profile_id` from `profiles`, so removing the user
+ * takes the pupil with it. The madrasa row is captured separately because
+ * nothing cascades to it.
+ */
+async function createFixtureTenant() {
+  const email = `fixture-tenant-${randomUUID().slice(0, 8)}@digital-madrasa.test`;
+  const user = await adminFetch('/auth/v1/admin/users', {
+    method: 'POST',
+    body: JSON.stringify({
+      email,
+      password: `Fx-${randomBytes(18).toString('base64url')}`,
+      email_confirm: true,
+      user_metadata: { signup_kind: 'parent', full_name: 'Fixture Tenant Head' },
+    }),
+  });
+  if (!user || !user.id) throw new Error('fixture tenant user was not created');
+  created.authUsers.unshift(user.id);
+
+  const slug = `fixture-${randomUUID().slice(0, 8)}`;
+  const madrasa = (await adminFetch('/rest/v1/madrasas', {
+    method: 'POST',
+    headers: { Prefer: 'return=representation' },
+    body: JSON.stringify({
+      name: 'Fixture Madrasa',
+      slug,
+      county: 'Wajir',
+      town: 'Wajir',
+      owner_id: user.id,
+      contact_email: email,
+      contact_phone: '+254700000199',
+      status: 'active',
+    }),
+  }))[0];
+  created.madrasas.push(madrasa.id);
+
+  await adminFetch(`/rest/v1/profiles?id=eq.${user.id}`, {
+    method: 'PATCH',
+    body: JSON.stringify({ madrasa_id: madrasa.id, role: 'student' }),
+  });
+
+  const pupil = (await adminFetch('/rest/v1/students', {
+    method: 'POST',
+    headers: { Prefer: 'return=representation' },
+    body: JSON.stringify({
+      madrasa_id: madrasa.id,
+      profile_id: user.id,
+      date_of_birth: '2014-05-05',
+      gender: 'male',
+    }),
+  }))[0];
+
+  return { madrasaId: madrasa.id, studentId: pupil.id };
+}
+
+/**
+ * A teacher created for this run alone, used for the invoice matrix.
+ *
+ * `issue-invoices` is rate limited at ten calls an hour keyed on the caller,
+ * and the matrix spends most of that in one pass — so running it as the shared
+ * owner account made the script safely re-runnable roughly once an hour, and a
+ * limited run reports as a wall of failures indistinguishable at a glance from
+ * a real regression. A fresh teacher has a fresh counter. The production
+ * limiter is left exactly as it is; the test simply stops competing with
+ * itself.
+ */
+async function createFixtureIssuer(madrasaId) {
+  const email = `fixture-issuer-${randomUUID().slice(0, 8)}@digital-madrasa.test`;
+  const password = `Fx-${randomBytes(18).toString('base64url')}`;
+
+  const user = await adminFetch('/auth/v1/admin/users', {
+    method: 'POST',
+    body: JSON.stringify({
+      email,
+      password,
+      email_confirm: true,
+      user_metadata: { signup_kind: 'parent', full_name: 'Fixture Issuer' },
+    }),
+  });
+  if (!user || !user.id) throw new Error('fixture issuer was not created');
+  created.authUsers.unshift(user.id);
+
+  await adminFetch(`/rest/v1/profiles?id=eq.${user.id}`, {
+    method: 'PATCH',
+    body: JSON.stringify({ madrasa_id: madrasaId, role: 'teacher' }),
+  });
+  await adminFetch('/rest/v1/teachers', {
+    method: 'POST',
+    body: JSON.stringify({
+      profile_id: user.id,
+      madrasa_id: madrasaId,
+      employee_no: `FX-${randomUUID().slice(0, 6)}`,
+      is_owner: false,
+      status: 'active',
+    }),
+  });
+
+  return { email, password };
+}
+
+/**
  * Removes every auth user this run created, one primary-key delete each.
  *
  * Deleting the auth user is enough to take the whole subtree with it:
@@ -175,9 +281,46 @@ async function createFixtureParent() {
  * standing verification records, so it is not done.
  */
 async function cleanup() {
-  if (created.authUsers.length === 0) return;
-
   const failed = [];
+
+  // Invoices first: they reference the structure. Both are removed by the ids
+  // this run captured, so a verification fee that happened to share a name
+  // with a real one could never take the real one with it.
+  for (const id of created.feeStructures) {
+    try {
+      await adminFetch(`/rest/v1/invoices?fee_structure_id=eq.${id}`, { method: 'DELETE' });
+      await adminFetch(`/rest/v1/fee_structures?id=eq.${id}`, { method: 'DELETE' });
+    } catch (error) {
+      failed.push(`fee structure ${id}: ${String(error.message).slice(0, 160)}`);
+    }
+  }
+
+  // After the auth users, since a madrasa cannot go while rows still point at
+  // it. Removed by captured id only.
+  const dropMadrasas = async () => {
+    for (const id of created.madrasas) {
+      try {
+        await adminFetch(`/rest/v1/madrasas?id=eq.${id}`, { method: 'DELETE' });
+      } catch (error) {
+        failed.push(`madrasa ${id}: ${String(error.message).slice(0, 160)}`);
+      }
+    }
+  };
+
+  // Before the auth users: `madrasas.owner_id` references a profile, and a
+  // profile cannot go while a madrasa still points at it.
+  await dropMadrasas();
+
+  if (created.authUsers.length === 0) {
+    if (created.feeStructures.length) {
+      console.log(
+        `\n  cleaned up ${created.feeStructures.length} fee structure(s) and their invoices`,
+      );
+    }
+    failed.forEach((f) => console.log(`    ${f}`));
+    return;
+  }
+
   for (const id of created.authUsers) {
     try {
       await adminFetch(`/auth/v1/admin/users/${id}`, { method: 'DELETE' });
@@ -203,7 +346,10 @@ async function cleanup() {
     failed.forEach((f) => console.log(`    ${f}`));
     return;
   }
-  console.log(`\n  cleaned up ${created.authUsers.length} record(s) this run created`);
+  console.log(
+    `\n  cleaned up ${created.authUsers.length} record(s) and `
+      + `${created.feeStructures.length} fee structure(s) this run created`,
+  );
 }
 
 try {
@@ -211,6 +357,7 @@ try {
   // three are read-only or refusal cases and consume no limited quota.
   const fixture = await createFixtureParent();
   console.log(`fixture parent: ${fixture.email}`);
+  const tenant = await createFixtureTenant();
 
   const owner = await signIn('owner@annur.example');
   const parent = await signIn(fixture.email, fixture.password);
@@ -387,6 +534,261 @@ try {
     }
     console.log('   attendance for ' + today + ' restored');
   }
+
+  // -------------------------------------------------- invoice targeting
+  //
+  // The point of these is who gets billed. A fee structure scoped to one pupil
+  // used to fall through the function's branching and invoice the entire
+  // madrasa, and a request that named no target did the same, so the cases
+  // below assert the size of the billed set and not merely that a call
+  // succeeded.
+  //
+  // Every invoice raised here belongs to a fee structure this run created, so
+  // cleanup removes them by that id — never by student, and never by name.
+  console.log('\ninvoice targeting');
+
+  const madrasa = (await adminFetch('/rest/v1/madrasas?select=id&slug=eq.madrasat-an-nur'))[0];
+  const hifz = (await adminFetch(
+    '/rest/v1/classes?select=id,name&madrasa_id=eq.' + madrasa.id + '&name=eq.Hifz%20Level%201',
+  ))[0];
+  const aisha = (await adminFetch(
+    '/rest/v1/students?select=id,class_id&profile_id=eq.' +
+      (await adminFetch('/rest/v1/profiles?select=id&email=eq.aisha.hassan@annur.example'))[0].id,
+  ))[0];
+
+  // Snapshot before anything is issued: test G compares against this.
+  const before = await adminFetch(
+    '/rest/v1/invoices?select=id,invoice_no,amount_due,student_id&madrasa_id=eq.' + madrasa.id,
+  );
+
+  const activeCount = (await adminFetch(
+    '/rest/v1/students?select=id&madrasa_id=eq.' + madrasa.id +
+      '&deleted_at=is.null&enrollment_status=eq.active',
+  )).length;
+  const hifzCount = (await adminFetch(
+    '/rest/v1/students?select=id&class_id=eq.' + hifz.id +
+      '&deleted_at=is.null&enrollment_status=eq.active',
+  )).length;
+
+  const mkStructure = async (name, appliesTo, extra) => {
+    const row = (await adminFetch('/rest/v1/fee_structures', {
+      method: 'POST',
+      headers: { Prefer: 'return=representation' },
+      body: JSON.stringify({
+        madrasa_id: madrasa.id,
+        name,
+        academic_year: new Date().getFullYear(),
+        term: 'Verification',
+        amount: 100,
+        currency: 'KES',
+        applies_to: appliesTo,
+        ...extra,
+      }),
+    }))[0];
+    created.feeStructures.push(row.id);
+    return row.id;
+  };
+
+  // Every issuing call below is made as this account, not the shared owner.
+  const issuerLogin = await createFixtureIssuer(madrasa.id);
+  const issuer = await signIn(issuerLogin.email, issuerLogin.password);
+
+  const perStudent = await mkStructure('VERIFY one pupil', 'student', { student_id: aisha.id });
+  const perClass = await mkStructure('VERIFY one class', 'class', { class_id: hifz.id });
+  const perAll = await mkStructure('VERIFY everyone', 'all', {});
+
+  const invoicesFor = async (structureId) =>
+    adminFetch(
+      '/rest/v1/invoices?select=id,invoice_no,student_id&fee_structure_id=eq.' + structureId,
+    );
+
+  // A. one student
+  const single = await call('issue-invoices', issuer, {
+    feeStructureId: perStudent,
+    scope: 'student',
+    dueDate: '2026-12-01',
+  });
+  check('A. student-scoped fee accepted', single.status === 201, `HTTP ${single.status}`);
+  const singleRows = await invoicesFor(perStudent);
+  check('A. exactly one invoice raised', singleRows.length === 1, `${singleRows.length} row(s)`);
+  check('A. and it is for that pupil', singleRows[0]?.student_id === aisha.id);
+  check(
+    'A. the number came from the server',
+    /^INV-\d{4}-\d{4}$/.test(single.body.invoices?.[0]?.invoiceNo ?? ''),
+    single.body.invoices?.[0]?.invoiceNo,
+  );
+
+  // H. nobody else was touched by that run
+  check(
+    'H. no other pupil was invoiced by it',
+    singleRows.every((r) => r.student_id === aisha.id),
+  );
+
+  // B. one class
+  const klass = await call('issue-invoices', issuer, {
+    feeStructureId: perClass,
+    scope: 'class',
+    dueDate: '2026-12-01',
+  });
+  check('B. class-scoped fee accepted', klass.status === 201, `HTTP ${klass.status}`);
+  const classRows = await invoicesFor(perClass);
+  check(
+    'B. one invoice per enrolled pupil in the class',
+    classRows.length === hifzCount,
+    `${classRows.length} of ${hifzCount}`,
+  );
+  const hifzIds = new Set(
+    (await adminFetch('/rest/v1/students?select=id&class_id=eq.' + hifz.id)).map((r) => r.id),
+  );
+  check('B. and nobody outside it', classRows.every((r) => hifzIds.has(r.student_id)));
+
+  // C. the whole madrasa, stated explicitly
+  const preview = await call('issue-invoices', issuer, {
+    feeStructureId: perAll,
+    scope: 'madrasa',
+    preview: true,
+  });
+  check(
+    'C. preview counts the enrolled',
+    preview.body.eligible === activeCount,
+    `${preview.body.eligible} of ${activeCount}`,
+  );
+  check('C. preview writes nothing', (await invoicesFor(perAll)).length === 0);
+  const all = await call('issue-invoices', issuer, {
+    feeStructureId: perAll,
+    scope: 'madrasa',
+    dueDate: '2026-12-01',
+  });
+  const allRows = await invoicesFor(perAll);
+  check(
+    'C. madrasa run bills every enrolled pupil',
+    allRows.length === activeCount,
+    `${allRows.length} of ${activeCount}`,
+  );
+  check(
+    'C. preview total matched what was issued',
+    all.body.created === preview.body.toIssue,
+    `${all.body.created} vs ${preview.body.toIssue}`,
+  );
+
+  // The rule that used to be missing: no target at all must not mean everyone.
+  const untargeted = await call('issue-invoices', issuer, { feeStructureId: perAll });
+  check(
+    '   a request with no target is refused',
+    untargeted.status === 400,
+    `HTTP ${untargeted.status}`,
+  );
+
+  // A fee that belongs to one class cannot be widened into a madrasa run.
+  const widened = await call('issue-invoices', issuer, {
+    feeStructureId: perClass,
+    scope: 'madrasa',
+  });
+  check(
+    '   a class fee cannot be billed madrasa-wide',
+    widened.status === 400,
+    `HTTP ${widened.status} ${widened.body.code ?? ''}`,
+  );
+
+  // D. another madrasa's pupil and another madrasa's class
+  const cross = await call('issue-invoices', issuer, {
+    feeStructureId: perAll,
+    scope: 'student',
+    studentId: tenant.studentId,
+  });
+  check(
+    'D. a pupil from another madrasa is refused',
+    cross.status === 404,
+    `HTTP ${cross.status}`,
+  );
+  check(
+    'D. and no invoice was raised for them',
+    (await adminFetch(
+      '/rest/v1/invoices?select=id&student_id=eq.' + tenant.studentId,
+    )).length === 0,
+  );
+  const foreignFee = (await adminFetch('/rest/v1/fee_structures', {
+    method: 'POST',
+    headers: { Prefer: 'return=representation' },
+    body: JSON.stringify({
+      madrasa_id: tenant.madrasaId,
+      name: 'VERIFY foreign fee',
+      academic_year: new Date().getFullYear(),
+      term: 'Verification',
+      amount: 100,
+      currency: 'KES',
+      applies_to: 'all',
+    }),
+  }))[0];
+  created.feeStructures.push(foreignFee.id);
+  const crossFee = await call('issue-invoices', issuer, {
+    feeStructureId: foreignFee.id,
+    scope: 'madrasa',
+  });
+  check(
+    "D. another madrasa's fee structure is invisible",
+    crossFee.status === 404,
+    `HTTP ${crossFee.status}`,
+  );
+
+  // E. callers who may not bill
+  const byParent = await call('issue-invoices', parent, {
+    feeStructureId: perAll,
+    scope: 'madrasa',
+  });
+  check('E. a parent cannot issue invoices', byParent.status === 403, `HTTP ${byParent.status}`);
+  const byStudent = await call('issue-invoices', student, {
+    feeStructureId: perAll,
+    scope: 'madrasa',
+  });
+  check('E. a student cannot issue invoices', byStudent.status === 403, `HTTP ${byStudent.status}`);
+
+  // Re-running a batch must not double-bill.
+  const rerun = await call('issue-invoices', issuer, {
+    feeStructureId: perClass,
+    scope: 'class',
+    dueDate: '2026-12-01',
+  });
+  check('   a repeated run raises nothing', rerun.body.created === 0, `${rerun.body.created}`);
+  check(
+    '   and reports who was skipped',
+    rerun.body.alreadyBilled === hifzCount,
+    `${rerun.body.alreadyBilled}`,
+  );
+  check(
+    '   leaving the invoice count unchanged',
+    (await invoicesFor(perClass)).length === hifzCount,
+  );
+
+  // F. numbering
+  const numbers = (await adminFetch(
+    '/rest/v1/invoices?select=invoice_no&madrasa_id=eq.' + madrasa.id,
+  )).map((r) => r.invoice_no);
+  check(
+    'F. every invoice number is unique',
+    new Set(numbers).size === numbers.length,
+    `${numbers.length} invoice(s)`,
+  );
+  check('F. all follow the per-madrasa format', numbers.every((n) => /^INV-\d{4}-\d{4}$/.test(n)));
+
+  // G. nothing that existed before was altered
+  const after = await adminFetch(
+    '/rest/v1/invoices?select=id,invoice_no,amount_due,student_id&madrasa_id=eq.' + madrasa.id,
+  );
+  const byId = new Map(after.map((r) => [r.id, r]));
+  check(
+    'G. invoices that existed before are untouched',
+    before.every((b) => {
+      const now = byId.get(b.id);
+      return (
+        now &&
+        now.invoice_no === b.invoice_no &&
+        now.amount_due === b.amount_due &&
+        now.student_id === b.student_id
+      );
+    }),
+    `${before.length} pre-existing invoice(s) compared`,
+  );
 
   console.log('\nmadrasa-lifecycle');
   const notAdmin = await call('madrasa-lifecycle', owner, {

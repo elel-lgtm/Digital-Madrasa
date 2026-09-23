@@ -902,6 +902,7 @@ export function createSeed(): MockDatabase {
       currency: 'KES',
       appliesTo: 'all',
       classId: null,
+      studentId: null,
       isActive: true,
     },
     {
@@ -914,6 +915,7 @@ export function createSeed(): MockDatabase {
       currency: 'KES',
       appliesTo: 'class',
       classId: CLASS_HIFZ_1,
+      studentId: null,
       isActive: true,
     },
     {
@@ -926,6 +928,7 @@ export function createSeed(): MockDatabase {
       currency: 'KES',
       appliesTo: 'all',
       classId: null,
+      studentId: null,
       isActive: true,
     },
   ];

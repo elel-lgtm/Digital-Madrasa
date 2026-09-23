@@ -139,7 +139,8 @@
     "card_expiry_invalid": "استخدم MM/YY",
     "card_expired": "انتهت صلاحية البطاقة",
     "card_cvv_invalid": "تحقّق من رمز الأمان",
-    "no_invoices_selected": "اختر فاتورة واحدة على الأقل"
+    "no_invoices_selected": "اختر فاتورة واحدة على الأقل",
+    "scope_required": "اختر من ستصدر له الفاتورة"
   },
   "errors": {
     "genericTitle": "حدث خطأ ما",
@@ -387,5 +388,41 @@
     "wrongClass": "هذا الرمز لصف آخر.",
     "notStudent": "الطلاب فقط يمكنهم المسح.",
     "unreadable": "تعذّرت قراءة الرمز. حاول مرة أخرى."
+  },
+  "invoicing": {
+    "chooseFee": "اختر الرسوم",
+    "chooseTarget": "من الذي ستصدر له الفاتورة؟",
+    "setupBody": "اختر الرسوم، ثم حدّد بدقة لمن هي.",
+    "target": "جهة الفوترة",
+    "scope": {
+      "student": "طالب واحد",
+      "class": "صف واحد",
+      "madrasa": "المدرسة بأكملها"
+    },
+    "appliesTo": {
+      "all": "الجميع",
+      "class": "صف واحد",
+      "student": "طالب واحد"
+    },
+    "fixedByFee": "محدّد بهذه الرسوم",
+    "wholeMadrasaWarning": "سيؤدي هذا إلى فوترة كل طالب مسجَّل في المدرسة. تحقّق من العدد في الشاشة التالية قبل التأكيد.",
+    "studentsInClass": "طالب واحد",
+    "studentsInClass_other": "{{count}} طالب",
+    "continueToReview": "المراجعة قبل الإصدار",
+    "review": "مراجعة عملية الفوترة",
+    "reviewBody": "تحقّق من الجهة والمبلغ الإجمالي. لا يُحتسب شيء حتى تؤكّد.",
+    "eligibleStudents": "الطلاب المشمولون",
+    "alreadyBilled": "سبق أن صدرت لهم هذه الرسوم",
+    "amountPerStudent": "المبلغ لكل طالب",
+    "invoicesToIssue": "الفواتير المزمع إصدارها",
+    "confirmIssue": "إصدار فاتورة واحدة · {{total}}",
+    "confirmIssue_other": "إصدار {{count}} فاتورة · {{total}}",
+    "nothingToIssue": "كل من في هذه الجهة لديه فاتورة بهذه الرسوم بالفعل، فلا شيء لإصداره.",
+    "issued": "تم إصدار الفواتير",
+    "invoicesIssued": "فاتورة صدرت",
+    "invoicesIssued_other": "فاتورة صدرت",
+    "invoiceNumbers": "أرقام الفواتير",
+    "allAlreadyBilled": "لم تُصدر أي فاتورة: طالب واحد لديه واحدة بالفعل لهذه الرسوم.",
+    "allAlreadyBilled_other": "لم تُصدر أي فاتورة: {{count}} طالبًا لديهم واحدة بالفعل لهذه الرسوم."
   }
 }

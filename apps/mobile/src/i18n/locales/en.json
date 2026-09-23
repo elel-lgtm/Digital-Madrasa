@@ -178,7 +178,8 @@
     "card_expiry_invalid": "Use MM/YY",
     "card_expired": "That card has expired",
     "card_cvv_invalid": "Check the security code",
-    "no_invoices_selected": "Choose at least one invoice"
+    "no_invoices_selected": "Choose at least one invoice",
+    "scope_required": "Choose who to bill"
   },
   "errors": {
     "genericTitle": "Something went wrong",
@@ -624,5 +625,41 @@
     "wrongClass": "That code is for a different class.",
     "notStudent": "Only students can scan in.",
     "unreadable": "That code could not be read. Try again."
+  },
+  "invoicing": {
+    "chooseFee": "Choose a fee",
+    "chooseTarget": "Who is being billed?",
+    "setupBody": "Choose the fee, then say exactly who it is for.",
+    "target": "Billing target",
+    "scope": {
+      "student": "One student",
+      "class": "One class",
+      "madrasa": "Entire madrasa"
+    },
+    "appliesTo": {
+      "all": "Everyone",
+      "class": "One class",
+      "student": "One student"
+    },
+    "fixedByFee": "Set by this fee",
+    "wholeMadrasaWarning": "This bills every enrolled student in the madrasa. Check the count on the next screen before confirming.",
+    "studentsInClass": "{{count}} student",
+    "studentsInClass_other": "{{count}} students",
+    "continueToReview": "Review before issuing",
+    "review": "Review billing run",
+    "reviewBody": "Check the target and the total. Nothing is charged until you confirm.",
+    "eligibleStudents": "Eligible students",
+    "alreadyBilled": "Already billed for this fee",
+    "amountPerStudent": "Amount per student",
+    "invoicesToIssue": "Invoices to issue",
+    "confirmIssue": "Issue {{count}} invoice · {{total}}",
+    "confirmIssue_other": "Issue {{count}} invoices · {{total}}",
+    "nothingToIssue": "Everyone in this target already has an invoice for this fee, so there is nothing to issue.",
+    "issued": "Invoices issued",
+    "invoicesIssued": "invoice issued",
+    "invoicesIssued_other": "invoices issued",
+    "invoiceNumbers": "Invoice numbers",
+    "allAlreadyBilled": "No invoices were raised: {{count}} student already had one for this fee.",
+    "allAlreadyBilled_other": "No invoices were raised: {{count}} students already had one for this fee."
   }
 }

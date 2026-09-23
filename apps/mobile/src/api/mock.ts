@@ -18,6 +18,8 @@ import {
   type FeeStructure,
   type Grade,
   type Invoice,
+  type IssuedInvoice,
+  type IssueInvoicesInput,
   type Klass,
   type Lesson,
   type Message,
@@ -599,6 +601,75 @@ function assertSubscriptionAllowsAdmin(): void {
 }
 
 // ============================================================ the client
+
+/**
+ * Resolves a billing target the same way the `issue-invoices` function does,
+ * so the mock and the real backend answer the same question.
+ *
+ * Kept in one place because the preview and the issue must agree: if the
+ * review step counted a different set from the one that gets charged, the
+ * confirmation the user gave would have been for something else.
+ */
+function resolveBillingTarget(input: IssueInvoicesInput) {
+  const data = requireDb();
+  const madrasaId = requireMadrasaId();
+  assertSubscriptionAllowsAdmin();
+
+  const structure = data.feeStructures.find((f) => f.id === input.feeStructureId);
+  if (!structure) throw new ApiError('not_found', 'Fee structure not found.');
+
+  if (structure.appliesTo === 'class' && input.scope !== 'class') {
+    throw new ApiError('scope_mismatch', 'That fee belongs to one class.');
+  }
+  if (structure.appliesTo === 'student' && input.scope !== 'student') {
+    throw new ApiError('scope_mismatch', 'That fee belongs to one student.');
+  }
+  if (input.scope === 'madrasa' && structure.appliesTo !== 'all') {
+    throw new ApiError('scope_mismatch', 'That fee does not apply to everyone.');
+  }
+
+  // Only the enrolled are billable. Graduating or withdrawing keeps the record
+  // for the pupil's history but must not keep charging them.
+  const enrolled = data.students.filter(
+    (st) => st.madrasaId === madrasaId && st.enrollmentStatus === 'active',
+  );
+
+  let targets = enrolled;
+  if (input.scope === 'student') {
+    const studentId = structure.appliesTo === 'student' ? structure.studentId : input.studentId;
+    targets = enrolled.filter((st) => st.id === studentId);
+    if (!targets.length) throw new ApiError('not_found', 'That student is not enrolled here.');
+  } else if (input.scope === 'class') {
+    const classId = structure.appliesTo === 'class' ? structure.classId : input.classId;
+    if (!data.classes.some((c) => c.id === classId)) {
+      throw new ApiError('not_found', 'That class was not found.');
+    }
+    targets = enrolled.filter((st) => st.classId === classId);
+  }
+
+  const alreadyBilled = targets.filter((st) =>
+    data.invoices.some(
+      (inv) =>
+        inv.studentId === st.id && inv.feeStructureId === structure.id && inv.status !== 'void',
+    ),
+  ).length;
+
+  const toIssue = targets.length - alreadyBilled;
+
+  return {
+    structure,
+    targets,
+    summary: {
+      scope: input.scope,
+      eligible: targets.length,
+      alreadyBilled,
+      toIssue,
+      amount: structure.amount,
+      currency: structure.currency,
+      total: structure.amount * toIssue,
+    },
+  };
+}
 
 export const mockApi: ApiClient = {
   // ------------------------------------------------------------ auth
@@ -1562,6 +1633,7 @@ export const mockApi: ApiClient = {
       currency: input.currency,
       appliesTo: input.appliesTo,
       classId: input.classId ?? null,
+      studentId: input.studentId ?? null,
       isActive: true,
     };
     requireDb().feeStructures.push(structure);
@@ -1569,22 +1641,21 @@ export const mockApi: ApiClient = {
     return structure;
   },
 
+  async previewInvoices(input) {
+    await bootstrap();
+    await delay();
+    return resolveBillingTarget(input).summary;
+  },
+
   async issueInvoices(input) {
     await bootstrap();
     await delay(700, 1100);
-    const madrasaId = requireMadrasaId();
-    assertSubscriptionAllowsAdmin();
     const data = requireDb();
-    const structure = data.feeStructures.find((f) => f.id === input.feeStructureId);
-    if (!structure) throw new ApiError('not_found', 'Fee structure not found.');
+    const madrasaId = requireMadrasaId();
+    const { structure, targets, summary } = resolveBillingTarget(input);
+    if (!summary.toIssue) return { ...summary, created: 0, invoices: [] };
 
-    const targets = data.students.filter(
-      (s) =>
-        s.madrasaId === madrasaId &&
-        s.enrollmentStatus === 'active' &&
-        (structure.appliesTo === 'all' || s.classId === structure.classId),
-    );
-
+    const issued: IssuedInvoice[] = [];
     let created = 0;
     targets.forEach((student) => {
       const duplicate = data.invoices.some(
@@ -1610,6 +1681,12 @@ export const mockApi: ApiClient = {
         notes: input.notes ?? null,
       };
       data.invoices.push(invoice);
+      issued.push({
+        invoiceNo: invoice.invoiceNo,
+        studentName: student.fullName,
+        amount: invoice.amountDue,
+        dueDate: invoice.dueDate,
+      });
 
       // Every issued invoice generates parent mail, the way the real
       // mail_outbox + Resend pipeline will.
@@ -1632,7 +1709,7 @@ export const mockApi: ApiClient = {
     });
 
     await persist();
-    return { created };
+    return { ...summary, created, invoices: issued };
   },
 
   async listInvoices(params) {

@@ -262,7 +262,41 @@ export interface FeeStructure {
   currency: string;
   appliesTo: 'all' | 'class' | 'student';
   classId: ID | null;
+  /** Set when `appliesTo` is `student`; the one pupil this fee belongs to. */
+  studentId: ID | null;
   isActive: boolean;
+}
+
+/**
+ * What a billing run would do, answered by the server before anything is
+ * raised. The counts are the authoritative ones: eligibility and the
+ * already-billed rule are evaluated against the database, not guessed from
+ * whatever roster the device happens to be holding.
+ */
+export interface InvoiceBatchPreview {
+  scope: 'student' | 'class' | 'madrasa';
+  /** Enrolled students the target resolves to. */
+  eligible: number;
+  /** Of those, the ones that already have an invoice for this fee. */
+  alreadyBilled: number;
+  /** Invoices this run would actually raise. */
+  toIssue: number;
+  amount: number;
+  currency: string;
+  total: number;
+}
+
+/** A run that has happened, reported with the numbers the database allocated. */
+export interface InvoiceBatchResult extends InvoiceBatchPreview {
+  created: number;
+  invoices: IssuedInvoice[];
+}
+
+export interface IssuedInvoice {
+  invoiceNo: string;
+  studentName: string;
+  amount: number;
+  dueDate: string;
 }
 
 export interface Invoice {

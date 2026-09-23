@@ -44,6 +44,10 @@ export async function listFeeStructures(): Promise<FeeStructure[]> {
     currency: row.currency ?? 'KES',
     appliesTo: row.applies_to,
     classId: row.class_id ?? null,
+    // Carried so a student-scoped fee can name its pupil in the billing
+    // screen. It was dropped before, which left the narrowest kind of fee
+    // indistinguishable from one that applies to everybody.
+    studentId: row.student_id ?? null,
     isActive: row.is_active ?? true,
   }));
 }

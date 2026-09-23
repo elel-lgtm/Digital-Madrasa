@@ -72,6 +72,7 @@ const implemented: Partial<ApiClient> = {
   getFeesSummary: fees.getFeesSummary,
   listPayments: fees.listPayments,
   createFeeStructure: m.createFeeStructure,
+  previewInvoices: edge.previewInvoices,
   issueInvoices: edge.issueInvoices,
 
   // ---------------------------------------------------------- recitations
