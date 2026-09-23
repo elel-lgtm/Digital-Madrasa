@@ -20,7 +20,7 @@ import {
 } from '../types';
 import { supabase } from './client';
 import { mapStudent, mapTeacher } from './mappers';
-import { getFeesSummary } from './queries-fees';
+import { getFeesSummary, listRecitations } from './queries-fees';
 
 /**
  * Read queries against Supabase.
@@ -314,7 +314,7 @@ export async function getChildOverview(studentId: string): Promise<ChildOverview
   // authorisation error — the database simply does not show it to them.
   if (!row) throw new ApiError('not_found', 'That child is not linked to your account.');
 
-  const [attendance, grades, hifz] = await Promise.all([
+  const [attendance, grades, hifz, recitations] = await Promise.all([
     supabase
       .from('attendance')
       .select('*')
@@ -323,6 +323,12 @@ export async function getChildOverview(studentId: string): Promise<ChildOverview
       .limit(30),
     supabase.from('grades').select('*').eq('student_id', studentId),
     supabase.from('hifz_progress').select('*').eq('student_id', studentId),
+    // The child screen has always rendered these cards; the field was left
+    // hardcoded empty, so a parent saw the "no recitations yet" copy however
+    // much their child had recited. Same read the student and teacher use —
+    // RLS answers `can_read_student`, which for a parent means an approved
+    // link, so the studentId here narrows rather than authorises.
+    listRecitations({ studentId }),
   ]);
 
   const attendanceRows: AttendanceRecord[] = (attendance.data ?? []).map((a: Row) => ({
@@ -367,7 +373,7 @@ export async function getChildOverview(studentId: string): Promise<ChildOverview
       issuedAt: g.created_at,
     })),
     outstandingBalance: 0,
-    recentRecitations: [],
+    recentRecitations: recitations,
     certificates: [],
   };
 }

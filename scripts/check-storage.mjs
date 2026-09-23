@@ -483,6 +483,56 @@ try {
     body: JSON.stringify({ deleted_at: null }),
   });
 
+
+  // ------------------------------------------------ parent recitation reads
+  //
+  // The matrix above proves who may fetch the audio. This proves who may see
+  // that the recitation exists at all — the query the parent's child screen
+  // runs. Both must agree, or one of them is the weaker rule that decides.
+  console.log('\nparent recitation visibility (row access)');
+
+  const listAs = async (token, studentId) => {
+    const r = await fetch(
+      URL_BASE + '/rest/v1/recitations?select=id,audio_url&student_id=eq.' + studentId,
+      { headers: { apikey: ANON, Authorization: 'Bearer ' + token } },
+    );
+    const rows = await r.json().catch(() => []);
+    return Array.isArray(rows) ? rows : [];
+  };
+
+  const childId = recStudent[0].student_id;
+
+  const linkedRows = await listAs(linkedToken, childId);
+  ck('approved parent lists the child recitation', linkedRows.length === 1, linkedRows.length + ' row(s)');
+  ck('  ...and never receives a usable audio path it cannot sign',
+     linkedRows.every((r) => typeof r.audio_url === 'string'));
+
+  const unlinkedRows = await listAs(unlinkedToken, childId);
+  ck('unlinked parent lists nothing for that child', unlinkedRows.length === 0, unlinkedRows.length + ' row(s)');
+
+  const farRows = await listAs(farToken, childId);
+  ck('parent from another madrasa lists nothing', farRows.length === 0, farRows.length + ' row(s)');
+
+  const anonListRows = await fetch(
+    URL_BASE + '/rest/v1/recitations?select=id&student_id=eq.' + childId,
+    { headers: { apikey: ANON } },
+  ).then((r) => r.json()).catch(() => []);
+  ck('unauthenticated lists nothing', !Array.isArray(anonListRows) || anonListRows.length === 0);
+
+  // A soft-deleted recitation disappears for the approved parent too, which is
+  // the same rule the Storage policy applies to its audio.
+  await rest('recitations?id=eq.' + ev.body.id, {
+    method: 'PATCH', headers: { Prefer: 'return=minimal' },
+    body: JSON.stringify({ deleted_at: new Date().toISOString() }),
+  });
+  const afterSoftDelete = await listAs(linkedToken, childId);
+  ck('soft-deleted recitation hidden from the parent', afterSoftDelete.length === 0,
+     afterSoftDelete.length + ' row(s)');
+  await rest('recitations?id=eq.' + ev.body.id, {
+    method: 'PATCH', headers: { Prefer: 'return=minimal' },
+    body: JSON.stringify({ deleted_at: null }),
+  });
+
   console.log('\n10. subscription enforcement');
   const src = readFileSync('supabase/functions/evaluate-recitation/index.ts', 'utf8');
   const hasSub = src.includes('requireActiveSubscription');

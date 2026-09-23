@@ -1,6 +1,6 @@
 import { formatMoney, percent } from '@digital-madrasa/shared';
 import { useQuery } from '@tanstack/react-query';
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Certificate as CertificateIcon } from 'phosphor-react-native';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -25,7 +25,7 @@ import {
 } from '@/components/ui';
 import { useApiError } from '@/hooks/useApiError';
 import { useTheme } from '@/theme/ThemeProvider';
-import { longDate, shortDate } from '@/utils/dates';
+import { formatDuration, longDate, shortDate } from '@/utils/dates';
 
 type Tab = 'progress' | 'attendance' | 'grades';
 
@@ -34,6 +34,7 @@ export default function ChildDetail() {
   const theme = useTheme();
   const describeError = useApiError();
   const { id } = useLocalSearchParams<{ id: string }>();
+  const router = useRouter();
   const [tab, setTab] = useState<Tab>('progress');
 
   const overview = useQuery({
@@ -135,8 +136,17 @@ export default function ChildDetail() {
                     const score =
                       recitation.feedback?.teacherOverride?.overallScore ??
                       recitation.feedback?.overallScore;
+                    const reviewed = Boolean(recitation.feedback?.teacherOverride);
                     return (
-                      <Card key={recitation.id}>
+                      <Card
+                        key={recitation.id}
+                        onPress={() =>
+                          router.push({
+                            pathname: '/(parent)/recitation/[id]',
+                            params: { id: recitation.id },
+                          })
+                        }
+                      >
                         <View
                           style={{
                             flexDirection: 'row',
@@ -145,14 +155,24 @@ export default function ChildDetail() {
                           }}
                         >
                           {score !== undefined ? <ScoreRing score={score} size={72} /> : null}
-                          <View style={{ flex: 1, gap: 2 }}>
+                          <View style={{ flex: 1, gap: 4 }}>
                             <AppText variant="bodyStrong">
                               {recitation.surahName} · {recitation.ayahFrom}–{recitation.ayahTo}
                             </AppText>
                             <AppText variant="caption" color="textMuted">
-                              {shortDate(recitation.createdAt)}
+                              {shortDate(recitation.createdAt)} ·{' '}
+                              {formatDuration(recitation.durationMs)} · {recitation.qiraahStyle}
                             </AppText>
-                            {recitation.feedback?.teacherOverride ? (
+                            {/* Says whose score the ring is showing, so a
+                                provisional model result is never taken for a
+                                teacher's assessment. */}
+                            <View style={{ alignSelf: 'flex-start' }}>
+                              <Badge
+                                label={reviewed ? t('teacher.reviewed') : t('student.aiOnly')}
+                                tone={reviewed ? 'success' : undefined}
+                              />
+                            </View>
+                            {recitation.feedback?.teacherOverride?.remarks ? (
                               <AppText variant="caption" color="textSubtle" numberOfLines={2}>
                                 {recitation.feedback.teacherOverride.remarks}
                               </AppText>
