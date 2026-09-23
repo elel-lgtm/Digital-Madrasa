@@ -30,10 +30,18 @@ async function currentUserId(): Promise<string> {
 export async function listAssignments(params: {
   classId?: string | null;
 }): Promise<Assignment[]> {
+  // The teacher's assignment list renders "submissions / class size" and a
+  // progress bar off these two counts. Both were hardcoded, so every
+  // assignment read "0 / 0" however many pupils had handed work in.
+  //
+  // Both arrive as aggregates on the embedded relations rather than as a
+  // query per row, and RLS scopes the embedded rows exactly as it scopes the
+  // parents, so neither count can span madrasas.
   let query = supabase
     .from('assignments')
-    .select('*, classes(name)')
+    .select('*, classes(name, students(count)), submissions(count)')
     .is('deleted_at', null)
+    .is('classes.students.deleted_at', null)
     .order('due_at', { ascending: false });
 
   if (params.classId) query = query.eq('class_id', params.classId);
@@ -51,8 +59,8 @@ export async function listAssignments(params: {
     instructions: row.instructions,
     assignmentType: row.assignment_type,
     dueAt: row.due_at,
-    submissionCount: 0,
-    studentCount: 0,
+    submissionCount: row.submissions?.[0]?.count ?? 0,
+    studentCount: row.classes?.students?.[0]?.count ?? 0,
   }));
 }
 
@@ -195,6 +203,25 @@ export async function listThreads(): Promise<Thread[]> {
 
   if (error) fail(error, 'Could not load conversations.');
 
+  // The conversation list shows an unread badge that was fed a hardcoded
+  // zero, so it never appeared. Unread means addressed to me and not yet
+  // read; `messages.read_at` already records that. One query for all threads
+  // rather than one per thread, and RLS limits it to messages I may read.
+  const { data: auth } = await supabase.auth.getUser();
+  const { data: unread } = auth.user
+    ? await supabase
+        .from('messages')
+        .select('thread_id')
+        .eq('recipient_id', auth.user.id)
+        .is('read_at', null)
+        .is('deleted_at', null)
+    : { data: [] };
+
+  const unreadByThread = new Map<string, number>();
+  for (const m of (unread ?? []) as Row[]) {
+    unreadByThread.set(m.thread_id, (unreadByThread.get(m.thread_id) ?? 0) + 1);
+  }
+
   return (data ?? []).map((row: Row) => ({
     id: row.id,
     subjectName: row.subject_name ?? 'Conversation',
@@ -203,7 +230,7 @@ export async function listThreads(): Promise<Thread[]> {
     counterpartRole: row.counterpart_role ?? 'teacher',
     lastMessage: row.last_message ?? '',
     lastMessageAt: row.last_message_at ?? row.created_at,
-    unreadCount: 0,
+    unreadCount: unreadByThread.get(row.id) ?? 0,
   }));
 }
 

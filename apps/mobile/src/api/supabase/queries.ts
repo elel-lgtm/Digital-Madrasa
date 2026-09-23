@@ -20,7 +20,8 @@ import {
 } from '../types';
 import { supabase } from './client';
 import { mapStudent, mapTeacher } from './mappers';
-import { getFeesSummary, listRecitations } from './queries-fees';
+import { listAssignments } from './queries-comms';
+import { getFeesSummary, listCertificates, listRecitations } from './queries-fees';
 
 /**
  * Read queries against Supabase.
@@ -314,7 +315,7 @@ export async function getChildOverview(studentId: string): Promise<ChildOverview
   // authorisation error — the database simply does not show it to them.
   if (!row) throw new ApiError('not_found', 'That child is not linked to your account.');
 
-  const [attendance, grades, hifz, recitations] = await Promise.all([
+  const [attendance, grades, hifz, recitations, invoices, certificates] = await Promise.all([
     supabase
       .from('attendance')
       .select('*')
@@ -329,6 +330,16 @@ export async function getChildOverview(studentId: string): Promise<ChildOverview
     // RLS answers `can_read_student`, which for a parent means an approved
     // link, so the studentId here narrows rather than authorises.
     listRecitations({ studentId }),
+    // Both of the fields below were hardcoded. A parent was shown
+    // "Outstanding balance: Ksh 0" for a child who owed fees, which is the
+    // worst kind of wrong number to put in front of someone — it reads as
+    // settled rather than as missing.
+    supabase
+      .from('invoices')
+      .select('amount_due, amount_paid')
+      .eq('student_id', studentId)
+      .is('deleted_at', null),
+    listCertificates(studentId),
   ]);
 
   const attendanceRows: AttendanceRecord[] = (attendance.data ?? []).map((a: Row) => ({
@@ -372,9 +383,16 @@ export async function getChildOverview(studentId: string): Promise<ChildOverview
       remarks: g.remarks ?? null,
       issuedAt: g.created_at,
     })),
-    outstandingBalance: 0,
+    outstandingBalance: (invoices.data ?? []).reduce(
+      (sum: number, i: Row) => sum + (Number(i.amount_due) - Number(i.amount_paid)),
+      0,
+    ),
     recentRecitations: recitations,
-    certificates: [],
+    // No certificate can be issued anywhere in the product yet, so this stays
+    // empty today either way. It reads through the same query the other
+    // screens use, so the child screen will not silently disagree with them
+    // once issuing exists.
+    certificates,
   };
 }
 
@@ -414,6 +432,35 @@ function summariseHifz(rows: HifzProgress[]): HifzSummary {
   };
 }
 
+/**
+ * Consecutive days, ending today or yesterday, on which the student was not
+ * absent.
+ *
+ * Yesterday counts as the end of the run so a streak does not appear broken
+ * first thing in the morning before that day's class has happened. A gap of
+ * more than a day ends it.
+ */
+function attendanceStreak(rows: AttendanceRecord[]): number {
+  const present = new Set(
+    rows.filter((r) => r.status !== 'absent').map((r) => r.sessionDate),
+  );
+  if (present.size === 0) return 0;
+
+  const DAY = 24 * 60 * 60 * 1000;
+  const today = new Date().toISOString().slice(0, 10);
+  const yesterday = new Date(Date.now() - DAY).toISOString().slice(0, 10);
+
+  let cursor = present.has(today) ? today : present.has(yesterday) ? yesterday : null;
+  if (!cursor) return 0;
+
+  let streak = 0;
+  while (present.has(cursor)) {
+    streak += 1;
+    cursor = new Date(new Date(cursor).getTime() - DAY).toISOString().slice(0, 10);
+  }
+  return streak;
+}
+
 function attendanceRate(rows: AttendanceRecord[]): number {
   if (rows.length === 0) return 0;
   const attended = rows.filter((r) => r.status === 'present' || r.status === 'late').length;
@@ -433,7 +480,7 @@ function findLive(lessons: Lesson[]): Lesson | null {
 }
 
 export async function getTeacherDashboard(): Promise<TeacherDashboard> {
-  const [madrasaName, students, classes, lessons, attendance, announcements, fees] =
+  const [madrasaName, students, classes, lessons, attendance, announcements, pendingReviews, fees] =
     await Promise.all([
       currentMadrasaName(),
       listStudents(),
@@ -441,6 +488,10 @@ export async function getTeacherDashboard(): Promise<TeacherDashboard> {
       listLessons({}),
       recentAttendance(),
       listAnnouncements(),
+      // The dashboard's work-queue card is gated on this being above zero, so
+      // hardcoding it meant a teacher was never told a recitation was waiting
+      // — the grading queue existed but nothing ever pointed at it.
+      listRecitations({ pendingReviewOnly: true }),
       // The same summary the Fees screen renders. The dashboard previously
       // hardcoded zeroes, so the two screens disagreed about the same money:
       // Ksh 0 here against Ksh 6,500 collected there.
@@ -459,7 +510,7 @@ export async function getTeacherDashboard(): Promise<TeacherDashboard> {
 
   return {
     madrasaName,
-    pendingReviewCount: 0,
+    pendingReviewCount: pendingReviews.length,
     pendingLinkRequests: pendingLinks ?? 0,
     todaysClasses: classes.map((klass) => ({ klass, attendanceMarked: false })),
     studentCount: students.items.length,
@@ -487,10 +538,17 @@ export async function getStudentDashboard(): Promise<StudentDashboard> {
   if (!studentRow) throw new ApiError('not_found', 'No student record for this account.');
   const student = mapStudent(studentRow);
 
-  const [hifz, attendance, lessons] = await Promise.all([
+  const [hifz, attendance, lessons, assignments, submissions] = await Promise.all([
     listHifzProgress(),
     recentAttendance(),
     listLessons({ classId: student.classId }),
+    // The dashboard renders an assignments list that was fed a hardcoded
+    // empty array, so a student was told they were all caught up regardless.
+    listAssignments({ classId: student.classId }),
+    // "Open" means not handed in, not merely not yet due. The list renders an
+    // explicit overdue state in a danger tone, so filtering by due date would
+    // hide precisely the work it exists to chase.
+    supabase.from('submissions').select('assignment_id').eq('student_id', student.id),
   ]);
 
   const now = Date.now();
@@ -502,11 +560,16 @@ export async function getStudentDashboard(): Promise<StudentDashboard> {
     studentName: student.fullName,
     admissionNo: student.admissionNo,
     className: student.className,
-    streakDays: 0,
+    streakDays: attendanceStreak(attendance),
     revisionDue: hifz.filter((h) => h.status === 'revising').slice(0, 5),
     nextLesson: upcoming[0] ?? null,
     liveLesson: findLive(lessons),
-    openAssignments: [],
+    openAssignments: (() => {
+      const submitted = new Set(
+        ((submissions.data ?? []) as Row[]).map((row) => row.assignment_id),
+      );
+      return assignments.filter((a) => !submitted.has(a.id));
+    })(),
     hifzSummary: summariseHifz(hifz),
     attendanceRate: attendanceRate(attendance),
     lastRecitation: null,
