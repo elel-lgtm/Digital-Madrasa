@@ -96,7 +96,7 @@ async function readObject(path, token) {
   return r.status;
 }
 
-const created = { paths: [], recitationIds: [], authUsers: [], madrasaIds: [] };
+const created = { paths: [], recitationIds: [], authUsers: [], madrasaIds: [], linkIds: [] };
 
 try {
   const student = await signIn('aisha.hassan@annur.example');
@@ -392,6 +392,97 @@ try {
   const bogus = await signAs(teacher, 'madrasa/' + madrasaId + '/recitations/' + randomUUID());
   ck('9. nonexistent object path -> DENY', bogus.status !== 200, 'HTTP ' + bogus.status);
 
+
+  // Cases 4, 5, 7 and 10 need identities the seed does not provide, so they are
+  // built here and torn down in the finally. Each one exists to prove a
+  // distinction the madrasa-scoped policy could not make.
+
+  // 4. another pupil in the same madrasa, who has nothing to do with this one
+  const peerStudentToken = await signIn('dm-2025-0001@annur.example');
+  const peerStudent = await signAs(peerStudentToken, up.body.path);
+  ck('4. student, another student -> DENY', peerStudent.status !== 200, 'HTTP ' + peerStudent.status);
+
+  // 5. a parent WITH an approved link to the reciting pupil
+  const recStudent = await rest('recitations?select=student_id,madrasa_id&id=eq.' + ev.body.id);
+  const linkedEmail = 'fixture-linked-' + randomUUID().slice(0, 8) + '@digital-madrasa.test';
+  const linkedPass = 'Fx-' + randomUUID();
+  const linkedUser = await fetch(URL_BASE + '/auth/v1/admin/users', {
+    method: 'POST',
+    headers: { ...SERVICE_HEADERS, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      email: linkedEmail, password: linkedPass, email_confirm: true,
+      user_metadata: { signup_kind: 'parent', full_name: 'Linked Parent' },
+    }),
+  }).then((r) => r.json());
+  if (linkedUser && linkedUser.id) created.authUsers.push(linkedUser.id);
+
+  await rest('profiles?id=eq.' + linkedUser.id, {
+    method: 'PATCH', headers: { Prefer: 'return=minimal' },
+    body: JSON.stringify({ madrasa_id: recStudent[0].madrasa_id }),
+  });
+  const linkedParent = await rest('parents?profile_id=eq.' + linkedUser.id, {
+    method: 'PATCH', headers: { Prefer: 'return=representation' },
+    body: JSON.stringify({ madrasa_id: recStudent[0].madrasa_id }),
+  });
+  const approved = await rest('parent_student_links', {
+    method: 'POST', headers: { Prefer: 'return=representation' },
+    body: JSON.stringify({
+      parent_id: linkedParent[0].id,
+      student_id: recStudent[0].student_id,
+      madrasa_id: recStudent[0].madrasa_id,
+      relationship: 'mother',
+      status: 'approved',
+      decided_at: new Date().toISOString(),
+    }),
+  });
+  if (approved[0]) created.linkIds.push(approved[0].id);
+
+  const linkedToken = await signIn(linkedEmail, linkedPass);
+  const linkedSign = await signAs(linkedToken, up.body.path);
+  ck('5. parent, APPROVED child -> ALLOW', linkedSign.status === 200, 'HTTP ' + linkedSign.status);
+
+  // 7. a parent belonging to the other madrasa entirely
+  const farEmail = 'fixture-farparent-' + randomUUID().slice(0, 8) + '@digital-madrasa.test';
+  const farPass = 'Fx-' + randomUUID();
+  const farUser = await fetch(URL_BASE + '/auth/v1/admin/users', {
+    method: 'POST',
+    headers: { ...SERVICE_HEADERS, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      email: farEmail, password: farPass, email_confirm: true,
+      user_metadata: { signup_kind: 'parent', full_name: 'Far Parent' },
+    }),
+  }).then((r) => r.json());
+  if (farUser && farUser.id) created.authUsers.push(farUser.id);
+
+  await rest('profiles?id=eq.' + farUser.id, {
+    method: 'PATCH', headers: { Prefer: 'return=minimal' },
+    body: JSON.stringify({ madrasa_id: created.madrasaIds[0] }),
+  });
+  await rest('parents?profile_id=eq.' + farUser.id, {
+    method: 'PATCH', headers: { Prefer: 'return=minimal' },
+    body: JSON.stringify({ madrasa_id: created.madrasaIds[0] }),
+  });
+  const farToken = await signIn(farEmail, farPass);
+  const farSign = await signAs(farToken, up.body.path);
+  ck('7. parent, different madrasa -> DENY', farSign.status !== 200, 'HTTP ' + farSign.status);
+
+  // 10. the platform admin keeps the reach it already had
+  const adminToken = await signIn('mohammednursukyan98@gmail.com', 'Roman@4567');
+  const adminSign = await signAs(adminToken, up.body.path);
+  ck('10. platform admin -> ALLOW (unchanged)', adminSign.status === 200, 'HTTP ' + adminSign.status);
+
+  // A soft-deleted recitation must stop authorising its audio.
+  await rest('recitations?id=eq.' + ev.body.id, {
+    method: 'PATCH', headers: { Prefer: 'return=minimal' },
+    body: JSON.stringify({ deleted_at: new Date().toISOString() }),
+  });
+  const afterDelete = await signAs(teacher, up.body.path);
+  ck('soft-deleted recitation -> DENY', afterDelete.status !== 200, 'HTTP ' + afterDelete.status);
+  await rest('recitations?id=eq.' + ev.body.id, {
+    method: 'PATCH', headers: { Prefer: 'return=minimal' },
+    body: JSON.stringify({ deleted_at: null }),
+  });
+
   console.log('\n10. subscription enforcement');
   const src = readFileSync('supabase/functions/evaluate-recitation/index.ts', 'utf8');
   const hasSub = src.includes('requireActiveSubscription');
@@ -407,6 +498,13 @@ try {
       await rest('recitations?id=eq.' + id, { method: 'DELETE' });
     } catch (e) {
       console.log('  ! recitation ' + id + ': ' + e.message.slice(0, 120));
+    }
+  }
+  for (const id of created.linkIds) {
+    try {
+      await rest('parent_student_links?id=eq.' + id, { method: 'DELETE' });
+    } catch (e) {
+      console.log('  ! link ' + id + ': ' + e.message.slice(0, 120));
     }
   }
   for (const id of created.madrasaIds) {
@@ -450,7 +548,8 @@ try {
   }
   console.log(
     '  removed ' + created.recitationIds.length + ' row(s) and ' +
-      created.paths.length + ' object path(s) and ' + created.authUsers.length + ' auth user(s)',
+      created.paths.length + ' object path(s), ' + created.authUsers.length +
+      ' auth user(s) and ' + created.linkIds.length + ' link(s)',
   );
 }
 

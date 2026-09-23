@@ -86,7 +86,7 @@ begin
     json_build_object('sub', v_pupil_u::text, 'role', 'authenticated')::text, true);
   select public.can_read_student(v_pupil) into v_allowed;
   if not v_allowed then
-    v_failed := v_failed || 'a student cannot read their own recitation';
+    v_failed := v_failed || 'a student cannot read their own recitation'::text;
   end if;
 
   -- 2. a different student in the same madrasa
@@ -94,7 +94,7 @@ begin
     json_build_object('sub', v_peer_u::text, 'role', 'authenticated')::text, true);
   select public.can_read_student(v_pupil) into v_allowed;
   if v_allowed then
-    v_failed := v_failed || 'another pupil in the madrasa can read the recitation';
+    v_failed := v_failed || 'another pupil in the madrasa can read the recitation'::text;
   end if;
 
   -- 3. the approved parent
@@ -102,7 +102,7 @@ begin
     json_build_object('sub', v_parent_u::text, 'role', 'authenticated')::text, true);
   select public.can_read_student(v_pupil) into v_allowed;
   if not v_allowed then
-    v_failed := v_failed || 'an approved parent cannot read their child''s recitation';
+    v_failed := v_failed || 'an approved parent cannot read their child''s recitation'::text;
   end if;
 
   -- 4. a parent in the same madrasa with no approved link — the Phase 4D gap
@@ -110,7 +110,7 @@ begin
     json_build_object('sub', v_stranger::text, 'role', 'authenticated')::text, true);
   select public.can_read_student(v_pupil) into v_allowed;
   if v_allowed then
-    v_failed := v_failed || 'an unlinked parent in the same madrasa can read the recitation';
+    v_failed := v_failed || 'an unlinked parent in the same madrasa can read the recitation'::text;
   end if;
 
   -- 5. staff of the same madrasa
@@ -118,7 +118,7 @@ begin
     json_build_object('sub', v_owner::text, 'role', 'authenticated')::text, true);
   select public.can_read_student(v_pupil) into v_allowed;
   if not v_allowed then
-    v_failed := v_failed || 'a teacher in the madrasa cannot read the recitation';
+    v_failed := v_failed || 'a teacher in the madrasa cannot read the recitation'::text;
   end if;
 
   -- 6. staff of another madrasa
@@ -126,7 +126,7 @@ begin
     json_build_object('sub', v_other_own::text, 'role', 'authenticated')::text, true);
   select public.can_read_student(v_pupil) into v_allowed;
   if v_allowed then
-    v_failed := v_failed || 'a teacher from another madrasa can read the recitation';
+    v_failed := v_failed || 'a teacher from another madrasa can read the recitation'::text;
   end if;
 
   -- ------------------------------------------- the policy joins on the path
@@ -140,7 +140,7 @@ begin
      where r.audio_url = v_path and r.deleted_at is null
        and public.can_read_student(r.student_id)
   ) then
-    v_failed := v_failed || 'the policy join from an object path to its recitation fails';
+    v_failed := v_failed || 'the policy join from an object path to its recitation fails'::text;
   end if;
 
   if exists (
@@ -148,7 +148,7 @@ begin
      where r.audio_url = v_path || '-not-a-real-object'
        and public.can_read_student(r.student_id)
   ) then
-    v_failed := v_failed || 'an unknown object path resolves to a recitation';
+    v_failed := v_failed || 'an unknown object path resolves to a recitation'::text;
   end if;
 
   -- A soft-deleted recitation must stop authorising its audio.
@@ -158,7 +158,7 @@ begin
      where r.audio_url = v_path and r.deleted_at is null
        and public.can_read_student(r.student_id)
   ) then
-    v_failed := v_failed || 'a deleted recitation still authorises its audio';
+    v_failed := v_failed || 'a deleted recitation still authorises its audio'::text;
   end if;
 
   perform set_config('request.jwt.claims', null, true);
