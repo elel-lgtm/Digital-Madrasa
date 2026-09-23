@@ -34,9 +34,13 @@ const CODE_MAP: Record<string, ApiErrorCode> = {
   // deliberately returns one generic message for every cause, so the client
   // must not try to be more specific than it was told.
   link_failed: 'not_found',
-  // A QR code that has rotated out of its window, or is for another class.
-  expired_code: 'validation',
-  wrong_class: 'forbidden',
+  // Kept distinct rather than folded into validation/forbidden: "that code has
+  // expired, ask for a fresh one" and "that code is for another class" need
+  // different actions from the student, and the generic copy for those two
+  // codes would tell them neither. The server's own wording cannot be used
+  // instead — it is English only, and this app ships in four languages.
+  expired_code: 'expired_code',
+  wrong_class: 'wrong_class',
   method: 'unknown',
   internal: 'unknown',
 };

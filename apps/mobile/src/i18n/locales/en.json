@@ -606,5 +606,23 @@
     "chooseChildTitle": "Which child?",
     "chooseChildBody": "Choose which child you are asking about first.",
     "disclaimer": "AI guidance assists study; your teacher’s assessment is final."
+  },
+  "scan": {
+    "title": "Scan attendance",
+    "intro": "Point your camera at the code your teacher is showing.",
+    "frameHint": "Hold the code inside the square",
+    "permissionTitle": "Camera needed",
+    "permissionBody": "Digital Madrasa needs your camera to read the attendance code. Nothing is recorded except that you were present.",
+    "permissionAllow": "Allow camera",
+    "permissionDenied": "Camera permission was declined. Turn it on in Settings, then come back.",
+    "openSettings": "Open settings",
+    "checking": "Marking you present…",
+    "successTitle": "You are marked present",
+    "scanAgain": "Scan again",
+    "done": "Done",
+    "expired": "That code has expired. Ask your teacher for a fresh one.",
+    "wrongClass": "That code is for a different class.",
+    "notStudent": "Only students can scan in.",
+    "unreadable": "That code could not be read. Try again."
   }
 }

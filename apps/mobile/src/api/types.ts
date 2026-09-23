@@ -74,6 +74,10 @@ export type ApiErrorCode =
   | 'subscription_lapsed'
   /** Signup succeeded but the address must be confirmed before signing in. */
   | 'email_confirmation_required'
+  /** A scanned attendance code has rotated out of its window. */
+  | 'expired_code'
+  /** A scanned attendance code belongs to a class the student is not in. */
+  | 'wrong_class'
   /** The Supabase client has no implementation for this call yet. */
   | 'not_implemented'
   | 'network'
@@ -326,5 +330,5 @@ export interface ApiClient {
   markAttendanceByQr(params: {
     token: string;
     studentId: string;
-  }): Promise<{ status: AttendanceStatus }>;
+  }): Promise<{ status: AttendanceStatus; sessionDate: string; classId: string }>;
 }

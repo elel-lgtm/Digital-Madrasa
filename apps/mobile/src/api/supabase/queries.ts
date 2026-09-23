@@ -2,6 +2,7 @@ import {
   liveSessionState,
   surahName,
   type Announcement,
+  type Assignment,
   type AttendanceRecord,
   type Grade,
   type HifzProgress,
@@ -20,7 +21,6 @@ import {
 } from '../types';
 import { supabase } from './client';
 import { mapStudent, mapTeacher } from './mappers';
-import { listAssignments } from './queries-comms';
 import { getFeesSummary, listCertificates, listRecitations } from './queries-fees';
 
 /**
@@ -544,7 +544,17 @@ export async function getStudentDashboard(): Promise<StudentDashboard> {
     listLessons({ classId: student.classId }),
     // The dashboard renders an assignments list that was fed a hardcoded
     // empty array, so a student was told they were all caught up regardless.
-    listAssignments({ classId: student.classId }),
+    //
+    // Queried here rather than through `listAssignments`: queries-comms
+    // already imports from this module, and importing back formed a require
+    // cycle that Metro warns can leave the binding uninitialized when it is
+    // called.
+    supabase
+      .from('assignments')
+      .select('*, classes(name)')
+      .eq('class_id', student.classId ?? '')
+      .is('deleted_at', null)
+      .order('due_at', { ascending: false }),
     // "Open" means not handed in, not merely not yet due. The list renders an
     // explicit overdue state in a danger tone, so filtering by due date would
     // hide precisely the work it exists to chase.
@@ -568,7 +578,25 @@ export async function getStudentDashboard(): Promise<StudentDashboard> {
       const submitted = new Set(
         ((submissions.data ?? []) as Row[]).map((row) => row.assignment_id),
       );
-      return assignments.filter((a) => !submitted.has(a.id));
+      return ((assignments.data ?? []) as Row[])
+        .filter((row) => !submitted.has(row.id))
+        .map((row) => ({
+          id: row.id,
+          madrasaId: row.madrasa_id,
+          classId: row.class_id,
+          className: row.classes?.name ?? '',
+          lessonId: row.lesson_id ?? null,
+          title: row.title,
+          instructions: row.instructions,
+          assignmentType: row.assignment_type,
+          dueAt: row.due_at,
+          // Class-wide tallies. They belong to the teacher's view of an
+          // assignment and no student screen renders them, so they are not
+          // counted here rather than reported as zero; a student cannot read
+          // another pupil's submissions to count them in any case.
+          submissionCount: 0,
+          studentCount: 0,
+        })) as Assignment[];
     })(),
     hifzSummary: summariseHifz(hifz),
     attendanceRate: attendanceRate(attendance),

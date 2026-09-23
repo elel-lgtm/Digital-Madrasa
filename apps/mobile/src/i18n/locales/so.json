@@ -368,5 +368,23 @@
   },
   "teacher": {
     "reviewed": "La eegay"
+  },
+  "scan": {
+    "title": "Iskaan xaadirinta",
+    "intro": "Kamaradaada u jeedi koodhka macallinkaagu soo bandhigayo.",
+    "frameHint": "Koodhka ku hay gudaha afargeesoodka",
+    "permissionTitle": "Kamarad ayaa loo baahan yahay",
+    "permissionBody": "Digital Madrasa waxay u baahan tahay kamaraddaada si ay u akhrido koodhka xaadirinta. Waxba lama diiwaan gelinayo marka laga reebo inaad joogtay.",
+    "permissionAllow": "Ogolow kamarada",
+    "permissionDenied": "Ogolaanshaha kamarada waa la diiday. Ka shid Goobaha, kadibna soo noqo.",
+    "openSettings": "Fur goobaha",
+    "checking": "Waxaa lagu diiwaan gelinayaa inaad joogto…",
+    "successTitle": "Waxaa lagu qoray inaad joogto",
+    "scanAgain": "Mar kale iskaan",
+    "done": "Waan dhammeeyay",
+    "expired": "Koodhkaas wuu dhacay. Macallinkaaga mid cusub weydii.",
+    "wrongClass": "Koodhkaas waa fasal kale.",
+    "notStudent": "Kaliya ardayda ayaa iskaan samayn karta.",
+    "unreadable": "Koodhkaas lama akhriyi karin. Isku day mar kale."
   }
 }

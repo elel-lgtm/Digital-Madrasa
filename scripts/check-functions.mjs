@@ -276,6 +276,118 @@ try {
   const forged = await call('attendance-qr', student, { token: 'fake.123.deadbeef' });
   check('forged token refused', forged.status === 400, `HTTP ${forged.status}`);
 
+  // ------------------------------------------------------- QR scan matrix
+  //
+  // The generation side above proves a token is signed and scoped. This is the
+  // other half: what the scan endpoint does with a token once a student
+  // presents it. Every rejection below is the server's, not the client's.
+  console.log('\nattendance-qr: scanning');
+
+  const scanStudent = await adminFetch(
+    '/rest/v1/students?select=id,class_id&profile_id=eq.' +
+      (await adminFetch('/rest/v1/profiles?select=id&email=eq.aisha.hassan@annur.example'))[0].id,
+  );
+  const today = new Date().toISOString().slice(0, 10);
+
+  // Today's row is restored afterwards so a passing run leaves attendance as
+  // it found it.
+  const priorRows = await adminFetch(
+    '/rest/v1/attendance?select=status,method&student_id=eq.' +
+      scanStudent[0].id + '&session_date=eq.' + today,
+  );
+  const prior = priorRows[0] ?? null;
+
+  try {
+    // A. own class, live token.
+    //
+    // The token is fetched as the teacher, because that is who is allowed to
+    // fetch one — the display side is staff-only, and a student who could mint
+    // their own code would not need to be in the room at all.
+    const issued = await fetch(
+      `${FN}/attendance-qr?classId=${scanStudent[0].class_id}`,
+      { headers: { apikey: ANON, Authorization: `Bearer ${owner}` } },
+    ).then((r) => r.json());
+    const liveToken = issued.token;
+
+    const good = await call('attendance-qr', student, { token: liveToken });
+    check('A. valid code for own class accepted', good.status === 200, `HTTP ${good.status}`);
+    check('   ...answers with the session it recorded', good.body.sessionDate === today,
+          good.body.sessionDate);
+
+    // B. the same code again — the upsert keys on (student, date), so this is
+    // one row, not two.
+    const again = await call('attendance-qr', student, { token: liveToken });
+    check('B. duplicate scan accepted idempotently', again.status === 200, `HTTP ${again.status}`);
+    const rows = await adminFetch(
+      '/rest/v1/attendance?select=id&student_id=eq.' + scanStudent[0].id +
+        '&session_date=eq.' + today,
+    );
+    check('   ...still exactly one attendance row', rows.length === 1, rows.length + ' row(s)');
+
+    // C. expired: a token from a window that has rotated away
+    const staleWindow = Math.floor(Date.now() / 30000) - 10;
+    const stale = liveToken.replace(/\.[0-9]+\./, '.' + staleWindow + '.');
+    const expired = await call('attendance-qr', student, { token: stale });
+    check('C. expired code refused', expired.status === 400 && expired.body.code === 'expired_code',
+          `HTTP ${expired.status} ${expired.body.code}`);
+
+    // D. malformed
+    const junk = await call('attendance-qr', student, { token: 'not-a-token' });
+    check('D. malformed code refused', junk.status === 400, `HTTP ${junk.status} ${junk.body.code}`);
+    const empty = await call('attendance-qr', student, {});
+    check('   ...missing code refused', empty.status === 400, `HTTP ${empty.status}`);
+
+    // E. a genuine, correctly signed token for a class this student is not in
+    const otherClass = (await adminFetch(
+      '/rest/v1/classes?select=id&id=neq.' + scanStudent[0].class_id + '&limit=1',
+    ))[0];
+    if (otherClass) {
+      const otherToken = (await fetch(`${FN}/attendance-qr?classId=${otherClass.id}`, {
+        headers: { apikey: ANON, Authorization: `Bearer ${owner}` },
+      }).then((r) => r.json())).token;
+      const wrong = await call('attendance-qr', student, { token: otherToken });
+      check('E. code for another class refused',
+            wrong.status === 403 && wrong.body.code === 'wrong_class',
+            `HTTP ${wrong.status} ${wrong.body.code}`);
+    }
+
+    // F. a non-student caller, which is also how a foreign tenant is turned
+    // away: the token names a class, and the caller must be a student in it.
+    const asTeacher = await call('attendance-qr', owner, { token: liveToken });
+    check('F. non-student caller refused', asTeacher.status === 403, `HTTP ${asTeacher.status}`);
+    const asParent = await call('attendance-qr', parent, { token: liveToken });
+    check('   ...parent refused', asParent.status === 403, `HTTP ${asParent.status}`);
+
+    // G. unauthenticated
+    const anon = await fetch(`${FN}/attendance-qr`, {
+      method: 'POST',
+      headers: { apikey: ANON, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token: liveToken }),
+    });
+    check('G. unauthenticated refused', anon.status === 401, `HTTP ${anon.status}`);
+  } finally {
+    // Put today's attendance back exactly as it was.
+    await adminFetch(
+      '/rest/v1/attendance?student_id=eq.' + scanStudent[0].id + '&session_date=eq.' + today,
+      { method: 'DELETE' },
+    ).catch(() => {});
+    if (prior) {
+      await adminFetch('/rest/v1/attendance', {
+        method: 'POST',
+        headers: { Prefer: 'return=minimal' },
+        body: JSON.stringify({
+          madrasa_id: (await adminFetch('/rest/v1/madrasas?select=id'))[0].id,
+          class_id: scanStudent[0].class_id,
+          student_id: scanStudent[0].id,
+          session_date: today,
+          status: prior.status,
+          method: prior.method,
+        }),
+      }).catch(() => {});
+    }
+    console.log('   attendance for ' + today + ' restored');
+  }
+
   console.log('\nmadrasa-lifecycle');
   const notAdmin = await call('madrasa-lifecycle', owner, {
     madrasaId: '00000000-0000-0000-0000-000000000000',

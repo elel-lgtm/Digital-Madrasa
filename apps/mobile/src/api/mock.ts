@@ -2533,7 +2533,7 @@ export const mockApi: ApiClient = {
     const currentWindow = Math.floor(Date.now() / 30_000);
     // One window of grace for slow scans; anything older is a replay.
     if (!classId || !Number.isFinite(window) || currentWindow - window > 1) {
-      throw new ApiError('validation', 'That code has expired. Ask for a fresh one.');
+      throw new ApiError('expired_code', 'That code has expired. Ask for a fresh one.');
     }
 
     const student = data.students.find((s) => s.id === studentId);
@@ -2542,7 +2542,12 @@ export const mockApi: ApiClient = {
     const existing = data.attendance.find(
       (a) => a.studentId === studentId && a.sessionDate === sessionDate,
     );
-    if (existing) return { status: existing.status };
+    // A student who is not in that class must not be marked present by it.
+    if (student.classId !== classId) {
+      throw new ApiError('wrong_class', 'That code is for a different class.');
+    }
+
+    if (existing) return { status: existing.status, sessionDate, classId };
 
     data.attendance.push({
       id: newId(NS.attendance),
@@ -2555,7 +2560,7 @@ export const mockApi: ApiClient = {
       note: null,
     });
     await persist();
-    return { status: 'present' as const };
+    return { status: 'present' as const, sessionDate, classId };
   },
 };
 

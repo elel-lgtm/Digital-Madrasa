@@ -187,14 +187,18 @@ export async function getAttendanceQrToken(
 export async function markAttendanceByQr(params: {
   token: string;
   studentId: string;
-}): Promise<{ status: 'present' }> {
-  await invokeFunction<{ status: string }>('attendance-qr', {
-    body: { token: params.token },
-  });
+}): Promise<{ status: 'present'; sessionDate: string; classId: string }> {
+  const result = await invokeFunction<{
+    status: string;
+    sessionDate: string;
+    classId: string;
+  }>('attendance-qr', { body: { token: params.token } });
 
   // The function only ever records a scan as present; a different status can
-  // only come from a teacher marking manually.
-  return { status: 'present' };
+  // only come from a teacher marking manually. The date and class it answers
+  // with are passed on so the confirmation can name what was recorded rather
+  // than the screen inventing it.
+  return { status: 'present', sessionDate: result.sessionDate, classId: result.classId };
 }
 
 /**

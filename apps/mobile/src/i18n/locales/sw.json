@@ -379,5 +379,23 @@
   },
   "teacher": {
     "reviewed": "Imekaguliwa"
+  },
+  "scan": {
+    "title": "Changanua mahudhurio",
+    "intro": "Elekeza kamera kwenye msimbo anaouonyesha mwalimu wako.",
+    "frameHint": "Weka msimbo ndani ya mraba",
+    "permissionTitle": "Kamera inahitajika",
+    "permissionBody": "Digital Madrasa inahitaji kamera yako kusoma msimbo wa mahudhurio. Hakuna kinachorekodiwa isipokuwa kwamba ulihudhuria.",
+    "permissionAllow": "Ruhusu kamera",
+    "permissionDenied": "Ruhusa ya kamera ilikataliwa. Iwashe kwenye Mipangilio, kisha urudi.",
+    "openSettings": "Fungua mipangilio",
+    "checking": "Tunakuweka kama uliyehudhuria…",
+    "successTitle": "Umewekwa kama uliyehudhuria",
+    "scanAgain": "Changanua tena",
+    "done": "Nimemaliza",
+    "expired": "Msimbo huo umeisha muda. Mwombe mwalimu wako mpya.",
+    "wrongClass": "Msimbo huo ni wa darasa lingine.",
+    "notStudent": "Wanafunzi pekee ndio wanaweza kuchanganua.",
+    "unreadable": "Msimbo huo haukusomeka. Jaribu tena."
   }
 }
