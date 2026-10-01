@@ -2,9 +2,9 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useRouter } from 'expo-router';
 import { CheckCircle, QrCode, Warning } from 'phosphor-react-native';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Linking, StyleSheet, View } from 'react-native';
+import { AppState, Linking, StyleSheet, View } from 'react-native';
 import { api, ApiError } from '@/api';
 import { AppText, Button, Card, PageHeader, Screen } from '@/components/ui';
 import { useApiError } from '@/hooks/useApiError';
@@ -36,7 +36,19 @@ export default function ScanAttendance() {
   const session = useRequiredSession();
   const queryClient = useQueryClient();
 
-  const [permission, requestPermission] = useCameraPermissions();
+  const [permission, requestPermission, getPermission] = useCameraPermissions();
+
+  // The screen tells a student who refused the camera to turn it on in
+  // Settings "then come back". Coming back must be enough: re-read the
+  // permission whenever the app returns to the foreground. (Found on a device:
+  // without this the screen kept saying "declined" after it was granted.)
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', (state) => {
+      if (state === 'active') void getPermission();
+    });
+    return () => subscription.remove();
+  }, [getPermission]);
+
   const [phase, setPhase] = useState<Phase>('scanning');
   const [failure, setFailure] = useState<string | null>(null);
   const [marked, setMarked] = useState<{ sessionDate: string } | null>(null);

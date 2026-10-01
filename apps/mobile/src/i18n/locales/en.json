@@ -277,7 +277,8 @@
     "downloaded": "Downloaded",
     "download": "Download",
     "myRecitations": "My recitations",
-    "aiOnly": "AI only"
+    "aiOnly": "AI only",
+    "micNeeded": "Microphone access is needed to record your recitation. You can turn it on in your device settings."
   },
   "live": {
     "liveNow": "Live now",

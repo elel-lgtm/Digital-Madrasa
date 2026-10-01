@@ -56,14 +56,19 @@ export function AppText({
         fontSize: Math.round(base.fontSize * 1.6 * scale),
         lineHeight: Math.round(base.lineHeight * 2 * scale),
         writingDirection: 'rtl',
-        textAlign: align ?? 'right',
+        // React Native swaps left and right once the layout is RTL
+        // (swapLeftAndRightInRTL), so "right" must be asked for as "left" there.
+        textAlign: align ?? (I18nManager.isRTL ? 'left' : 'right'),
       }
     : {
         fontFamily: base.fontFamily,
         fontSize: base.fontSize,
         lineHeight: arabicUi ? Math.max(base.lineHeight, Math.round(base.fontSize * 1.75)) : base.lineHeight,
         ...(base.letterSpacing !== undefined && !arabicUi ? { letterSpacing: base.letterSpacing } : {}),
-        textAlign: align ?? (I18nManager.isRTL ? 'right' : 'left'),
+        // "left" means the start of the line: React Native swaps it to the
+        // right in an RTL layout. Asking for "right" there, as this once did,
+        // put Arabic headings on the left — seen only in a native build.
+        textAlign: align ?? 'left',
       };
 
   return (

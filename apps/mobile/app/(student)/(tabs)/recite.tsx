@@ -11,7 +11,7 @@ import { useRouter } from 'expo-router';
 import { Microphone, Stop, WarningCircle } from 'phosphor-react-native';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, View } from 'react-native';
+import { Linking, Pressable, View } from 'react-native';
 import { api } from '@/api';
 import { SurahPicker } from '@/components/SurahPicker';
 import {
@@ -63,6 +63,8 @@ export default function Recite() {
   const [ayahTo, setAyahTo] = useState('10');
   const [qiraah, setQiraah] = useState<QiraahStyle>('hafs');
   const [permissionDenied, setPermissionDenied] = useState(false);
+  // Refused for good: asking again shows nothing, so offer Settings instead.
+  const [permissionBlocked, setPermissionBlocked] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [recordedUri, setRecordedUri] = useState<string | null>(null);
   const [recordedMs, setRecordedMs] = useState(0);
@@ -108,6 +110,7 @@ export default function Recite() {
       const permission = await requestRecordingPermissionsAsync();
       if (!permission.granted) {
         setPermissionDenied(true);
+        setPermissionBlocked(!permission.canAskAgain);
         return;
       }
       setPermissionDenied(false);
@@ -198,10 +201,18 @@ export default function Recite() {
                 <View style={{ flexDirection: 'row', gap: theme.spacing.md }}>
                   <WarningCircle size={22} color={theme.colors.warning} weight="duotone" />
                   <AppText variant="caption" color="textMuted" style={{ flex: 1 }}>
-                    Microphone access is needed to record your recitation. You can turn it on in
-                    your device settings.
+                    {t('student.micNeeded')}
                   </AppText>
                 </View>
+                {permissionBlocked ? (
+                  <View style={{ marginTop: theme.spacing.md }}>
+                    <Button
+                      label={t('scan.openSettings')}
+                      variant="secondary"
+                      onPress={() => void Linking.openSettings()}
+                    />
+                  </View>
+                ) : null}
               </Card>
             ) : null}
 
