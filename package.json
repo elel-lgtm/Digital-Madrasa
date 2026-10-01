@@ -41,6 +41,7 @@
     "ai:check:hosted": "node scripts/check-ai-gateway.mjs --hosted",
     "check:tajweed": "node scripts/check-tajweed.mjs",
     "check:card": "node scripts/check-card.mjs",
+    "usability:score": "node scripts/usability-score.mjs",
     "db:seed:learning": "node scripts/seed-learning-data.mjs",
     "ai:url": "node scripts/set-gateway-url.mjs",
     "check:screens": "node scripts/check-screens.mjs",
