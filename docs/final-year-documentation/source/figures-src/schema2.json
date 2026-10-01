@@ -1,0 +1,5165 @@
+{
+ "admission_counters": {
+  "columns": [
+   {
+    "name": "admission_year",
+    "type": "integer",
+    "nullable": false,
+    "default": "",
+    "pk": true,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "last_seq",
+    "type": "integer",
+    "nullable": false,
+    "default": "0",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": [
+     "last_seq >= 0"
+    ]
+   }
+  ],
+  "uniques": [],
+  "constraints": []
+ },
+ "announcements": {
+  "columns": [
+   {
+    "name": "id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "gen_random_uuid()",
+    "pk": true,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "madrasa_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "madrasas",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "author_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "profiles",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "title",
+    "type": "text",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "body",
+    "type": "text",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "audience",
+    "type": "_text",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": [
+     "audience <@ array['students','parents','teachers']"
+    ]
+   },
+   {
+    "name": "publish_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "expires_at",
+    "type": "timestamp with time zone",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "created_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "updated_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "deleted_at",
+    "type": "timestamp with time zone",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   }
+  ],
+  "uniques": [],
+  "constraints": []
+ },
+ "assignments": {
+  "columns": [
+   {
+    "name": "id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "gen_random_uuid()",
+    "pk": true,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "madrasa_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "madrasas",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "class_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "classes",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "lesson_id",
+    "type": "uuid",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "lessons",
+     "column": "id",
+     "on_delete": "SET NULL"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "title",
+    "type": "text",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": [
+     "length(btrim(title)) between 3 and 120"
+    ]
+   },
+   {
+    "name": "instructions",
+    "type": "text",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "assignment_type",
+    "type": "assignment_type",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "due_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "created_by",
+    "type": "uuid",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "profiles",
+     "column": "id",
+     "on_delete": "SET NULL"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "created_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "updated_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "deleted_at",
+    "type": "timestamp with time zone",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   }
+  ],
+  "uniques": [],
+  "constraints": []
+ },
+ "attendance": {
+  "columns": [
+   {
+    "name": "id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "gen_random_uuid()",
+    "pk": true,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "madrasa_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "madrasas",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "class_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "classes",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "student_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "students",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "session_date",
+    "type": "date",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "status",
+    "type": "attendance_status",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "method",
+    "type": "attendance_method",
+    "nullable": false,
+    "default": "'manual'::attendance_method",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "note",
+    "type": "text",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "marked_by",
+    "type": "uuid",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "profiles",
+     "column": "id",
+     "on_delete": "SET NULL"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "created_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "updated_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "deleted_at",
+    "type": "timestamp with time zone",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   }
+  ],
+  "uniques": [
+   [
+    "session_date",
+    "student_id"
+   ]
+  ],
+  "constraints": []
+ },
+ "audit_log": {
+  "columns": [
+   {
+    "name": "id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "gen_random_uuid()",
+    "pk": true,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "actor_id",
+    "type": "uuid",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "actor_role",
+    "type": "user_role",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "madrasa_id",
+    "type": "uuid",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "action",
+    "type": "text",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "entity_type",
+    "type": "text",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "entity_id",
+    "type": "uuid",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "before",
+    "type": "jsonb",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "after",
+    "type": "jsonb",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "ip",
+    "type": "inet",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "user_agent",
+    "type": "text",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "created_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   }
+  ],
+  "uniques": [],
+  "constraints": []
+ },
+ "certificates": {
+  "columns": [
+   {
+    "name": "id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "gen_random_uuid()",
+    "pk": true,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "student_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "students",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "madrasa_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "madrasas",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "kind",
+    "type": "text",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": [
+     "kind in ('juz_completion', 'quran_completion', 'tajweed_level')"
+    ]
+   },
+   {
+    "name": "title",
+    "type": "text",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "issued_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "verification_code",
+    "type": "text",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": true,
+    "checks": []
+   },
+   {
+    "name": "pdf_url",
+    "type": "text",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "created_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "deleted_at",
+    "type": "timestamp with time zone",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   }
+  ],
+  "uniques": [],
+  "constraints": []
+ },
+ "classes": {
+  "columns": [
+   {
+    "name": "id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "gen_random_uuid()",
+    "pk": true,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "madrasa_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "madrasas",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "name",
+    "type": "text",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": [
+     "length(btrim(name)) between 2 and 80"
+    ]
+   },
+   {
+    "name": "level",
+    "type": "text",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "teacher_id",
+    "type": "uuid",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "teachers",
+     "column": "id",
+     "on_delete": "SET NULL"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "schedule",
+    "type": "jsonb",
+    "nullable": false,
+    "default": "'[]'::jsonb",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "capacity",
+    "type": "integer",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": [
+     "capacity between 1 and 200"
+    ]
+   },
+   {
+    "name": "created_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "updated_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "deleted_at",
+    "type": "timestamp with time zone",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   }
+  ],
+  "uniques": [],
+  "constraints": []
+ },
+ "enrollments": {
+  "columns": [
+   {
+    "name": "id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "gen_random_uuid()",
+    "pk": true,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "class_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "classes",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "student_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "students",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "madrasa_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "madrasas",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "joined_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "status",
+    "type": "text",
+    "nullable": false,
+    "default": "'active'::text",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "deleted_at",
+    "type": "timestamp with time zone",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   }
+  ],
+  "uniques": [
+   [
+    "class_id",
+    "student_id"
+   ]
+  ],
+  "constraints": []
+ },
+ "feature_flags": {
+  "columns": [
+   {
+    "name": "madrasa_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": true,
+    "fk": {
+     "table": "madrasas",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "ai_evaluation",
+    "type": "boolean",
+    "nullable": false,
+    "default": "true",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "payments",
+    "type": "boolean",
+    "nullable": false,
+    "default": "true",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "leaderboard",
+    "type": "boolean",
+    "nullable": false,
+    "default": "false",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "offline_mode",
+    "type": "boolean",
+    "nullable": false,
+    "default": "true",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "sms_fallback",
+    "type": "boolean",
+    "nullable": false,
+    "default": "true",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "updated_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   }
+  ],
+  "uniques": [],
+  "constraints": []
+ },
+ "fee_structures": {
+  "columns": [
+   {
+    "name": "id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "gen_random_uuid()",
+    "pk": true,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "madrasa_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "madrasas",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "name",
+    "type": "text",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "academic_year",
+    "type": "integer",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": [
+     "academic_year between 2000 and 2100"
+    ]
+   },
+   {
+    "name": "term",
+    "type": "text",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "amount",
+    "type": "numeric",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": [
+     "amount > 0"
+    ]
+   },
+   {
+    "name": "currency",
+    "type": "character",
+    "nullable": false,
+    "default": "'KES'::bpchar",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "applies_to",
+    "type": "fee_scope",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "class_id",
+    "type": "uuid",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "classes",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "student_id",
+    "type": "uuid",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "students",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "is_active",
+    "type": "boolean",
+    "nullable": false,
+    "default": "true",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "created_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "updated_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "deleted_at",
+    "type": "timestamp with time zone",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   }
+  ],
+  "uniques": [],
+  "constraints": [
+   "constraint fee_scope_target check ( (applies_to = 'all' and class_id is null and student_id is null) or (applies_to = 'class' and class_id is not null) or (applies_to = 'student' and student_id is not null) )"
+  ]
+ },
+ "grades": {
+  "columns": [
+   {
+    "name": "id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "gen_random_uuid()",
+    "pk": true,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "madrasa_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "madrasas",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "student_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "students",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "class_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "classes",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "term",
+    "type": "text",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "subject",
+    "type": "text",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "score",
+    "type": "numeric",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": [
+     "score >= 0"
+    ]
+   },
+   {
+    "name": "max_score",
+    "type": "numeric",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": [
+     "max_score > 0"
+    ]
+   },
+   {
+    "name": "remarks",
+    "type": "text",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "issued_by",
+    "type": "uuid",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "profiles",
+     "column": "id",
+     "on_delete": "SET NULL"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "created_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "updated_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "deleted_at",
+    "type": "timestamp with time zone",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   }
+  ],
+  "uniques": [],
+  "constraints": [
+   "constraint grades_score_within_max check (score <= max_score)"
+  ]
+ },
+ "hifz_progress": {
+  "columns": [
+   {
+    "name": "id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "gen_random_uuid()",
+    "pk": true,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "student_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "students",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "madrasa_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "madrasas",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "surah_no",
+    "type": "integer",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": [
+     "surah_no between 1 and 114"
+    ]
+   },
+   {
+    "name": "ayah_no",
+    "type": "integer",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": [
+     "ayah_no >= 1"
+    ]
+   },
+   {
+    "name": "juz_no",
+    "type": "integer",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": [
+     "juz_no between 1 and 30"
+    ]
+   },
+   {
+    "name": "status",
+    "type": "hifz_status",
+    "nullable": false,
+    "default": "'not_started'::hifz_status",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "confidence_score",
+    "type": "numeric",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": [
+     "confidence_score between 0 and 1"
+    ]
+   },
+   {
+    "name": "last_revised_at",
+    "type": "timestamp with time zone",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "next_review_at",
+    "type": "timestamp with time zone",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "created_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "updated_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "deleted_at",
+    "type": "timestamp with time zone",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   }
+  ],
+  "uniques": [
+   [
+    "student_id",
+    "surah_no"
+   ]
+  ],
+  "constraints": []
+ },
+ "invoice_counters": {
+  "columns": [
+   {
+    "name": "madrasa_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": true,
+    "fk": {
+     "table": "madrasas",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "last_seq",
+    "type": "integer",
+    "nullable": false,
+    "default": "0",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   }
+  ],
+  "uniques": [],
+  "constraints": []
+ },
+ "invoices": {
+  "columns": [
+   {
+    "name": "id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "gen_random_uuid()",
+    "pk": true,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "madrasa_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "madrasas",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "student_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "students",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "invoice_no",
+    "type": "text",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "fee_structure_id",
+    "type": "uuid",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "fee_structures",
+     "column": "id",
+     "on_delete": "SET NULL"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "description",
+    "type": "text",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "amount_due",
+    "type": "numeric",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": [
+     "amount_due > 0"
+    ]
+   },
+   {
+    "name": "amount_paid",
+    "type": "numeric",
+    "nullable": false,
+    "default": "0",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": [
+     "amount_paid >= 0"
+    ]
+   },
+   {
+    "name": "currency",
+    "type": "character",
+    "nullable": false,
+    "default": "'KES'::bpchar",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "due_date",
+    "type": "date",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "status",
+    "type": "invoice_status",
+    "nullable": false,
+    "default": "'draft'::invoice_status",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "issued_at",
+    "type": "timestamp with time zone",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "notes",
+    "type": "text",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "created_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "updated_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "deleted_at",
+    "type": "timestamp with time zone",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   }
+  ],
+  "uniques": [],
+  "constraints": [
+   "constraint invoice_not_overpaid check (amount_paid <= amount_due)"
+  ]
+ },
+ "lessons": {
+  "columns": [
+   {
+    "name": "id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "gen_random_uuid()",
+    "pk": true,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "madrasa_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "madrasas",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "class_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "classes",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "title",
+    "type": "text",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": [
+     "length(btrim(title)) between 3 and 120"
+    ]
+   },
+   {
+    "name": "surah_from",
+    "type": "integer",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": [
+     "surah_from between 1 and 114"
+    ]
+   },
+   {
+    "name": "ayah_from",
+    "type": "integer",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": [
+     "ayah_from >= 1"
+    ]
+   },
+   {
+    "name": "surah_to",
+    "type": "integer",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": [
+     "surah_to between 1 and 114"
+    ]
+   },
+   {
+    "name": "ayah_to",
+    "type": "integer",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": [
+     "ayah_to >= 1"
+    ]
+   },
+   {
+    "name": "qiraah_style",
+    "type": "qiraah_style",
+    "nullable": false,
+    "default": "'hafs'::qiraah_style",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "resource_urls",
+    "type": "_text",
+    "nullable": false,
+    "default": "'{}'::text[]",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "notes",
+    "type": "text",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "scheduled_for",
+    "type": "timestamp with time zone",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "created_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "updated_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "deleted_at",
+    "type": "timestamp with time zone",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "meeting_url",
+    "type": "text",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   }
+  ],
+  "uniques": [],
+  "constraints": [
+   "constraint lessons_range_ordered check ( surah_to > surah_from or (surah_to = surah_from and ayah_to >= ayah_from) )",
+   "constraint lessons_meeting_url_allowlist check ( meeting_url is null or meeting_url ~ '^https://meet\\.google\\.com/' or meeting_url ~ '^https://teams\\.microsoft\\.com/' or meeting_url ~ '^https://teams\\.live\\.com/' or meeting_url ~ '^https://([a-z0-9-]+\\.)?zoom\\.us/' or meeting_url ~ '^https://meet\\.jit\\.si/' )"
+  ]
+ },
+ "madrasas": {
+  "columns": [
+   {
+    "name": "id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "gen_random_uuid()",
+    "pk": true,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "name",
+    "type": "text",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": [
+     "length(btrim(name)) between 3 and 120"
+    ]
+   },
+   {
+    "name": "slug",
+    "type": "text",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": true,
+    "checks": []
+   },
+   {
+    "name": "county",
+    "type": "text",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "town",
+    "type": "text",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "owner_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "profiles",
+     "column": "id",
+     "on_delete": "RESTRICT"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "logo_url",
+    "type": "text",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "contact_email",
+    "type": "text",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "contact_phone",
+    "type": "text",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": [
+     "contact_phone ~ '^\\+?254[17]\\d{8}$'"
+    ]
+   },
+   {
+    "name": "timezone",
+    "type": "text",
+    "nullable": false,
+    "default": "'Africa/Nairobi'::text",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "status",
+    "type": "madrasa_status",
+    "nullable": false,
+    "default": "'active'::madrasa_status",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "deletion_scheduled_at",
+    "type": "timestamp with time zone",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "deletion_reason",
+    "type": "text",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "created_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "updated_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "deleted_at",
+    "type": "timestamp with time zone",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "suspended_at",
+    "type": "timestamp with time zone",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "suspended_by",
+    "type": "uuid",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "profiles",
+     "column": "id",
+     "on_delete": "NO ACTION"
+    },
+    "unique": false,
+    "checks": []
+   }
+  ],
+  "uniques": [],
+  "constraints": []
+ },
+ "mail_outbox": {
+  "columns": [
+   {
+    "name": "id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "gen_random_uuid()",
+    "pk": true,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "madrasa_id",
+    "type": "uuid",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "madrasas",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "to_email",
+    "type": "text",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "template",
+    "type": "text",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "payload",
+    "type": "jsonb",
+    "nullable": false,
+    "default": "'{}'::jsonb",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "status",
+    "type": "mail_status",
+    "nullable": false,
+    "default": "'queued'::mail_status",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "attempts",
+    "type": "integer",
+    "nullable": false,
+    "default": "0",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "provider_id",
+    "type": "text",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "error",
+    "type": "text",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "scheduled_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "sent_at",
+    "type": "timestamp with time zone",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "created_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "notification_id",
+    "type": "uuid",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "notifications",
+     "column": "id",
+     "on_delete": "SET NULL"
+    },
+    "unique": false,
+    "checks": []
+   }
+  ],
+  "uniques": [],
+  "constraints": []
+ },
+ "message_threads": {
+  "columns": [
+   {
+    "name": "id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "gen_random_uuid()",
+    "pk": true,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "madrasa_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "madrasas",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "student_id",
+    "type": "uuid",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "students",
+     "column": "id",
+     "on_delete": "SET NULL"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "participant_a",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "profiles",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "participant_b",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "profiles",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "last_message_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "created_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "deleted_at",
+    "type": "timestamp with time zone",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   }
+  ],
+  "uniques": [],
+  "constraints": []
+ },
+ "messages": {
+  "columns": [
+   {
+    "name": "id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "gen_random_uuid()",
+    "pk": true,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "madrasa_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "madrasas",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "thread_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "message_threads",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "sender_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "profiles",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "recipient_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "profiles",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "body",
+    "type": "text",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": [
+     "length(btrim(body)) between 1 and 2000"
+    ]
+   },
+   {
+    "name": "attachment_url",
+    "type": "text",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "read_at",
+    "type": "timestamp with time zone",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "created_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "deleted_at",
+    "type": "timestamp with time zone",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   }
+  ],
+  "uniques": [],
+  "constraints": []
+ },
+ "notification_preferences": {
+  "columns": [
+   {
+    "name": "user_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": true,
+    "fk": {
+     "table": "profiles",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "preferences",
+    "type": "jsonb",
+    "nullable": false,
+    "default": "'{}'::jsonb",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "updated_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   }
+  ],
+  "uniques": [],
+  "constraints": []
+ },
+ "notifications": {
+  "columns": [
+   {
+    "name": "id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "gen_random_uuid()",
+    "pk": true,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "user_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "profiles",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "madrasa_id",
+    "type": "uuid",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "madrasas",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "type",
+    "type": "text",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "title",
+    "type": "text",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "body",
+    "type": "text",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "payload",
+    "type": "jsonb",
+    "nullable": false,
+    "default": "'{}'::jsonb",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "channel",
+    "type": "_text",
+    "nullable": false,
+    "default": "ARRAY['in_app'::text]",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "read_at",
+    "type": "timestamp with time zone",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "sent_at",
+    "type": "timestamp with time zone",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "created_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   }
+  ],
+  "uniques": [],
+  "constraints": []
+ },
+ "parent_student_links": {
+  "columns": [
+   {
+    "name": "id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "gen_random_uuid()",
+    "pk": true,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "parent_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "parents",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "student_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "students",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "madrasa_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "madrasas",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "relationship",
+    "type": "relationship_type",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "status",
+    "type": "link_status",
+    "nullable": false,
+    "default": "'pending'::link_status",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "requested_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "decided_at",
+    "type": "timestamp with time zone",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "decided_by",
+    "type": "uuid",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "profiles",
+     "column": "id",
+     "on_delete": "SET NULL"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "reason",
+    "type": "text",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "created_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "updated_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "deleted_at",
+    "type": "timestamp with time zone",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   }
+  ],
+  "uniques": [
+   [
+    "parent_id",
+    "student_id"
+   ]
+  ],
+  "constraints": []
+ },
+ "parents": {
+  "columns": [
+   {
+    "name": "id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "gen_random_uuid()",
+    "pk": true,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "profile_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "profiles",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": true,
+    "checks": []
+   },
+   {
+    "name": "madrasa_id",
+    "type": "uuid",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "madrasas",
+     "column": "id",
+     "on_delete": "SET NULL"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "created_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "updated_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "deleted_at",
+    "type": "timestamp with time zone",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   }
+  ],
+  "uniques": [],
+  "constraints": []
+ },
+ "payment_allocations": {
+  "columns": [
+   {
+    "name": "id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "gen_random_uuid()",
+    "pk": true,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "payment_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "payments",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "invoice_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "invoices",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "madrasa_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "madrasas",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "amount",
+    "type": "numeric",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": [
+     "amount > 0"
+    ]
+   },
+   {
+    "name": "created_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   }
+  ],
+  "uniques": [
+   [
+    "invoice_id",
+    "payment_id"
+   ]
+  ],
+  "constraints": []
+ },
+ "payments": {
+  "columns": [
+   {
+    "name": "id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "gen_random_uuid()",
+    "pk": true,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "madrasa_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "madrasas",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "parent_id",
+    "type": "uuid",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "parents",
+     "column": "id",
+     "on_delete": "SET NULL"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "amount",
+    "type": "numeric",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": [
+     "amount > 0"
+    ]
+   },
+   {
+    "name": "currency",
+    "type": "character",
+    "nullable": false,
+    "default": "'KES'::bpchar",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "method",
+    "type": "payment_method",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "provider_ref",
+    "type": "text",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": true,
+    "checks": []
+   },
+   {
+    "name": "checkout_request_id",
+    "type": "text",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": true,
+    "checks": []
+   },
+   {
+    "name": "status",
+    "type": "payment_status",
+    "nullable": false,
+    "default": "'initiated'::payment_status",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "raw_callback",
+    "type": "jsonb",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "created_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "updated_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "settled_at",
+    "type": "timestamp with time zone",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "channel",
+    "type": "payment_channel",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "provider",
+    "type": "payment_provider",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "card_last4",
+    "type": "text",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "card_brand",
+    "type": "card_brand",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "failure_reason",
+    "type": "text",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "saved_card_id",
+    "type": "uuid",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "saved_cards",
+     "column": "id",
+     "on_delete": "NO ACTION"
+    },
+    "unique": false,
+    "checks": []
+   }
+  ],
+  "uniques": [],
+  "constraints": [
+   "checkout_request_id text unique",
+   "constraint payments_card_last4_format check (card_last4 is null or card_last4 ~ '^\\d{4}$')"
+  ]
+ },
+ "profiles": {
+  "columns": [
+   {
+    "name": "id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": true,
+    "fk": {
+     "table": "",
+     "column": "",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "role",
+    "type": "user_role",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "madrasa_id",
+    "type": "uuid",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "madrasas",
+     "column": "id",
+     "on_delete": "SET NULL"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "full_name",
+    "type": "text",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": [
+     "length(btrim(full_name)) between 2 and 120"
+    ]
+   },
+   {
+    "name": "email",
+    "type": "text",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "phone",
+    "type": "text",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": [
+     "phone ~ '^\\+?254[17]\\d{8}$'"
+    ]
+   },
+   {
+    "name": "avatar_url",
+    "type": "text",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "locale",
+    "type": "text",
+    "nullable": false,
+    "default": "'en'::text",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": [
+     "locale in ('en', 'sw', 'so', 'ar')"
+    ]
+   },
+   {
+    "name": "is_platform_admin",
+    "type": "boolean",
+    "nullable": false,
+    "default": "false",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "is_active",
+    "type": "boolean",
+    "nullable": false,
+    "default": "true",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "created_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "updated_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "deleted_at",
+    "type": "timestamp with time zone",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   }
+  ],
+  "uniques": [],
+  "constraints": []
+ },
+ "push_tokens": {
+  "columns": [
+   {
+    "name": "id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "gen_random_uuid()",
+    "pk": true,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "user_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "profiles",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "token",
+    "type": "text",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": true,
+    "checks": [
+     "token ~ '^Expo(nent)?PushToken\\[[A-Za-z0-9_-]{8,}\\]$'"
+    ]
+   },
+   {
+    "name": "platform",
+    "type": "text",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": [
+     "platform in ('android', 'ios')"
+    ]
+   },
+   {
+    "name": "created_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "last_seen_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "disabled_at",
+    "type": "timestamp with time zone",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "disabled_reason",
+    "type": "text",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   }
+  ],
+  "uniques": [],
+  "constraints": []
+ },
+ "rate_limits": {
+  "columns": [
+   {
+    "name": "id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "gen_random_uuid()",
+    "pk": true,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "key",
+    "type": "text",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "window_start",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "count",
+    "type": "integer",
+    "nullable": false,
+    "default": "1",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   }
+  ],
+  "uniques": [
+   [
+    "key",
+    "window_start"
+   ]
+  ],
+  "constraints": []
+ },
+ "receipts": {
+  "columns": [
+   {
+    "name": "id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "gen_random_uuid()",
+    "pk": true,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "payment_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "payments",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": true,
+    "checks": []
+   },
+   {
+    "name": "madrasa_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "madrasas",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "receipt_no",
+    "type": "text",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": true,
+    "checks": []
+   },
+   {
+    "name": "pdf_url",
+    "type": "text",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "emailed_at",
+    "type": "timestamp with time zone",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "created_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   }
+  ],
+  "uniques": [],
+  "constraints": []
+ },
+ "recitations": {
+  "columns": [
+   {
+    "name": "id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "gen_random_uuid()",
+    "pk": true,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "student_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "students",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "madrasa_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "madrasas",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "assignment_id",
+    "type": "uuid",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "assignments",
+     "column": "id",
+     "on_delete": "SET NULL"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "audio_url",
+    "type": "text",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "duration_ms",
+    "type": "integer",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": [
+     "duration_ms > 0 and duration_ms <= 900000"
+    ]
+   },
+   {
+    "name": "surah_no",
+    "type": "integer",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": [
+     "surah_no between 1 and 114"
+    ]
+   },
+   {
+    "name": "ayah_from",
+    "type": "integer",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": [
+     "ayah_from >= 1"
+    ]
+   },
+   {
+    "name": "ayah_to",
+    "type": "integer",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": [
+     "ayah_to >= 1"
+    ]
+   },
+   {
+    "name": "qiraah_style",
+    "type": "qiraah_style",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "created_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "updated_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "deleted_at",
+    "type": "timestamp with time zone",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   }
+  ],
+  "uniques": [],
+  "constraints": [
+   "constraint recitations_range_ordered check (ayah_to >= ayah_from)"
+  ]
+ },
+ "saved_cards": {
+  "columns": [
+   {
+    "name": "id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "gen_random_uuid()",
+    "pk": true,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "madrasa_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "madrasas",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "parent_id",
+    "type": "uuid",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "parents",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "brand",
+    "type": "card_brand",
+    "nullable": false,
+    "default": "'unknown'::card_brand",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "last4",
+    "type": "text",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": [
+     "last4 ~ '^\\d{4}$'"
+    ]
+   },
+   {
+    "name": "expiry_month",
+    "type": "integer",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": [
+     "expiry_month between 1 and 12"
+    ]
+   },
+   {
+    "name": "expiry_year",
+    "type": "integer",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": [
+     "expiry_year between 2024 and 2100"
+    ]
+   },
+   {
+    "name": "holder_name",
+    "type": "text",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "provider",
+    "type": "payment_provider",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "provider_token",
+    "type": "text",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "is_default",
+    "type": "boolean",
+    "nullable": false,
+    "default": "false",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "created_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "updated_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "deleted_at",
+    "type": "timestamp with time zone",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   }
+  ],
+  "uniques": [
+   [
+    "provider",
+    "provider_token"
+   ]
+  ],
+  "constraints": []
+ },
+ "sms_outbox": {
+  "columns": [
+   {
+    "name": "id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "gen_random_uuid()",
+    "pk": true,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "madrasa_id",
+    "type": "uuid",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "madrasas",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "notification_id",
+    "type": "uuid",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "notifications",
+     "column": "id",
+     "on_delete": "SET NULL"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "to_phone",
+    "type": "text",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": [
+     "to_phone ~ '^\\+254[17]\\d{8}$'"
+    ]
+   },
+   {
+    "name": "body",
+    "type": "text",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": [
+     "length(body) between 1 and 480"
+    ]
+   },
+   {
+    "name": "status",
+    "type": "mail_status",
+    "nullable": false,
+    "default": "'queued'::mail_status",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "attempts",
+    "type": "integer",
+    "nullable": false,
+    "default": "0",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "provider_id",
+    "type": "text",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "error",
+    "type": "text",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "scheduled_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "sent_at",
+    "type": "timestamp with time zone",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "created_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   }
+  ],
+  "uniques": [],
+  "constraints": []
+ },
+ "students": {
+  "columns": [
+   {
+    "name": "id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "gen_random_uuid()",
+    "pk": true,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "profile_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "profiles",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "madrasa_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "madrasas",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "admission_no",
+    "type": "text",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": true,
+    "checks": []
+   },
+   {
+    "name": "admission_year",
+    "type": "integer",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "date_of_birth",
+    "type": "date",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": [
+     "date_of_birth > '1950-01-01' and date_of_birth < current_date"
+    ]
+   },
+   {
+    "name": "gender",
+    "type": "text",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": [
+     "gender in ('male', 'female')"
+    ]
+   },
+   {
+    "name": "guardian_notes",
+    "type": "text",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "class_id",
+    "type": "uuid",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "classes",
+     "column": "id",
+     "on_delete": "SET NULL"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "enrollment_status",
+    "type": "enrollment_status",
+    "nullable": false,
+    "default": "'active'::enrollment_status",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "created_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "updated_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "deleted_at",
+    "type": "timestamp with time zone",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   }
+  ],
+  "uniques": [],
+  "constraints": [
+   "constraint admission_no_format check (admission_no ~ '^DM-\\d{4}-\\d{4}$')"
+  ]
+ },
+ "submissions": {
+  "columns": [
+   {
+    "name": "id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "gen_random_uuid()",
+    "pk": true,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "assignment_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "assignments",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "student_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "students",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "madrasa_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "madrasas",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "audio_url",
+    "type": "text",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "text_body",
+    "type": "text",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "submitted_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "status",
+    "type": "submission_status",
+    "nullable": false,
+    "default": "'pending'::submission_status",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "score",
+    "type": "numeric",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": [
+     "score is null or score >= 0"
+    ]
+   },
+   {
+    "name": "created_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "updated_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "deleted_at",
+    "type": "timestamp with time zone",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   }
+  ],
+  "uniques": [
+   [
+    "assignment_id",
+    "student_id"
+   ]
+  ],
+  "constraints": []
+ },
+ "subscription_invoices": {
+  "columns": [
+   {
+    "name": "id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "gen_random_uuid()",
+    "pk": true,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "madrasa_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "madrasas",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "subscription_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "subscriptions",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "invoice_no",
+    "type": "text",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": true,
+    "checks": []
+   },
+   {
+    "name": "amount_due",
+    "type": "numeric",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": [
+     "amount_due > 0"
+    ]
+   },
+   {
+    "name": "amount_paid",
+    "type": "numeric",
+    "nullable": false,
+    "default": "0",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": [
+     "amount_paid >= 0"
+    ]
+   },
+   {
+    "name": "currency",
+    "type": "text",
+    "nullable": false,
+    "default": "'KES'::text",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "period_start",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "period_end",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "due_date",
+    "type": "date",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "status",
+    "type": "invoice_status",
+    "nullable": false,
+    "default": "'issued'::invoice_status",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "issued_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "created_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "updated_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   }
+  ],
+  "uniques": [],
+  "constraints": [
+   "constraint sub_invoice_period_ordered check (period_end > period_start)"
+  ]
+ },
+ "subscription_payments": {
+  "columns": [
+   {
+    "name": "id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "gen_random_uuid()",
+    "pk": true,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "madrasa_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "madrasas",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "subscription_invoice_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "subscription_invoices",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "amount",
+    "type": "numeric",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": [
+     "amount > 0"
+    ]
+   },
+   {
+    "name": "currency",
+    "type": "text",
+    "nullable": false,
+    "default": "'KES'::text",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "channel",
+    "type": "payment_channel",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "provider",
+    "type": "payment_provider",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "provider_ref",
+    "type": "text",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": true,
+    "checks": []
+   },
+   {
+    "name": "checkout_request_id",
+    "type": "text",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "status",
+    "type": "payment_status",
+    "nullable": false,
+    "default": "'initiated'::payment_status",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "card_last4",
+    "type": "text",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": [
+     "card_last4 ~ '^\\d{4}$'"
+    ]
+   },
+   {
+    "name": "card_brand",
+    "type": "card_brand",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "failure_reason",
+    "type": "text",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "raw_callback",
+    "type": "jsonb",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "created_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "settled_at",
+    "type": "timestamp with time zone",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "updated_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   }
+  ],
+  "uniques": [],
+  "constraints": [
+   "checkout_request_id text"
+  ]
+ },
+ "subscription_plans": {
+  "columns": [
+   {
+    "name": "id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "gen_random_uuid()",
+    "pk": true,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "code",
+    "type": "text",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": true,
+    "checks": []
+   },
+   {
+    "name": "name",
+    "type": "text",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "amount",
+    "type": "numeric",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": [
+     "amount >= 0"
+    ]
+   },
+   {
+    "name": "currency",
+    "type": "text",
+    "nullable": false,
+    "default": "'KES'::text",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "interval",
+    "type": "billing_interval",
+    "nullable": false,
+    "default": "'monthly'::billing_interval",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "trial_days",
+    "type": "integer",
+    "nullable": false,
+    "default": "30",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": [
+     "trial_days >= 0"
+    ]
+   },
+   {
+    "name": "features",
+    "type": "_text",
+    "nullable": false,
+    "default": "'{}'::text[]",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "is_active",
+    "type": "boolean",
+    "nullable": false,
+    "default": "true",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "created_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "updated_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   }
+  ],
+  "uniques": [],
+  "constraints": []
+ },
+ "subscriptions": {
+  "columns": [
+   {
+    "name": "id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "gen_random_uuid()",
+    "pk": true,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "madrasa_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "madrasas",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": true,
+    "checks": []
+   },
+   {
+    "name": "plan_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "subscription_plans",
+     "column": "id",
+     "on_delete": "NO ACTION"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "status",
+    "type": "subscription_status",
+    "nullable": false,
+    "default": "'trialing'::subscription_status",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "trial_ends_at",
+    "type": "timestamp with time zone",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "current_period_start",
+    "type": "timestamp with time zone",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "current_period_end",
+    "type": "timestamp with time zone",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "grace_ends_at",
+    "type": "timestamp with time zone",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "cancel_at_period_end",
+    "type": "boolean",
+    "nullable": false,
+    "default": "false",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "cancelled_at",
+    "type": "timestamp with time zone",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "cancellation_reason",
+    "type": "text",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "default_card_id",
+    "type": "uuid",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "saved_cards",
+     "column": "id",
+     "on_delete": "SET NULL"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "created_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "updated_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   }
+  ],
+  "uniques": [],
+  "constraints": [
+   "constraint period_ordered check ( current_period_end is null or current_period_start is null or current_period_end > current_period_start )"
+  ]
+ },
+ "tajweed_feedback": {
+  "columns": [
+   {
+    "name": "id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "gen_random_uuid()",
+    "pk": true,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "recitation_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "recitations",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": true,
+    "checks": []
+   },
+   {
+    "name": "madrasa_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "madrasas",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "overall_score",
+    "type": "numeric",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": [
+     "overall_score between 0 and 100"
+    ]
+   },
+   {
+    "name": "errors",
+    "type": "jsonb",
+    "nullable": false,
+    "default": "'[]'::jsonb",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "model_version",
+    "type": "text",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "processing_ms",
+    "type": "integer",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": [
+     "processing_ms >= 0"
+    ]
+   },
+   {
+    "name": "reviewed_by_teacher_id",
+    "type": "uuid",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "teachers",
+     "column": "id",
+     "on_delete": "SET NULL"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "teacher_override",
+    "type": "jsonb",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "created_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "updated_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "deleted_at",
+    "type": "timestamp with time zone",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   }
+  ],
+  "uniques": [],
+  "constraints": []
+ },
+ "teachers": {
+  "columns": [
+   {
+    "name": "id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "gen_random_uuid()",
+    "pk": true,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "profile_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "profiles",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "madrasa_id",
+    "type": "uuid",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": {
+     "table": "madrasas",
+     "column": "id",
+     "on_delete": "CASCADE"
+    },
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "employee_no",
+    "type": "text",
+    "nullable": false,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "specialisation",
+    "type": "text",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "qiraah_styles",
+    "type": "_qiraah_style",
+    "nullable": false,
+    "default": "ARRAY['hafs'::qiraah_style]",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "is_owner",
+    "type": "boolean",
+    "nullable": false,
+    "default": "false",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "status",
+    "type": "teacher_status",
+    "nullable": false,
+    "default": "'invited'::teacher_status",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "created_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "updated_at",
+    "type": "timestamp with time zone",
+    "nullable": false,
+    "default": "now()",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   },
+   {
+    "name": "deleted_at",
+    "type": "timestamp with time zone",
+    "nullable": true,
+    "default": "",
+    "pk": false,
+    "fk": null,
+    "unique": false,
+    "checks": []
+   }
+  ],
+  "uniques": [
+   [
+    "employee_no",
+    "madrasa_id"
+   ],
+   [
+    "madrasa_id",
+    "profile_id"
+   ]
+  ],
+  "constraints": []
+ }
+}
