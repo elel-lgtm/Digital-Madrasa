@@ -16,7 +16,6 @@ import {
   GRACE_DAYS,
   canManageMeetingLink,
   canUseAdminFeatures,
-  cardDetailsSchema,
   isMeetingUrl,
   isoDate,
   liveSessionState,
@@ -43,7 +42,6 @@ import {
   type Student,
   type TajweedFinding,
   type Teacher,
-  type CardDetailsInput,
   type SavedCard,
   type Subscription,
 } from '@digital-madrasa/shared';
@@ -51,9 +49,6 @@ import { NS, newId } from './ids';
 import {
   buildSubscriptionInvoice,
   buildSubscriptionPayment,
-  cardFailureReason,
-  cardOutcome,
-  tokeniseCard,
 } from './billing-mock';
 import { DEMO_LIVE_LESSONS, createSeed, type MockDatabase } from './seed';
 import {
@@ -491,51 +486,6 @@ function myStudentId(): string {
   const student = requireDb().students.find((s) => s.profileId === profile.id);
   if (!student) throw new ApiError('not_found', 'No student record for this account.');
   return student.id;
-}
-
-/**
- * Resolves a card payment to a stored card: either an already-tokenised one
- * the caller picked, or a freshly entered one.
- *
- * Tokenisation is what makes storing anything legal — only the brand, last
- * four and expiry survive. The number is discarded inside `tokeniseCard` and
- * exists nowhere afterwards.
- */
-function resolveCard(
-  input: { savedCardId?: string; card?: CardDetailsInput },
-  madrasaId: string,
-  ownerProfileId: string,
-): SavedCard {
-  const data = requireDb();
-
-  if (input.savedCardId) {
-    const existing = data.savedCards.find((c) => c.id === input.savedCardId);
-    if (!existing) throw new ApiError('not_found', 'That card is no longer saved.');
-    return existing;
-  }
-
-  if (!input.card) {
-    throw new ApiError('validation', 'Card details are required.');
-  }
-
-  const parsed = cardDetailsSchema.safeParse(input.card);
-  if (!parsed.success) {
-    throw new ApiError('validation', 'Those card details are not valid.');
-  }
-
-  const profile = requireProfile();
-  const card = tokeniseCard(
-    parsed.data,
-    madrasaId,
-    profile.role === 'parent' ? ownerProfileId : null,
-  );
-
-  // Only persisted when the payer opted in. A one-off charge leaves nothing.
-  if (parsed.data.saveCard) {
-    if (data.savedCards.length === 0) card.isDefault = true;
-    data.savedCards.push(card);
-  }
-  return card;
 }
 
 /** Asserts the caller is madrasa staff, returning their profile. */
@@ -1991,7 +1941,6 @@ export const mockApi: ApiClient = {
     if (amount <= 0) throw new ApiError('conflict', 'These invoices are already settled.');
 
     const madrasaId = invoices[0]!.madrasaId;
-    let card: SavedCard | null = null;
     let phone: string | null = null;
     let shouldFail = false;
     let failureReason: string | null = null;
@@ -1999,12 +1948,9 @@ export const mockApi: ApiClient = {
     if (input.channel === 'mpesa') {
       phone = normaliseKenyanPhone(input.phone);
       shouldFail = phone.endsWith('9999');
-    } else {
-      card = resolveCard(input, madrasaId, profile.id);
-      const outcome = cardOutcome(card.last4);
-      shouldFail = outcome !== 'success';
-      failureReason = cardFailureReason(outcome);
     }
+    // A card is paid on the gateway's hosted page, which the mock does not
+    // show: it settles as a successful test card a few seconds later.
 
     const payment: Payment = {
       id: newId(NS.payment),
@@ -2013,7 +1959,7 @@ export const mockApi: ApiClient = {
       parentId: profile.id,
       amount,
       currency: 'KES',
-      method: input.channel === 'card' ? 'stripe' : 'mpesa',
+      method: input.channel === 'card' ? 'card' : 'mpesa',
       providerRef: null,
       checkoutRequestId: `${input.channel === 'card' ? 'chg' : 'ws_CO'}_${Date.now()}`,
       status: 'pending',
@@ -2179,10 +2125,8 @@ export const mockApi: ApiClient = {
       shouldFail = phone.endsWith('9999');
       if (shouldFail) failureReason = 'The M-Pesa request was cancelled or timed out.';
     } else {
-      card = resolveCard(input, madrasaId, profile.id);
-      const outcome = cardOutcome(card.last4);
-      shouldFail = outcome !== 'success';
-      failureReason = cardFailureReason(outcome);
+      // Paid on the gateway's hosted page; the mock settles a test card.
+      card = { id: 'hosted', madrasaId, last4: '4242', brand: 'visa' } as SavedCard;
     }
 
     const payment = buildSubscriptionPayment({

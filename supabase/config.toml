@@ -27,6 +27,11 @@ verify_jwt = true
 [functions.ai-assistant]
 verify_jwt = true
 
+# Paystack calls this with no bearer token: the webhook is checked by its
+# x-paystack-signature, and the browser return only triggers a server-side check.
+[functions.card-callback]
+verify_jwt = false
+
 [functions.madrasa-lifecycle]
 verify_jwt = true
 

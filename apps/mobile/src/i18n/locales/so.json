@@ -600,7 +600,8 @@
       "success": "La bixiyay",
       "failed": "Fashilmay",
       "reversed": "La celiyay"
-    }
+    },
+    "cardHostedNote": "Kaarkaaga waxaad gelin doontaa bogga lacag-bixinta ee ammaan ah ee Paystack. Digital Madrasa ma arkto mana kaydiso lambarka kaarkaaga."
   },
   "ai": {
     "title": "Kaaliyaha AI",

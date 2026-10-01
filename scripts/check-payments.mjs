@@ -4,7 +4,7 @@
  * `payment-callback` Edge Functions) through the deployed API, with the
  * provider in mock mode (MPESA_ENV unset). No real money moves.
  *
- *   fees:          card refused · someone else's invoice refused · staff refused
+ *   fees:          someone else's invoice refused · staff refused
  *                  · a failed prompt credits nothing · a paid prompt credits the
  *                  invoice, issues a receipt and tells the parent · a double tap
  *                  is refused · the callback needs its secret · a replayed
@@ -124,10 +124,8 @@ try {
     `${OPEN_INVOICE_NO} ${invoiceBefore.status}`);
 
   console.log('\nfees — refusals');
-  let r = await call(parent, { action: 'pay-fees', channel: 'card', invoiceIds: [invoiceBefore.id], phone: '0712345678' });
-  check('card payment refused', r.status === 422 && r.body.code === 'card_unavailable', `${r.status} ${r.body.code}`);
-
-  r = await call(parent, { action: 'pay-fees', channel: 'mpesa', invoiceIds: [revoked.id], phone: '0712345678' });
+  // Card payments have their own check: npm run check:card.
+  let r = await call(parent, { action: 'pay-fees', channel: 'mpesa', invoiceIds: [revoked.id], phone: '0712345678' });
   check('invoice of a revoked child is not found', r.status === 404, `${r.status} ${r.body.code}`);
 
   r = await call(owner, { action: 'pay-fees', channel: 'mpesa', invoiceIds: [invoiceBefore.id], phone: '0712345678' });

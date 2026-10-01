@@ -329,7 +329,7 @@ export interface Payment {
   parentId: ID | null;
   amount: number;
   currency: string;
-  method: 'mpesa' | 'cash' | 'bank' | 'stripe';
+  method: 'mpesa' | 'cash' | 'bank' | 'stripe' | 'card';
   providerRef: string | null;
   checkoutRequestId: string | null;
   status: PaymentStatus;

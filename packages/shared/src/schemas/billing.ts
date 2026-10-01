@@ -64,11 +64,12 @@ export const startSubscriptionPaymentSchema = z.discriminatedUnion('channel', [
     channel: z.literal('mpesa'),
     phone: phoneSchema,
   }),
+  /**
+   * By card: nothing else is sent. The card is entered on the gateway's
+   * hosted page, never in the app.
+   */
   z.object({
     channel: z.literal('card'),
-    card: cardDetailsSchema.optional(),
-    /** Reuse of an already-tokenised card instead of re-entering details. */
-    savedCardId: uuidSchema.optional(),
   }),
 ]);
 export type StartSubscriptionPaymentInput = z.infer<typeof startSubscriptionPaymentSchema>;
@@ -86,8 +87,6 @@ export const payFeesSchema = z.discriminatedUnion('channel', [
   z.object({
     channel: z.literal('card'),
     invoiceIds: z.array(uuidSchema).min(1, 'validation.no_invoices_selected'),
-    card: cardDetailsSchema.optional(),
-    savedCardId: uuidSchema.optional(),
   }),
 ]);
 export type PayFeesInput = z.infer<typeof payFeesSchema>;

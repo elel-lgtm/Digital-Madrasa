@@ -312,18 +312,15 @@ export async function awaitTajweedFeedback(recitationId: string): Promise<Recita
  * outcome is settled on the server, and these calls only ever ask what it
  * was. No amount is sent — it is derived from the invoices server-side.
  *
- * Card details never leave the device: with no card gateway connected there
- * is nothing that could accept them safely, so a card payment is refused here
- * before any request is made.
+ * A card payment sends only the invoice ids: the function answers with the
+ * gateway's hosted checkout page, where the card is entered, so no card data
+ * ever passes through the app.
  */
-function cardUnavailable(): ApiError {
-  return new ApiError('card_unavailable', 'Card payments are not available yet. Please pay with M-Pesa.');
-}
-
 export async function payFees(input: PayFeesInput): Promise<PaymentIntent> {
-  if (input.channel !== 'mpesa') throw cardUnavailable();
   return invokeFunction<PaymentIntent>('payments', {
-    body: { action: 'pay-fees', channel: 'mpesa', invoiceIds: input.invoiceIds, phone: input.phone },
+    body: input.channel === 'card'
+      ? { action: 'pay-fees', channel: 'card', invoiceIds: input.invoiceIds }
+      : { action: 'pay-fees', channel: 'mpesa', invoiceIds: input.invoiceIds, phone: input.phone },
   });
 }
 
@@ -341,9 +338,10 @@ export async function getPaymentStatus(checkoutRequestId: string): Promise<Payme
 export async function startSubscriptionPayment(
   input: StartSubscriptionPaymentInput,
 ): Promise<PaymentIntent> {
-  if (input.channel !== 'mpesa') throw cardUnavailable();
   return invokeFunction<PaymentIntent>('payments', {
-    body: { action: 'pay-subscription', channel: 'mpesa', phone: input.phone },
+    body: input.channel === 'card'
+      ? { action: 'pay-subscription', channel: 'card' }
+      : { action: 'pay-subscription', channel: 'mpesa', phone: input.phone },
   });
 }
 

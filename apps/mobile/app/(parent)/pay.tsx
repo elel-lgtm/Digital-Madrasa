@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, View } from 'react-native';
 import { api } from '@/api';
 import { qk } from '@/api/keys';
-import { CardForm, EMPTY_CARD, toCardInput, type CardFormValues } from '@/components/CardForm';
+import { HostedCardNote, openCardCheckout } from '@/components/CardCheckout';
 import { PaymentMethodPicker } from '@/components/PaymentMethodPicker';
 import { PhoneField } from '@/components/PhoneField';
 import { AppText, Button, Card, PageHeader, Screen } from '@/components/ui';
@@ -50,8 +50,6 @@ export default function PayScreen() {
   const [channel, setChannel] = useState<PaymentChannel>('mpesa');
   const [phone, setPhone] = useState(session.user.phone ?? '');
   const [phoneError, setPhoneError] = useState<string | undefined>();
-  const [card, setCard] = useState<CardFormValues>(EMPTY_CARD);
-  const [cardErrors, setCardErrors] = useState<Record<string, string>>({});
   const [error, setError] = useState<string | null>(null);
   const [checkoutRequestId, setCheckoutRequestId] = useState<string | null>(null);
 
@@ -73,13 +71,14 @@ export default function PayScreen() {
     onSuccess: (intent) => {
       setCheckoutRequestId(intent.checkoutRequestId);
       setPhase('waiting');
+      // Card: the gateway's page opens over the app; polling carries on.
+      void openCardCheckout(intent.authorisationUrl);
     },
     onError: (err) => setError(describeError(err).body),
   });
 
   const submitPayment = () => {
     setError(null);
-    setCardErrors({});
 
     if (channel === 'mpesa') {
       const parsed = phoneSchema.safeParse(normaliseKenyanPhone(phone));
@@ -92,18 +91,9 @@ export default function PayScreen() {
       return;
     }
 
-    const parsed = payFeesSchema.safeParse({
-      channel: 'card',
-      invoiceIds: ids,
-      card: toCardInput(card),
-    });
+    const parsed = payFeesSchema.safeParse({ channel: 'card', invoiceIds: ids });
     if (!parsed.success) {
-      const next: Record<string, string> = {};
-      for (const issue of parsed.error.issues) {
-        const key = String(issue.path[issue.path.length - 1] ?? 'card');
-        if (!next[key]) next[key] = t(issue.message);
-      }
-      setCardErrors(next);
+      setError(t(parsed.error.issues[0]?.message ?? 'validation.no_invoices_selected'));
       return;
     }
     initiate.mutate(parsed.data);
@@ -181,7 +171,7 @@ export default function PayScreen() {
                 required
               />
             ) : (
-              <CardForm values={card} onChange={setCard} errors={cardErrors} />
+              <HostedCardNote />
             )}
 
             {error ? (

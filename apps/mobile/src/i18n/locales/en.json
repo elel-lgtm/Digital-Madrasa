@@ -600,7 +600,8 @@
       "success": "Paid",
       "failed": "Failed",
       "reversed": "Reversed"
-    }
+    },
+    "cardHostedNote": "You will enter your card on Paystack’s secure payment page. Digital Madrasa never sees or stores your card number."
   },
   "ai": {
     "title": "AI Assistant",

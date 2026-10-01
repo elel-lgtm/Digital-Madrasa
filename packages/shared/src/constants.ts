@@ -50,7 +50,7 @@ export const INVOICE_STATUSES = [
 ] as const;
 export type InvoiceStatus = (typeof INVOICE_STATUSES)[number];
 
-export const PAYMENT_METHODS = ['mpesa', 'cash', 'bank', 'stripe'] as const;
+export const PAYMENT_METHODS = ['mpesa', 'cash', 'bank', 'stripe', 'card'] as const;
 export const PAYMENT_STATUSES = ['initiated', 'pending', 'success', 'failed', 'reversed'] as const;
 export type PaymentStatus = (typeof PAYMENT_STATUSES)[number];
 

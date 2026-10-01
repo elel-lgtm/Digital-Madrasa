@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, KeyboardAvoidingView, Platform, View } from 'react-native';
 import { api } from '@/api';
 import { qk } from '@/api/keys';
-import { CardForm, EMPTY_CARD, toCardInput, type CardFormValues } from '@/components/CardForm';
+import { HostedCardNote, openCardCheckout } from '@/components/CardCheckout';
 import { PaymentMethodPicker } from '@/components/PaymentMethodPicker';
 import { PhoneField } from '@/components/PhoneField';
 import {
@@ -42,7 +42,6 @@ export default function SubscriptionPay() {
 
   const [channel, setChannel] = useState<PaymentChannel>('mpesa');
   const [phone, setPhone] = useState(session.user.phone ?? '');
-  const [card, setCard] = useState<CardFormValues>(EMPTY_CARD);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [stage, setStage] = useState<Stage>('form');
   const [checkoutId, setCheckoutId] = useState<string | null>(null);
@@ -59,6 +58,8 @@ export default function SubscriptionPay() {
     onSuccess: (intent) => {
       setCheckoutId(intent.checkoutRequestId);
       setStage('processing');
+      // Card: the gateway's page opens over the app; polling carries on.
+      void openCardCheckout(intent.authorisationUrl);
     },
     onError: (error) => {
       setFailure(describeError(error).body);
@@ -102,21 +103,7 @@ export default function SubscriptionPay() {
       return;
     }
 
-    const parsed = startSubscriptionPaymentSchema.safeParse({
-      channel: 'card',
-      card: toCardInput(card),
-    });
-    if (!parsed.success) {
-      const next: Record<string, string> = {};
-      for (const issue of parsed.error.issues) {
-        // Paths look like ["card","number"]; the field is the last segment.
-        const key = String(issue.path[issue.path.length - 1] ?? 'card');
-        if (!next[key]) next[key] = t(issue.message);
-      }
-      setErrors(next);
-      return;
-    }
-    start.mutate(parsed.data);
+    start.mutate(startSubscriptionPaymentSchema.parse({ channel: 'card' }));
   };
 
   if (subscription.isPending || !subscription.data) {
@@ -253,7 +240,7 @@ export default function SubscriptionPay() {
               required
             />
           ) : (
-            <CardForm values={card} onChange={setCard} errors={errors} />
+            <HostedCardNote />
           )}
         </View>
       </Screen>

@@ -1,10 +1,12 @@
 import { authenticate, requireOwner, type Caller } from '../_shared/auth.ts';
 import { handler, json, PublicError, readJson } from '../_shared/http.ts';
+import { cardReference, startCardCheckout, verifyCardCheckout } from '../_shared/card.ts';
+import { settleCardOutcome } from '../_shared/card-settle.ts';
 import { maskMsisdn, reconcilePending, stkPush, toMsisdn } from '../_shared/mpesa.ts';
 import { LIMITS, rateLimit } from '../_shared/rate-limit.ts';
 
 /**
- * Starting and following M-Pesa payments.
+ * Starting and following payments, by M-Pesa or by card.
  *
  *   { action: 'pay-fees', channel, invoiceIds, phone }   a parent pays invoices
  *   { action: 'pay-subscription', channel, phone }       the owner pays the platform
@@ -19,9 +21,12 @@ import { LIMITS, rateLimit } from '../_shared/rate-limit.ts';
  * callback, from a status query when the callback is late, or — with the
  * mock provider — from the simulated callback in `_shared/mpesa.ts`.
  *
- * Card payments are refused here, deliberately and visibly. No card gateway
- * is integrated, and card numbers must never be sent to this server: a real
- * integration tokenises on the device through the gateway's own SDK.
+ * Card payments go through Paystack's hosted checkout (_shared/card.ts): this
+ * function records the attempt for the amount it derived and returns the
+ * checkout page, which the app opens in a browser. The card number is typed
+ * into Paystack's page and never reaches the app or this server. The outcome
+ * settles through the same database functions as M-Pesa, from Paystack's
+ * signed webhook (card-callback) or from a status poll asking Paystack.
  */
 
 interface Body {
@@ -38,20 +43,20 @@ const OPEN_INVOICE = ['issued', 'partially_paid', 'overdue'];
 /** A second prompt for the same bill inside this window is refused. */
 const IN_FLIGHT_MS = 2 * 60 * 1000;
 
-function refuseCard(channel: Body['channel']) {
-  if (channel === 'card') {
-    throw new PublicError(
-      422,
-      'card_unavailable',
-      'Card payments are not available yet. Please pay with M-Pesa.',
-    );
-  }
+const PAYSTACK_KEY = () => Deno.env.get('PAYSTACK_SECRET_KEY') || undefined;
+
+/** Where Paystack sends the browser after the card step. */
+const CARD_RETURN_URL = () => `${Deno.env.get('SUPABASE_URL')}/functions/v1/card-callback`;
+
+/** Paystack needs an e-mail for its receipt; never one we invent if we have one. */
+function payerEmail(caller: Caller): string {
+  return caller.email || `${caller.userId}@users.digitalmadrasa.invalid`;
 }
 
 // ------------------------------------------------------------------- fees
 
 async function payFees(caller: Caller, body: Body): Promise<Response> {
-  refuseCard(body.channel);
+  const card = body.channel === 'card';
   if (caller.role !== 'parent') {
     throw new PublicError(403, 'forbidden', 'Only a parent can pay fees here.');
   }
@@ -60,7 +65,7 @@ async function payFees(caller: Caller, body: Body): Promise<Response> {
   if (ids.length === 0 || ids.length > 10 || !ids.every((id) => UUID.test(id))) {
     throw new PublicError(400, 'validation', 'Choose between one and ten invoices.');
   }
-  const msisdn = toMsisdn(body.phone ?? '');
+  const msisdn = card ? null : toMsisdn(body.phone ?? '');
 
   await rateLimit(caller.admin, `payment:${caller.userId}`, LIMITS.payment);
 
@@ -95,7 +100,7 @@ async function payFees(caller: Caller, body: Body): Promise<Response> {
   const owed = open.map((i) => ({ id: i.id, owed: Number(i.amount_due) - Number(i.amount_paid) }));
   const amount = owed.reduce((sum, i) => sum + i.owed, 0);
   if (amount <= 0) throw new PublicError(409, 'conflict', 'These invoices are already settled.');
-  if (!Number.isInteger(amount)) {
+  if (!card && !Number.isInteger(amount)) {
     throw new PublicError(422, 'validation', 'M-Pesa can only take whole shillings. Ask the madrasa to round this invoice.');
   }
 
@@ -111,7 +116,7 @@ async function payFees(caller: Caller, body: Body): Promise<Response> {
     .gte('payments.created_at', since)
     .limit(1);
   if (inFlight && inFlight.length > 0) {
-    throw new PublicError(409, 'payment_in_progress', 'A payment for this bill is already waiting on a phone.');
+    throw new PublicError(409, 'payment_in_progress', 'A payment for this bill is already in progress.');
   }
 
   const madrasaId = invoices[0].madrasa_id as string;
@@ -122,9 +127,9 @@ async function payFees(caller: Caller, body: Body): Promise<Response> {
       parent_id: parent.id,
       amount,
       currency: 'KES',
-      method: 'mpesa',
-      channel: 'mpesa',
-      provider: 'daraja',
+      method: card ? 'card' : 'mpesa',
+      channel: card ? 'card' : 'mpesa',
+      provider: card ? 'paystack' : 'daraja',
       status: 'initiated',
     })
     .select('id')
@@ -141,12 +146,16 @@ async function payFees(caller: Caller, body: Body): Promise<Response> {
   );
   if (allocError) throw allocError;
 
+  if (card) {
+    return startCard(caller, 'fees', 'payments', payment.id, amount, 'KES', { payment_id: payment.id });
+  }
+
   const reference =
     (invoices[0] as { students?: { admission_no?: string } }).students?.admission_no ?? 'FEES';
 
   let push;
   try {
-    push = await stkPush({ msisdn, amount, accountReference: reference, description: 'School fees' });
+    push = await stkPush({ msisdn: msisdn!, amount, accountReference: reference, description: 'School fees' });
   } catch (err) {
     await caller.admin
       .from('payments')
@@ -165,19 +174,69 @@ async function payFees(caller: Caller, body: Body): Promise<Response> {
     checkoutRequestId: push.checkoutRequestId,
     amount,
     currency: 'KES',
-    phone: maskMsisdn(msisdn),
+    phone: maskMsisdn(msisdn!),
     channel: 'mpesa',
     authorisationUrl: null,
+  });
+}
+
+/**
+ * Starts the hosted card checkout for a payment row already recorded with its
+ * amount. The row is keyed by the checkout reference, which is how the
+ * webhook and the status poll find it again.
+ */
+async function startCard(
+  caller: Caller,
+  kind: 'fees' | 'subscription',
+  table: 'payments' | 'subscription_payments',
+  paymentId: string,
+  amount: number,
+  currency: string,
+  metadata: Record<string, unknown>,
+): Promise<Response> {
+  const reference = cardReference(kind);
+  let checkout;
+  try {
+    checkout = await startCardCheckout({
+      secretKey: PAYSTACK_KEY(),
+      reference,
+      amount,
+      email: payerEmail(caller),
+      callbackUrl: CARD_RETURN_URL(),
+      metadata: { ...metadata, kind },
+    });
+  } catch (err) {
+    console.error('[payments] card checkout:', err instanceof Error ? err.message : err);
+    await caller.admin
+      .from(table)
+      .update({ status: 'failed', failure_reason: 'The card checkout could not be started.' })
+      .eq('id', paymentId);
+    throw new PublicError(502, 'card_unavailable', 'Card payment could not be started. Please try again or pay with M-Pesa.');
+  }
+
+  await caller.admin
+    .from(table)
+    .update({ status: 'pending', checkout_request_id: checkout.reference })
+    .eq('id', paymentId);
+
+  return json({
+    paymentId,
+    checkoutRequestId: checkout.reference,
+    amount,
+    currency,
+    phone: null,
+    channel: 'card',
+    authorisationUrl: checkout.authorisationUrl,
   });
 }
 
 // ------------------------------------------------------------ subscription
 
 async function paySubscription(caller: Caller, body: Body): Promise<Response> {
-  refuseCard(body.channel);
+  const card = body.channel === 'card';
   // Only the owner pays. A teacher must not be able to charge the school.
   const owner = await requireOwner(caller);
-  const msisdn = toMsisdn(body.phone ?? '');
+  const msisdn = card ? null : toMsisdn(body.phone ?? '');
 
   await rateLimit(caller.admin, `payment:${caller.userId}`, LIMITS.payment);
 
@@ -198,7 +257,7 @@ async function paySubscription(caller: Caller, body: Body): Promise<Response> {
     .gte('created_at', since)
     .limit(1);
   if (inFlight && inFlight.length > 0) {
-    throw new PublicError(409, 'payment_in_progress', 'A payment for this invoice is already waiting on a phone.');
+    throw new PublicError(409, 'payment_in_progress', 'A payment for this invoice is already in progress.');
   }
 
   const { data: payment, error: insertError } = await caller.admin
@@ -208,18 +267,23 @@ async function paySubscription(caller: Caller, body: Body): Promise<Response> {
       subscription_invoice_id: invoice.id,
       amount,
       currency: invoice.currency ?? 'KES',
-      channel: 'mpesa',
-      provider: 'daraja',
+      channel: card ? 'card' : 'mpesa',
+      provider: card ? 'paystack' : 'daraja',
       status: 'initiated',
     })
     .select('id')
     .single();
   if (insertError) throw insertError;
 
+  if (card) {
+    return startCard(caller, 'subscription', 'subscription_payments', payment.id, amount,
+      invoice.currency ?? 'KES', { subscription_payment_id: payment.id });
+  }
+
   let push;
   try {
     push = await stkPush({
-      msisdn,
+      msisdn: msisdn!,
       amount,
       accountReference: String(invoice.invoice_no).replace(/^DMS-\d{4}-/, 'DMS-'),
       description: 'Subscription',
@@ -242,7 +306,7 @@ async function paySubscription(caller: Caller, body: Body): Promise<Response> {
     checkoutRequestId: push.checkoutRequestId,
     amount,
     currency: invoice.currency ?? 'KES',
-    phone: maskMsisdn(msisdn),
+    phone: maskMsisdn(msisdn!),
     channel: 'mpesa',
     authorisationUrl: null,
   });
@@ -324,7 +388,19 @@ async function status(caller: Caller, body: Body): Promise<Response> {
   let row = await read();
   if (!row) throw new PublicError(404, 'not_found', 'Payment not found.');
 
-  if (row.status === 'pending' || row.status === 'initiated') {
+  const byCard = fees ? row.method === 'card' : row.channel === 'card';
+  if (byCard && (row.status === 'pending' || row.status === 'initiated')) {
+    // The webhook normally settles a card payment; a poll asks Paystack too,
+    // so a lost webhook cannot leave the parent waiting.
+    const outcome = await verifyCardCheckout({
+      secretKey: PAYSTACK_KEY(),
+      reference: checkoutId,
+      createdAt: row.created_at,
+      amount: Number(row.amount),
+    });
+    await settleCardOutcome(caller.admin, fees ? 'fees' : 'subscription', checkoutId, outcome);
+    row = (await read()) ?? row;
+  } else if (row.status === 'pending' || row.status === 'initiated') {
     await reconcilePending(caller.admin, {
       checkoutRequestId: checkoutId,
       amount: Number(row.amount),

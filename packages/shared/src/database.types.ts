@@ -2327,7 +2327,7 @@ export type Database = {
       madrasa_status: "active" | "suspended" | "pending_deletion" | "deleted"
       mail_status: "queued" | "sent" | "failed"
       payment_channel: "mpesa" | "card"
-      payment_method: "mpesa" | "cash" | "bank" | "stripe"
+      payment_method: "mpesa" | "cash" | "bank" | "stripe" | "card"
       payment_provider:
         | "daraja"
         | "paystack"

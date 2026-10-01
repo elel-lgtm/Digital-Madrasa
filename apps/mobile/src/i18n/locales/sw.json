@@ -600,7 +600,8 @@
       "success": "Imelipwa",
       "failed": "Imeshindikana",
       "reversed": "Imerudishwa"
-    }
+    },
+    "cardHostedNote": "Utaweka kadi yako kwenye ukurasa salama wa malipo wa Paystack. Digital Madrasa haioni wala haihifadhi nambari ya kadi yako."
   },
   "ai": {
     "title": "Msaidizi wa AI",
