@@ -139,6 +139,9 @@ Deno.serve(handler(async (req) => {
         type: 'link_request',
         title: 'New parent link request',
         body: `${caller.fullName} has asked to link to a student. Review it in Link requests.`,
+        // What the notice is about, so a reader can deep-link to it and a test
+        // run can remove exactly the notices its own requests produced.
+        payload: { link_id: link.id, student_id: student.id },
         channel: ['in_app'],
       })),
     );

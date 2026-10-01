@@ -55,3 +55,9 @@ Thumbs.db
 # Local backup output — never commit children's records to git.
 backups/
 backup/
+
+# Earlier drafts of the project report; kept locally, too large to version.
+docs/final-year-documentation/previous/
+docs/Digital_Madrasa_Project_Documentation.pdf
+docs/Digital_Madrasa_Project_Report.docx
+docs/Digital_Madrasa_Project_Report.pdf

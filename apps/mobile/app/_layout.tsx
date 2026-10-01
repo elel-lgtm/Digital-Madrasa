@@ -15,7 +15,9 @@ import { useEffect, useMemo } from 'react';
 import { View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { useSession } from '@/hooks/useSession';
 import { applyDirection, initI18n, resolveDeviceLocale } from '@/i18n';
+import { registerDeviceForPush } from '@/notifications/push';
 import { queryClient, queryPersister } from '@/providers/queryClient';
 import { usePreferences } from '@/store/preferences';
 import { ThemeProvider, useTheme } from '@/theme/ThemeProvider';
@@ -78,6 +80,7 @@ function ThemedNavigator() {
   return (
     <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
       <StatusBar style={theme.scheme === 'dark' ? 'light' : 'dark'} />
+      <PushRegistrar />
       <Stack
         screenOptions={{
           headerShown: false,
@@ -90,7 +93,23 @@ function ThemedNavigator() {
         <Stack.Screen name="(student)" />
         <Stack.Screen name="(teacher)" />
         <Stack.Screen name="(parent)" />
+        <Stack.Screen name="(admin)" />
       </Stack>
     </View>
   );
+}
+
+/**
+ * Registers the device for push once per signed-in account. Renders nothing;
+ * does nothing where push is unavailable (see src/notifications/push.ts).
+ */
+function PushRegistrar() {
+  const { data: session } = useSession();
+  const userId = session?.user.id ?? null;
+
+  useEffect(() => {
+    if (userId) void registerDeviceForPush();
+  }, [userId]);
+
+  return null;
 }

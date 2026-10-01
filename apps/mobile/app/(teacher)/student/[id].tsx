@@ -1,17 +1,19 @@
 import { formatMoney, percent } from '@digital-madrasa/shared';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import * as Clipboard from 'expo-clipboard';
 import { Copy, Users } from 'phosphor-react-native';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, View } from 'react-native';
+import { Alert, Pressable, View } from 'react-native';
 import { api } from '@/api';
 import { qk } from '@/api/keys';
+import { CertificateCard } from '@/components/CertificateCard';
 import {
   AppText,
   Avatar,
   Badge,
+  Button,
   Card,
   Divider,
   ErrorState,
@@ -35,10 +37,26 @@ export default function StudentDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const [copied, setCopied] = useState(false);
 
+  const queryClient = useQueryClient();
+
   const detail = useQuery({
     queryKey: qk.student(id ?? ''),
     queryFn: () => api.getStudent(id ?? ''),
     enabled: Boolean(id),
+  });
+  const hifz = useQuery({
+    queryKey: qk.hifz(id ?? ''),
+    queryFn: () => api.listHifzProgress(id ?? ''),
+    enabled: Boolean(id),
+  });
+  const certificates = useQuery({
+    queryKey: qk.certificates(id ?? ''),
+    queryFn: () => api.listCertificates(id ?? ''),
+    enabled: Boolean(id),
+  });
+  const withdraw = useMutation({
+    mutationFn: api.withdrawCertificate,
+    onSuccess: () => void queryClient.invalidateQueries({ queryKey: qk.certificates(id ?? '') }),
   });
 
   if (detail.isPending) {
@@ -138,6 +156,99 @@ export default function StudentDetail() {
             </AppText>
           </View>
         </Card>
+
+        <View>
+          <SectionHeader
+            title={t('learning.memorisation')}
+            action={{
+              label: t('learning.updateMemorisation'),
+              onPress: () =>
+                router.push({
+                  pathname: '/(teacher)/hifz-update',
+                  params: { studentId: student.id, name: student.fullName },
+                }),
+            }}
+          />
+          <Card padded={false}>
+            {(hifz.data ?? []).length === 0 ? (
+              <View style={{ padding: theme.spacing.lg }}>
+                <AppText variant="body" color="textMuted">
+                  {t('learning.noHifz')}
+                </AppText>
+              </View>
+            ) : (
+              [...(hifz.data ?? [])]
+                .sort((a, b) => b.surahNo - a.surahNo)
+                .slice(0, 8)
+                .map((row, index) => (
+                  <View key={row.id} style={{ paddingHorizontal: theme.spacing.lg }}>
+                    {index > 0 ? <Divider /> : null}
+                    <ListRow
+                      title={`${row.surahNo}. ${row.surahName}`}
+                      subtitle={`Juz ${row.juzNo}${row.status === 'learning' ? ` · ${t('learning.upToAyah')} ${row.ayahNo}` : ''}`}
+                      onPress={() =>
+                        router.push({
+                          pathname: '/(teacher)/hifz-update',
+                          params: { studentId: student.id, name: student.fullName, surahNo: String(row.surahNo) },
+                        })
+                      }
+                      right={
+                        <Badge
+                          label={t(`learning.status_${row.status}`)}
+                          tone={
+                            row.status === 'mastered'
+                              ? 'success'
+                              : row.status === 'learning'
+                                ? 'info'
+                                : row.status === 'revising'
+                                  ? 'warning'
+                                  : 'accent'
+                          }
+                        />
+                      }
+                    />
+                  </View>
+                ))
+            )}
+          </Card>
+        </View>
+
+        <View style={{ gap: theme.spacing.md }}>
+          <SectionHeader title={t('learning.certificates')} />
+          {(certificates.data ?? []).length === 0 ? (
+            <AppText variant="body" color="textMuted">
+              {t('learning.noCertificates')}
+            </AppText>
+          ) : (
+            (certificates.data ?? []).map((certificate) => (
+              <CertificateCard
+                key={certificate.id}
+                certificate={certificate}
+                withdrawing={withdraw.isPending && withdraw.variables === certificate.id}
+                onWithdraw={() =>
+                  Alert.alert(t('learning.withdraw'), t('learning.withdrawConfirm'), [
+                    { text: t('common.cancel'), style: 'cancel' },
+                    {
+                      text: t('learning.withdraw'),
+                      style: 'destructive',
+                      onPress: () => withdraw.mutate(certificate.id),
+                    },
+                  ])
+                }
+              />
+            ))
+          )}
+          <Button
+            label={t('learning.awardCertificate')}
+            variant="secondary"
+            onPress={() =>
+              router.push({
+                pathname: '/(teacher)/certificate-new',
+                params: { studentId: student.id, name: student.fullName },
+              })
+            }
+          />
+        </View>
 
         <View>
           <SectionHeader title={t('teacher.grades')} />

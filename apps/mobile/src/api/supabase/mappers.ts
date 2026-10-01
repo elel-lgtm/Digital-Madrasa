@@ -82,6 +82,7 @@ export function mapTeacher(row: Row): Teacher {
     qiraahStyles: row.qiraah_styles ?? [],
     isOwner: row.is_owner ?? false,
     status: row.status ?? 'active',
-    classCount: row.class_count ?? 0,
+    // From the embedded aggregate, which inherits the parent row's RLS.
+    classCount: row.classes?.[0]?.count ?? 0,
   };
 }

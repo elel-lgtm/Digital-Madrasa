@@ -35,8 +35,10 @@ export default function Index() {
       return <Redirect href="/(parent)/dashboard" />;
     case 'teacher':
       return <Redirect href="/(teacher)/dashboard" />;
+    case 'admin':
+      // The web console. On a phone the (admin) layout explains where to go.
+      return <Redirect href="/(admin)/overview" />;
     default:
-      // Platform admins use the web console, never the mobile shell.
       return <Redirect href="/(auth)/welcome" />;
   }
 }

@@ -111,6 +111,31 @@ export const updateHifzProgressSchema = z.object({
 });
 export type UpdateHifzProgressInput = z.infer<typeof updateHifzProgressSchema>;
 
+/** A student's written answer. Resubmitting replaces it until it is marked. */
+export const submitAssignmentSchema = z.object({
+  assignmentId: uuidSchema,
+  textBody: plainTextSchema(4000).pipe(z.string().min(1, 'validation.body_required')),
+});
+export type SubmitAssignmentInput = z.infer<typeof submitAssignmentSchema>;
+
+/** Marking is out of 100; "returned" sends it back for another attempt. */
+export const gradeSubmissionSchema = z.object({
+  submissionId: uuidSchema,
+  score: z.number().min(0).max(100),
+  status: z.enum(['graded', 'returned']),
+});
+export type GradeSubmissionInput = z.infer<typeof gradeSubmissionSchema>;
+
+export const CERTIFICATE_KINDS = ['juz_completion', 'quran_completion', 'tajweed_level'] as const;
+
+/** The code is never sent: the database issues it. */
+export const issueCertificateSchema = z.object({
+  studentId: uuidSchema,
+  kind: z.enum(CERTIFICATE_KINDS),
+  title: plainTextSchema(120).pipe(z.string().min(3, 'validation.title_too_short')),
+});
+export type IssueCertificateInput = z.infer<typeof issueCertificateSchema>;
+
 export const createRecitationSchema = z
   .object({
     qiraahStyle: z.enum(QIRAAH_STYLES),

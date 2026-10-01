@@ -1,12 +1,12 @@
 import { formatMoney, percent } from '@digital-madrasa/shared';
 import { useQuery } from '@tanstack/react-query';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { Certificate as CertificateIcon } from 'phosphor-react-native';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 import { api } from '@/api';
 import { qk } from '@/api/keys';
+import { CertificateCard } from '@/components/CertificateCard';
 import { ScoreRing } from '@/components/TajweedFeedback';
 import {
   AppText,
@@ -187,28 +187,11 @@ export default function ChildDetail() {
             </View>
 
             {data.certificates.length > 0 ? (
-              <View>
-                <SectionHeader title={t('parent.reportCard')} />
-                <Card padded={false}>
-                  {data.certificates.map((certificate, index) => (
-                    <View key={certificate.id} style={{ paddingHorizontal: theme.spacing.lg }}>
-                      {index > 0 ? <Divider /> : null}
-                      <ListRow
-                        title={certificate.title}
-                        subtitle={longDate(certificate.issuedAt)}
-                        left={
-                          <CertificateIcon
-                            size={22}
-                            color={theme.colors.accent}
-                            weight="duotone"
-                          />
-                        }
-                        right={<Badge label={certificate.verificationCode} />}
-                        showChevron={false}
-                      />
-                    </View>
-                  ))}
-                </Card>
+              <View style={{ gap: theme.spacing.md }}>
+                <SectionHeader title={t('learning.certificates')} />
+                {data.certificates.map((certificate) => (
+                  <CertificateCard key={certificate.id} certificate={certificate} />
+                ))}
               </View>
             ) : null}
           </View>

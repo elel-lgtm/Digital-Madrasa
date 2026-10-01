@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { useRouter } from 'expo-router';
 import { ClipboardText } from 'phosphor-react-native';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
@@ -23,6 +24,7 @@ export default function Assignments() {
   const { t } = useTranslation();
   const theme = useTheme();
   const describeError = useApiError();
+  const router = useRouter();
 
   const assignments = useQuery({
     queryKey: qk.assignments(null),
@@ -52,7 +54,12 @@ export default function Assignments() {
           (assignments.data ?? []).map((assignment) => {
             const due = formatDueLabel(assignment.dueAt, t);
             return (
-              <Card key={assignment.id} accent={due.tone === 'danger' ? 'danger' : undefined}>
+              <Card
+                key={assignment.id}
+                accent={due.tone === 'danger' ? 'danger' : undefined}
+                accessibilityLabel={assignment.title}
+                onPress={() => router.push(`/(teacher)/assignment/${assignment.id}`)}
+              >
                 <View style={{ gap: theme.spacing.md }}>
                   <View style={{ flexDirection: 'row', gap: theme.spacing.md }}>
                     <View style={{ flex: 1, gap: 2 }}>

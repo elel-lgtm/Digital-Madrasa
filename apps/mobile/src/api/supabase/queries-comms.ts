@@ -49,6 +49,21 @@ export async function listAssignments(params: {
   const { data, error } = await query;
   if (error) fail(error, 'Could not load assignments.');
 
+  // For a student, say whether each one has been handed in. RLS returns only
+  // the caller's own submission rows, so this cannot reveal classmates' work.
+  const { data: auth } = await supabase.auth.getUser();
+  const { data: me } = auth.user
+    ? await supabase.from('profiles').select('role').eq('id', auth.user.id).maybeSingle()
+    : { data: null };
+  const mine = new Map<string, string>();
+  if (me?.role === 'student') {
+    const { data: subs } = await supabase
+      .from('submissions')
+      .select('assignment_id, status')
+      .is('deleted_at', null);
+    (subs ?? []).forEach((s: Row) => mine.set(s.assignment_id, s.status));
+  }
+
   return (data ?? []).map((row: Row) => ({
     id: row.id,
     madrasaId: row.madrasa_id,
@@ -61,6 +76,9 @@ export async function listAssignments(params: {
     dueAt: row.due_at,
     submissionCount: row.submissions?.[0]?.count ?? 0,
     studentCount: row.classes?.students?.[0]?.count ?? 0,
+    ...(me?.role === 'student'
+      ? { mySubmissionStatus: (mine.get(row.id) ?? 'not_submitted') as Assignment['mySubmissionStatus'] }
+      : {}),
   }));
 }
 
@@ -129,6 +147,8 @@ export async function listMail(): Promise<Row[]> {
     .from('notifications')
     .select('*')
     .eq('user_id', userId)
+    // A new-message push opens the conversation; it is not inbox mail.
+    .neq('type', 'message')
     .order('created_at', { ascending: false })
     .limit(50);
 

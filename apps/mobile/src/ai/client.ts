@@ -4,14 +4,18 @@ import { supabase } from '@/api/supabase';
 import { env } from '@/config/env';
 
 /**
- * Talks to the AI gateway.
+ * Talks to the assistant.
  *
- * Deliberately not part of `ApiClient`: the gateway is a separate service on a
- * different host, and conflating the two would mean every Supabase-mode screen
- * appeared broken whenever the AI box was off.
+ * By default that is the hosted `ai-assistant` Edge Function, so the assistant
+ * works wherever the app does. Setting EXPO_PUBLIC_AI_GATEWAY_URL points it at
+ * a self-hosted gateway (services/ai-gateway) instead, for running against a
+ * local model. Both speak the same request and reply.
+ *
+ * Deliberately not part of `ApiClient`: an assistant that is down must not
+ * make every Supabase-mode screen appear broken.
  *
  * The request carries the user's Supabase access token and nothing else. No
- * role, no madrasa id, no user id — the gateway derives all of that from the
+ * role, no madrasa id, no user id — the server derives all of that from the
  * token, and anything this client claimed would be ignored.
  */
 
@@ -59,20 +63,25 @@ async function accessToken(): Promise<string> {
 }
 
 async function httpAsk({ message, selectedChildId, signal }: AskOptions): Promise<AiReply> {
-  if (!env.aiGatewayUrl) {
-    throw new AiError(
-      'not_configured',
-      'The assistant is not configured. Set EXPO_PUBLIC_AI_GATEWAY_URL.',
-    );
-  }
+  const url = env.aiGatewayUrl
+    ? `${env.aiGatewayUrl}/api/ai/chat`
+    : env.supabaseUrl
+      ? `${env.supabaseUrl}/functions/v1/ai-assistant`
+      : null;
+  if (!url) throw new AiError('not_configured', 'The assistant is not configured.');
 
   const token = await accessToken();
 
   let res: Response;
   try {
-    res = await fetch(`${env.aiGatewayUrl}/api/ai/chat`, {
+    res = await fetch(url, {
       method: 'POST',
-      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        // The Edge Function gateway wants the project's public key as well.
+        ...(env.supabaseAnonKey ? { apikey: env.supabaseAnonKey } : {}),
+      },
       body: JSON.stringify({
         message,
         context: selectedChildId ? { selectedChildId } : undefined,
@@ -80,10 +89,7 @@ async function httpAsk({ message, selectedChildId, signal }: AskOptions): Promis
       signal,
     });
   } catch {
-    throw new AiError(
-      'unreachable',
-      'Could not reach the assistant. Check that it is running and on the same network.',
-    );
+    throw new AiError('unreachable', 'Could not reach the assistant. Check your connection.');
   }
 
   if (res.status === 401) throw new AiError('unauthenticated', 'Sign in again to continue.');
@@ -130,5 +136,5 @@ async function mockAsk({ message }: AskOptions): Promise<AiReply> {
 
 export const ai = {
   ask: apiMode === 'supabase' ? httpAsk : mockAsk,
-  isConfigured: apiMode !== 'supabase' || Boolean(env.aiGatewayUrl),
+  isConfigured: apiMode !== 'supabase' || Boolean(env.aiGatewayUrl || env.supabaseUrl),
 };

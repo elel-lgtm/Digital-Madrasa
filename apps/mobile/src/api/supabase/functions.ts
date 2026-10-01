@@ -44,6 +44,12 @@ const CODE_MAP: Record<string, ApiErrorCode> = {
   // A fee that belongs to one class or one pupil, asked to bill wider. The
   // generic validation copy would not say which fee or which way it is wrong.
   scope_mismatch: 'scope_mismatch',
+  // The typed-back name did not match: a validation problem with the form.
+  confirm_mismatch: 'validation',
+  purge_failed: 'conflict',
+  card_unavailable: 'card_unavailable',
+  payment_in_progress: 'payment_in_progress',
+  payment_provider: 'payment_provider',
   method: 'unknown',
   internal: 'unknown',
 };

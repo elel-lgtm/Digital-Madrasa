@@ -93,6 +93,7 @@ Deno.serve(handler(async (req) => {
         type: 'link_approved',
         title: 'Your child has been linked',
         body: 'You can now see their progress, attendance and fees.',
+        payload: { link_id: link.id, student_id: link.student_id },
         channel: ['in_app', 'push'],
       });
     }

@@ -2,6 +2,7 @@ import {
   SUBSCRIPTION_CURRENCY,
   type Announcement,
   type AttendanceRecord,
+  type CancelSubscriptionInput,
   type CreateAnnouncementInput,
   type CreateAssignmentInput,
   type CreateClassInput,
@@ -46,6 +47,7 @@ function fail(error: { message: string; code?: string } | null, fallback: string
   if (error?.code === '42501' || /row-level security/i.test(message)) {
     throw new ApiError('forbidden', 'You do not have permission to do that.');
   }
+  if (error?.code === 'P0002') throw new ApiError('not_found', fallback);
   throw new ApiError('unknown', message);
 }
 
@@ -395,6 +397,10 @@ export async function getSubscription(): Promise<Subscription> {
   if (!data) throw new ApiError('not_found', 'No subscription for this madrasa.');
 
   const plan = (data as Row).subscription_plans ?? {};
+  // Read through its own policy: only the madrasa's staff see a madrasa card.
+  const defaultCard = data.default_card_id
+    ? (await listSavedCards()).find((card) => card.id === data.default_card_id) ?? null
+    : null;
 
   return {
     id: data.id,
@@ -418,7 +424,7 @@ export async function getSubscription(): Promise<Subscription> {
     graceEndsAt: data.grace_ends_at ?? null,
     cancelledAt: data.cancelled_at ?? null,
     cancelAtPeriodEnd: data.cancel_at_period_end ?? false,
-    defaultCard: null,
+    defaultCard,
   };
 }
 
@@ -497,12 +503,45 @@ export async function listSavedCards(): Promise<SavedCard[]> {
   }));
 }
 
+// -------------------------------------------------------------------- push
+
+export async function registerPushToken(token: string, platform: 'android' | 'ios'): Promise<void> {
+  const { error } = await supabase.rpc('register_push_token', { p_token: token, p_platform: platform });
+  if (error) fail(error, 'Could not register this device for notifications.');
+}
+
+export async function unregisterPushToken(token: string): Promise<void> {
+  const { error } = await supabase.rpc('unregister_push_token', { p_token: token });
+  if (error) fail(error, 'Could not unregister this device.');
+}
+
+/**
+ * Card and subscription controls go through SECURITY DEFINER functions
+ * (migration 0024), each with its own ownership check. A direct UPDATE would
+ * be checked against the read policy on the returned row — a soft-deleted
+ * card is no longer readable — and the old card policy accepted any new row.
+ */
 export async function removeSavedCard(cardId: string): Promise<void> {
-  const { error } = await supabase
-    .from('saved_cards')
-    .update({ deleted_at: new Date().toISOString() })
-    .eq('id', cardId);
-  if (error) fail(error, 'Could not remove that card.');
+  const { error } = await supabase.rpc('remove_saved_card', { p_card_id: cardId });
+  if (error) fail(error, 'That card is no longer saved.');
+}
+
+export async function setDefaultCard(cardId: string): Promise<void> {
+  const { error } = await supabase.rpc('set_default_card', { p_card_id: cardId });
+  if (error) fail(error, 'That card is no longer saved.');
+}
+
+/** Owner only (checked in the database). Access continues to the end of the paid period. */
+export async function cancelSubscription(input: CancelSubscriptionInput): Promise<Subscription> {
+  const { error } = await supabase.rpc('cancel_subscription', { p_reason: input.reason ?? null });
+  if (error) fail(error, 'Could not cancel the subscription.');
+  return getSubscription();
+}
+
+export async function resumeSubscription(): Promise<Subscription> {
+  const { error } = await supabase.rpc('resume_subscription');
+  if (error) fail(error, 'Could not resume the subscription.');
+  return getSubscription();
 }
 
 /**

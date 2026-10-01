@@ -2,6 +2,7 @@ import { authenticate, requireStaff } from '../_shared/auth.ts';
 import { writeAudit } from '../_shared/audit.ts';
 import { handler, json, PublicError, readJson } from '../_shared/http.ts';
 import { LIMITS, rateLimit } from '../_shared/rate-limit.ts';
+import { signToken, verifyToken, WINDOW_SECONDS, windowNumber } from './token.ts';
 
 /**
  * QR attendance.
@@ -21,50 +22,13 @@ import { LIMITS, rateLimit } from '../_shared/rate-limit.ts';
  * the previous window is accepted only to cover clock skew and slow cameras.
  */
 
-const WINDOW_SECONDS = 30;
+// Falls back to the service key so a missing secret cannot silently make
+// every token forgeable — it just ties tokens to a value only we hold.
+const secret = () =>
+  Deno.env.get('QR_SIGNING_SECRET') ?? Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '';
 
-function windowNumber(at = Date.now()): number {
-  return Math.floor(at / 1000 / WINDOW_SECONDS);
-}
-
-async function sign(classId: string, window: number): Promise<string> {
-  // Falls back to the service key so a missing secret cannot silently make
-  // every token forgeable — it just ties tokens to a value only we hold.
-  const secret =
-    Deno.env.get('QR_SIGNING_SECRET') ?? Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '';
-
-  const key = await crypto.subtle.importKey(
-    'raw',
-    new TextEncoder().encode(secret),
-    { name: 'HMAC', hash: 'SHA-256' },
-    false,
-    ['sign'],
-  );
-  const mac = await crypto.subtle.sign(
-    'HMAC',
-    key,
-    new TextEncoder().encode(`${classId}.${window}`),
-  );
-  const hex = Array.from(new Uint8Array(mac))
-    .map((b) => b.toString(16).padStart(2, '0'))
-    .join('');
-  return `${classId}.${window}.${hex.slice(0, 32)}`;
-}
-
-async function verify(token: string): Promise<string | null> {
-  const parts = token.split('.');
-  if (parts.length !== 3) return null;
-  const [classId, windowRaw] = parts;
-  const window = Number(windowRaw);
-  if (!Number.isFinite(window)) return null;
-
-  const now = windowNumber();
-  // Current window, plus the one before it for clock skew and slow scans.
-  if (window !== now && window !== now - 1) return null;
-
-  const expected = await sign(classId, window);
-  return expected === token ? classId : null;
-}
+const sign = (classId: string, window: number) => signToken(secret(), classId, window);
+const verify = (token: string) => verifyToken(secret(), token);
 
 Deno.serve(handler(async (req) => {
   const caller = await authenticate(req);

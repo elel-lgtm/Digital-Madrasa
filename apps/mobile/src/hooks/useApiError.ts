@@ -41,6 +41,12 @@ export function useApiError() {
             body: t('errors.madrasaSuspended'),
             offline: false,
           };
+        case 'card_unavailable':
+          return { title: t('errors.genericTitle'), body: t('errors.cardUnavailable'), offline: false };
+        case 'payment_in_progress':
+          return { title: t('errors.genericTitle'), body: t('errors.paymentInProgress'), offline: false };
+        case 'payment_provider':
+          return { title: t('errors.genericTitle'), body: t('errors.paymentProvider'), offline: false };
         case 'network':
           return {
             title: t('errors.networkTitle'),

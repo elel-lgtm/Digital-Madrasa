@@ -87,6 +87,17 @@ export default function Welcome() {
         </Pressable>
       </View>
 
+      <Pressable
+        accessibilityRole="link"
+        onPress={() => router.push('/(auth)/verify-certificate')}
+        hitSlop={8}
+        style={{ alignSelf: 'center', marginTop: theme.spacing.md, minHeight: 44, justifyContent: 'center' }}
+      >
+        <AppText variant="caption" color="textMuted">
+          {t('learning.verifyLink')}
+        </AppText>
+      </Pressable>
+
       <View style={{ gap: theme.spacing.sm, marginTop: theme.spacing.lg }}>
         <AppText variant="label" color="textSubtle" uppercase align="center">
           {t('settings.language')}

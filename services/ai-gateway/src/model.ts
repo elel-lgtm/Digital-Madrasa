@@ -1,12 +1,13 @@
+import { GeminiError, geminiGenerate } from '../../../supabase/functions/_shared/gemini.ts';
 import { config } from './config.ts';
 
 /**
  * The model provider.
  *
- * Deliberately one small interface with two implementations. Swapping Qwen3
- * for a different local model, or for a hosted free tier if you ever need the
- * app testable away from your laptop, is a change to this file and nothing
- * else. No screen, route or prompt knows which model answered.
+ * Deliberately one small interface with three implementations: a local model
+ * (Ollama), a hosted one (Gemini) and a stub. Swapping between them is a
+ * change to this file and nothing else. No screen, route or prompt knows
+ * which model answered.
  */
 
 export interface ChatMessage {
@@ -111,13 +112,34 @@ function stubChat(messages: ChatMessage[]): string {
   ].join('\n');
 }
 
+async function geminiChat(messages: ChatMessage[]): Promise<string> {
+  try {
+    return await geminiGenerate({
+      apiKey: config.geminiApiKey,
+      model: config.geminiModel,
+      system: messages.find((m) => m.role === 'system')?.content,
+      parts: [{ text: messages.findLast((m) => m.role === 'user')?.content ?? '' }],
+      temperature: 0.3,
+      maxOutputTokens: 4096,
+      timeoutMs: config.modelTimeoutMs,
+    });
+  } catch (error) {
+    if (!(error instanceof GeminiError)) throw error;
+    if (error.kind === 'timeout') throw new ModelError('timeout', error.message);
+    throw new ModelError(error.kind === 'failed' || error.kind === 'blocked' ? 'failed' : 'unavailable', error.message);
+  }
+}
+
 export async function chat(messages: ChatMessage[]): Promise<string> {
-  return config.modelProvider === 'ollama' ? ollamaChat(messages) : stubChat(messages);
+  if (config.modelProvider === 'ollama') return ollamaChat(messages);
+  if (config.modelProvider === 'gemini') return geminiChat(messages);
+  return stubChat(messages);
 }
 
 /** Reports whether the configured model is actually usable, for /health. */
 export async function modelHealth(): Promise<{ ok: boolean; detail: string }> {
   if (config.modelProvider === 'stub') return { ok: true, detail: 'stub provider' };
+  if (config.modelProvider === 'gemini') return { ok: true, detail: `${config.geminiModel} (hosted)` };
 
   try {
     const res = await fetch(`${config.ollamaUrl}/api/tags`, {

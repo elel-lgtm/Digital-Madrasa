@@ -460,7 +460,14 @@ export type MailKind =
   | 'report_card'
   | 'announcement'
   | 'message'
-  | 'progress_summary';
+  | 'progress_summary'
+  // Written by Edge Functions: issue-invoices, link-child, decide-link,
+  // madrasa-lifecycle. The inbox must render every one of them.
+  | 'fee_due'
+  | 'link_request'
+  | 'link_approved'
+  | 'madrasa_status'
+  | 'certificate_issued';
 
 export interface MailItem {
   id: ID;
@@ -495,6 +502,16 @@ export interface Certificate {
   issuedAt: string;
   verificationCode: string;
   pdfUrl: string | null;
+}
+
+/** What a public certificate check returns; nothing beyond the certificate itself. */
+export interface VerifiedCertificate {
+  title: string;
+  kind: Certificate['kind'];
+  studentName: string;
+  madrasaName: string;
+  issuedAt: string;
+  valid: boolean;
 }
 
 export interface AuditEntry {
@@ -535,4 +552,54 @@ export interface Session {
   teacher: Teacher | null;
   featureFlags: FeatureFlags;
   issuedAt: string;
+}
+
+// ============================================================ platform admin
+
+/** The platform at a glance. Counts and totals only — no pupil records. */
+export interface AdminOverview {
+  madrasas: Record<MadrasaStatus, number>;
+  people: { students: number; teachers: number; parents: number };
+  subscriptions: Partial<Record<SubscriptionStatus, number>>;
+  revenue30d: { subscriptions: number; feesCollected: number; currency: string };
+  /** Non-zero `stalled` means notification delivery is not running. */
+  delivery: { stalled: number; emailFailed: number; smsFailed: number };
+  generatedAt: string;
+}
+
+export interface AdminMadrasa {
+  id: ID;
+  name: string;
+  slug: string;
+  county: string;
+  town: string;
+  status: MadrasaStatus;
+  createdAt: string;
+  suspendedAt: string | null;
+  deletionScheduledAt: string | null;
+  deletionReason: string | null;
+  ownerName: string | null;
+  ownerEmail: string | null;
+  contactPhone: string;
+  subscriptionStatus: SubscriptionStatus | null;
+  trialEndsAt: string | null;
+  currentPeriodEnd: string | null;
+  students: number;
+  teachers: number;
+  parents: number;
+  feesOutstanding: number;
+  lastActivityAt: string | null;
+}
+
+export interface AdminAuditEntry {
+  id: ID;
+  createdAt: string;
+  action: string;
+  entityType: string;
+  entityId: ID | null;
+  actorName: string;
+  actorRole: string | null;
+  madrasaId: ID | null;
+  madrasaName: string | null;
+  reason: string | null;
 }

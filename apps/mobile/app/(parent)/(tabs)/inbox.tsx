@@ -10,6 +10,10 @@ import {
   FileText,
   ChatCircleDots,
   CurrencyCircleDollar,
+  UserPlus,
+  UserCircleCheck,
+  Buildings,
+  Certificate,
 } from 'phosphor-react-native';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -42,9 +46,23 @@ const KIND_ICON: Record<MailKind, Icon> = {
   announcement: Megaphone,
   message: ChatCircleDots,
   progress_summary: TrendUp,
+  fee_due: Receipt,
+  link_request: UserPlus,
+  link_approved: UserCircleCheck,
+  madrasa_status: Buildings,
+  certificate_issued: Certificate,
 };
 
 const URGENT: MailKind[] = ['fee_overdue', 'attendance_alert'];
+
+/**
+ * Notification types are written by server functions, so a type added there
+ * must never be able to take the inbox down: an unknown type gets a generic
+ * icon and label rather than an undefined component.
+ */
+function iconFor(kind: string): Icon {
+  return (KIND_ICON as Record<string, Icon>)[kind] ?? Envelope;
+}
 
 export default function ParentInbox() {
   const { t } = useTranslation();
@@ -110,7 +128,7 @@ export default function ParentInbox() {
           />
         ) : (
           (mail.data ?? []).map((item) => {
-            const IconComponent = KIND_ICON[item.kind];
+            const IconComponent = iconFor(item.kind);
             const unread = !item.readAt;
             return (
               <Card
@@ -144,7 +162,7 @@ export default function ParentInbox() {
                       {item.preview}
                     </AppText>
                     <View style={{ flexDirection: 'row', gap: theme.spacing.sm }}>
-                      <Badge label={t(`mail.${item.kind}`)} tone={unread ? 'accent' : 'neutral'} />
+                      <Badge label={t(`mail.${item.kind}`, { defaultValue: t('mail.notice') })} tone={unread ? 'accent' : 'neutral'} />
                       {item.attachmentLabel ? <Badge label={item.attachmentLabel} /> : null}
                     </View>
                   </View>

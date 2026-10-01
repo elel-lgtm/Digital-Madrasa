@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { useRouter } from 'expo-router';
 import { BookOpen, ClipboardText } from 'phosphor-react-native';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -27,6 +28,7 @@ export default function Learn() {
   const { t } = useTranslation();
   const theme = useTheme();
   const describeError = useApiError();
+  const router = useRouter();
   const [tab, setTab] = useState<Tab>('assignments');
 
   const assignments = useQuery({
@@ -76,6 +78,8 @@ export default function Learn() {
                   <Card
                     key={assignment.id}
                     accent={submitted ? 'success' : due.tone === 'danger' ? 'danger' : undefined}
+                    accessibilityLabel={assignment.title}
+                    onPress={() => router.push(`/(student)/assignment/${assignment.id}`)}
                   >
                     <View style={{ gap: theme.spacing.sm }}>
                       <View

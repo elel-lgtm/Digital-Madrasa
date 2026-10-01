@@ -1,18 +1,16 @@
 import { TOTAL_JUZ, percent, type HifzStatus } from '@digital-madrasa/shared';
 import { useQuery } from '@tanstack/react-query';
-import { Certificate as CertificateIcon, Flame } from 'phosphor-react-native';
+import { Flame } from 'phosphor-react-native';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 import { api } from '@/api';
 import { qk } from '@/api/keys';
+import { CertificateCard } from '@/components/CertificateCard';
 import {
   AppText,
-  Badge,
   Card,
-  Divider,
   ErrorState,
-  ListRow,
   PageHeader,
   ProgressBar,
   Screen,
@@ -23,7 +21,6 @@ import {
 import { useApiError } from '@/hooks/useApiError';
 import { useRequiredSession } from '@/hooks/useSession';
 import { useTheme } from '@/theme/ThemeProvider';
-import { longDate } from '@/utils/dates';
 
 export default function StudentProgress() {
   const { t } = useTranslation();
@@ -216,28 +213,11 @@ export default function StudentProgress() {
           </Card>
 
           {(certificates.data ?? []).length > 0 ? (
-            <View>
-              <SectionHeader title={t('parent.reportCard')} />
-              <Card padded={false}>
-                {(certificates.data ?? []).map((certificate, index) => (
-                  <View key={certificate.id} style={{ paddingHorizontal: theme.spacing.lg }}>
-                    {index > 0 ? <Divider /> : null}
-                    <ListRow
-                      title={certificate.title}
-                      subtitle={longDate(certificate.issuedAt)}
-                      left={
-                        <CertificateIcon
-                          size={22}
-                          color={theme.colors.accent}
-                          weight="duotone"
-                        />
-                      }
-                      right={<Badge label={certificate.verificationCode} />}
-                      showChevron={false}
-                    />
-                  </View>
-                ))}
-              </Card>
+            <View style={{ gap: theme.spacing.md }}>
+              <SectionHeader title={t('learning.certificates')} />
+              {(certificates.data ?? []).map((certificate) => (
+                <CertificateCard key={certificate.id} certificate={certificate} />
+              ))}
             </View>
           ) : null}
         </View>

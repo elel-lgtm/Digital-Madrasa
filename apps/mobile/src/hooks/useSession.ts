@@ -7,6 +7,7 @@ import type {
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/api';
 import { qk } from '@/api/keys';
+import { unregisterDeviceForPush } from '@/notifications/push';
 
 /**
  * The session is a query rather than a store, so every screen shares one
@@ -66,7 +67,12 @@ export function useRegisterParent() {
 export function useSignOut() {
   const client = useQueryClient();
   return useMutation({
-    mutationFn: () => api.signOut(),
+    mutationFn: async () => {
+      // While still signed in, so the server accepts it: this phone stops
+      // receiving the account's notifications.
+      await unregisterDeviceForPush();
+      await api.signOut();
+    },
     onSuccess: () => {
       client.setQueryData(qk.session, null);
       // Everything cached belonged to the account that just left.

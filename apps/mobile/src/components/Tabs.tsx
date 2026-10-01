@@ -1,15 +1,25 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '@/theme/ThemeProvider';
 
-/** The bar itself, above whatever the system reserves at the bottom edge. */
-const BAR_HEIGHT = 62;
+/**
+ * The bar itself, above whatever the system reserves at the bottom edge. Tall
+ * enough for the 24pt icon plus a full label line: at 62 the navigator shrank
+ * the label to 9pt of height and clipped every descender, which in Arabic
+ * took the dots off most words.
+ */
+const BAR_HEIGHT = 66;
 
 /** Shared tab bar styling so all three role shells look like one app. */
 export function useTabScreenOptions() {
   const theme = useTheme();
   const insets = useSafeAreaInsets();
+  const { i18n } = useTranslation();
+  // Arabic labels render in the system's taller Arabic fallback font, so they
+  // get a taller line.
+  const arabic = i18n.language === 'ar';
 
   return React.useMemo(
     () => ({
@@ -31,9 +41,12 @@ export function useTabScreenOptions() {
       tabBarLabelStyle: {
         fontFamily: theme.fonts.bodyMedium,
         fontSize: 11,
+        lineHeight: arabic ? 18 : 15,
+        // Never squeezed below its own line height by the icon above it.
+        flexShrink: 0,
       },
       sceneStyle: { backgroundColor: theme.colors.background },
     }),
-    [theme, insets.bottom],
+    [theme, insets.bottom, arabic],
   );
 }

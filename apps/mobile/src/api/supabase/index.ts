@@ -7,6 +7,8 @@ import * as q from './queries';
 import * as storage from './storage';
 import * as c from './queries-comms';
 import * as fees from './queries-fees';
+import * as learning from './learning';
+import * as admin from './admin';
 
 export { supabase } from './client';
 
@@ -49,6 +51,7 @@ const implemented: Partial<ApiClient> = {
   listStudents: q.listStudents,
   listClasses: q.listClasses,
   listTeachers: q.listTeachers,
+  inviteTeacher: edge.inviteTeacher,
 
   // ------------------------------------------------------------- learning
   listLessons: q.listLessons,
@@ -83,6 +86,14 @@ const implemented: Partial<ApiClient> = {
   saveTeacherOverride: m.saveTeacherOverride,
   getRecitationAudioUrl: storage.getRecitationAudioUrl,
   listCertificates: fees.listCertificates,
+  issueCertificate: learning.issueCertificate,
+  withdrawCertificate: learning.withdrawCertificate,
+  verifyCertificate: learning.verifyCertificate,
+  upsertHifzProgress: learning.upsertHifzProgress,
+  getMySubmission: learning.getMySubmission,
+  submitAssignment: learning.submitAssignment,
+  gradeSubmission: learning.gradeSubmission,
+  getStudent: q.getStudent,
 
   // ------------------------------------------------ assignments & links
   listAssignments: c.listAssignments,
@@ -122,8 +133,28 @@ const implemented: Partial<ApiClient> = {
   getSubscription: m.getSubscription,
   listSubscriptionInvoices: m.listSubscriptionInvoices,
   listSubscriptionPayments: m.listSubscriptionPayments,
+  cancelSubscription: m.cancelSubscription,
+  resumeSubscription: m.resumeSubscription,
+  startSubscriptionPayment: edge.startSubscriptionPayment,
+  getSubscriptionPaymentStatus: edge.getSubscriptionPaymentStatus,
   listSavedCards: m.listSavedCards,
   removeSavedCard: m.removeSavedCard,
+  setDefaultCard: m.setDefaultCard,
+
+  // ------------------------------------------------------- platform admin
+  getAdminOverview: admin.getAdminOverview,
+  listAdminMadrasas: admin.listAdminMadrasas,
+  listAdminAudit: admin.listAdminAudit,
+  changeMadrasaStatus: admin.changeMadrasaStatus,
+
+  // ------------------------------------------------------------------ push
+  registerPushToken: m.registerPushToken,
+  unregisterPushToken: m.unregisterPushToken,
+
+  // ------------------------------------------------ fee payments (M-Pesa)
+  payFees: edge.payFees,
+  initiatePayment: edge.initiatePayment,
+  getPaymentStatus: edge.getPaymentStatus,
 };
 
 bindAuthRefreshToAppState();

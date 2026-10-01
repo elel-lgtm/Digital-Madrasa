@@ -1,4 +1,9 @@
 import type {
+  AdminAuditEntry,
+  AdminMadrasa,
+  AdminOverview,
+  MadrasaLifecycleInput,
+  MadrasaStatus,
   Announcement,
   Assignment,
   AttendanceStatus,
@@ -57,6 +62,11 @@ import type {
   CreateAnnouncementInput,
   CreateRecitationInput,
   NotificationPreferences,
+  GradeSubmissionInput,
+  IssueCertificateInput,
+  SubmitAssignmentInput,
+  UpdateHifzProgressInput,
+  VerifiedCertificate,
 } from '@digital-madrasa/shared';
 
 /**
@@ -82,6 +92,12 @@ export type ApiErrorCode =
   | 'wrong_class'
   /** The chosen billing target is wider or narrower than the fee allows. */
   | 'scope_mismatch'
+  /** No card gateway is connected; M-Pesa is the way to pay. */
+  | 'card_unavailable'
+  /** A prompt for this bill is already waiting on a phone. */
+  | 'payment_in_progress'
+  /** M-Pesa could not be reached, or is not configured. */
+  | 'payment_provider'
   /** The Supabase client has no implementation for this call yet. */
   | 'not_implemented'
   | 'network'
@@ -252,6 +268,12 @@ export interface ApiClient {
   listAssignments(params: { classId?: string | null }): Promise<Assignment[]>;
   createAssignment(input: CreateAssignmentInput): Promise<Assignment>;
   listSubmissions(assignmentId: string): Promise<Submission[]>;
+  /** The signed-in student's own submission for an assignment, if any. */
+  getMySubmission(assignmentId: string): Promise<Submission | null>;
+  /** Hands in, or revises while unmarked or returned, a written answer. */
+  submitAssignment(input: SubmitAssignmentInput): Promise<Submission>;
+  /** Staff mark a submission or return it for another attempt. */
+  gradeSubmission(input: GradeSubmissionInput): Promise<Submission>;
 
   listAttendance(params: { classId: string; sessionDate: string }): Promise<AttendanceRecord[]>;
   markAttendance(input: MarkAttendanceInput): Promise<AttendanceRecord[]>;
@@ -274,6 +296,8 @@ export interface ApiClient {
   saveTeacherOverride(input: TeacherOverrideInput): Promise<Recitation>;
 
   listHifzProgress(studentId: string): Promise<HifzProgress[]>;
+  /** Staff record where a student has reached in one surah. */
+  upsertHifzProgress(input: UpdateHifzProgressInput): Promise<HifzProgress>;
 
   // -- parent linking -----------------------------------------------------
   listLinkRequests(status?: ParentLink['status']): Promise<ParentLink[]>;
@@ -317,6 +341,20 @@ export interface ApiClient {
   removeSavedCard(cardId: string): Promise<void>;
   setDefaultCard(cardId: string): Promise<void>;
 
+  // -- platform admin (web console) ---------------------------------------
+  /** Platform admins only. Counts and totals; no pupil records. */
+  getAdminOverview(): Promise<AdminOverview>;
+  listAdminMadrasas(): Promise<AdminMadrasa[]>;
+  listAdminAudit(params: { madrasaId?: string }): Promise<AdminAuditEntry[]>;
+  /** Suspend, schedule deletion, reinstate or purge. Audited server-side. */
+  changeMadrasaStatus(input: MadrasaLifecycleInput): Promise<{ status: MadrasaStatus }>;
+
+  // -- push ---------------------------------------------------------------
+  /** Ties this device's Expo push token to the signed-in account. */
+  registerPushToken(token: string, platform: 'android' | 'ios'): Promise<void>;
+  /** Called before sign-out, so the device stops receiving for the account. */
+  unregisterPushToken(token: string): Promise<void>;
+
   // -- communication ------------------------------------------------------
   listAnnouncements(): Promise<Announcement[]>;
   createAnnouncement(input: CreateAnnouncementInput): Promise<Announcement>;
@@ -335,6 +373,11 @@ export interface ApiClient {
   getStudentDashboard(): Promise<StudentDashboard>;
   search(query: string): Promise<SearchResults>;
   listCertificates(studentId: string): Promise<Certificate[]>;
+  /** Staff award a certificate; the verification code is issued by the server. */
+  issueCertificate(input: IssueCertificateInput): Promise<Certificate>;
+  withdrawCertificate(certificateId: string): Promise<void>;
+  /** Public check of a certificate code; works without signing in. */
+  verifyCertificate(code: string): Promise<VerifiedCertificate | null>;
   /** Rotating QR payload for attendance; refreshes every 30 seconds. */
   getAttendanceQrToken(classId: string): Promise<{ token: string; expiresAt: string }>;
   markAttendanceByQr(params: {

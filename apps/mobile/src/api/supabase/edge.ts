@@ -2,14 +2,21 @@ import type {
   CreateRecitationInput,
   CreateStudentInput,
   DecideLinkInput,
+  InviteTeacherInput,
   InvoiceBatchPreview,
   InvoiceBatchResult,
+  InitiatePaymentInput,
   IssueInvoicesInput,
   ParentLink,
+  PayFeesInput,
+  Payment,
+  StartSubscriptionPaymentInput,
+  SubscriptionPayment,
   Recitation,
+  Teacher,
   Student,
 } from '@digital-madrasa/shared';
-import { ApiError } from '../types';
+import { ApiError, type PaymentIntent } from '../types';
 import { invokeFunction } from './functions';
 import { listLinkRequests } from './queries-comms';
 import { getRecitation } from './queries-fees';
@@ -178,6 +185,29 @@ export async function issueInvoices(input: IssueInvoicesInput): Promise<InvoiceB
   return { ...body, created: body.created ?? 0, invoices: body.invoices ?? [] };
 }
 
+/**
+ * `inviteTeacher` -> `invite-teacher`
+ *
+ * Needs a function because adding a teacher creates their login, and the Auth
+ * admin API needs the service-role key — which must never reach the device.
+ *
+ * No email is sent. The project has no mail sender, so the new teacher takes
+ * the account over through the app's own password-reset flow; the response
+ * carries `deliveredByEmail: false` so the screen can say so rather than imply
+ * an invitation is on its way.
+ */
+export async function inviteTeacher(input: InviteTeacherInput): Promise<Teacher> {
+  return invokeFunction<Teacher>('invite-teacher', {
+    body: {
+      fullName: input.fullName,
+      email: input.email,
+      phone: input.phone,
+      specialisation: input.specialisation,
+      qiraahStyles: input.qiraahStyles,
+    },
+  });
+}
+
 // -------------------------------------------------------------- attendance
 
 /**
@@ -269,4 +299,56 @@ export async function createRecitation(input: CreateRecitationInput): Promise<Re
  */
 export async function awaitTajweedFeedback(recitationId: string): Promise<Recitation> {
   return getRecitation(recitationId);
+}
+
+// ---------------------------------------------------------------- payments
+
+/**
+ * Payments -> `payments`
+ *
+ * The function records the attempt and asks M-Pesa to prompt the phone; the
+ * outcome is settled on the server, and these calls only ever ask what it
+ * was. No amount is sent — it is derived from the invoices server-side.
+ *
+ * Card details never leave the device: with no card gateway connected there
+ * is nothing that could accept them safely, so a card payment is refused here
+ * before any request is made.
+ */
+function cardUnavailable(): ApiError {
+  return new ApiError('card_unavailable', 'Card payments are not available yet. Please pay with M-Pesa.');
+}
+
+export async function payFees(input: PayFeesInput): Promise<PaymentIntent> {
+  if (input.channel !== 'mpesa') throw cardUnavailable();
+  return invokeFunction<PaymentIntent>('payments', {
+    body: { action: 'pay-fees', channel: 'mpesa', invoiceIds: input.invoiceIds, phone: input.phone },
+  });
+}
+
+/** The older M-Pesa-only entry point; same request as `payFees`. */
+export async function initiatePayment(input: InitiatePaymentInput): Promise<PaymentIntent> {
+  return payFees({ channel: 'mpesa', invoiceIds: input.invoiceIds, phone: input.phone });
+}
+
+export async function getPaymentStatus(checkoutRequestId: string): Promise<Payment> {
+  return invokeFunction<Payment>('payments', {
+    body: { action: 'status', kind: 'fees', checkoutRequestId },
+  });
+}
+
+export async function startSubscriptionPayment(
+  input: StartSubscriptionPaymentInput,
+): Promise<PaymentIntent> {
+  if (input.channel !== 'mpesa') throw cardUnavailable();
+  return invokeFunction<PaymentIntent>('payments', {
+    body: { action: 'pay-subscription', channel: 'mpesa', phone: input.phone },
+  });
+}
+
+export async function getSubscriptionPaymentStatus(
+  checkoutRequestId: string,
+): Promise<SubscriptionPayment> {
+  return invokeFunction<SubscriptionPayment>('payments', {
+    body: { action: 'status', kind: 'subscription', checkoutRequestId },
+  });
 }

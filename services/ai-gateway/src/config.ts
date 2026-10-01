@@ -7,6 +7,8 @@
  * privileged key would silently turn every policy off.
  */
 
+import { DEFAULT_GEMINI_MODEL } from '../../../supabase/functions/_shared/gemini.ts';
+
 function required(name: string): string {
   const value = process.env[name]?.trim();
   if (!value) {
@@ -27,12 +29,15 @@ export const config = {
   supabaseAnonKey: required('SUPABASE_ANON_KEY'),
 
   /**
-   * "ollama" talks to a real model; "stub" returns a canned reply built from
-   * the retrieved data. Stub mode exists so the whole pipeline — auth, RLS,
-   * retrieval, redaction — can be tested before a model is installed, and so
-   * CI never needs a GPU.
+   * "ollama" talks to a local model and "gemini" to Google's hosted one;
+   * "stub" returns a canned reply built from the retrieved data. Stub mode
+   * exists so the whole pipeline — auth, RLS, retrieval, redaction — can be
+   * tested before a model is installed, and so CI never needs a GPU or a key.
    */
-  modelProvider: optional('MODEL_PROVIDER', 'stub') as 'ollama' | 'stub',
+  modelProvider: optional('MODEL_PROVIDER', 'stub') as 'ollama' | 'gemini' | 'stub',
+  /** Only read when MODEL_PROVIDER=gemini. A server secret; never in the app. */
+  geminiApiKey: optional('GEMINI_API_KEY', ''),
+  geminiModel: optional('GEMINI_MODEL', DEFAULT_GEMINI_MODEL),
   ollamaUrl: optional('OLLAMA_URL', 'http://127.0.0.1:11434'),
   ollamaModel: optional('OLLAMA_MODEL', 'qwen3:1.7b'),
 
@@ -53,7 +58,10 @@ export function assertConfig(): void {
         'the database as the calling user, or RLS stops protecting anything.',
     );
   }
-  if (config.modelProvider !== 'ollama' && config.modelProvider !== 'stub') {
-    throw new Error(`MODEL_PROVIDER must be "ollama" or "stub", got "${config.modelProvider}".`);
+  if (!['ollama', 'gemini', 'stub'].includes(config.modelProvider)) {
+    throw new Error(`MODEL_PROVIDER must be "ollama", "gemini" or "stub", got "${config.modelProvider}".`);
+  }
+  if (config.modelProvider === 'gemini' && !config.geminiApiKey) {
+    throw new Error('MODEL_PROVIDER=gemini needs GEMINI_API_KEY.');
   }
 }

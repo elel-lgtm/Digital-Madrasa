@@ -277,6 +277,7 @@ Deno.serve(handler(async (req) => {
         type: 'fee_due',
         title: 'New invoice issued',
         body: `${structure.name} is now due. You can pay in the app.`,
+        payload: { fee_structure_id: structure.id, due_date: dueDate },
         channel: ['in_app', 'push', 'email'],
       })),
     );

@@ -5,6 +5,10 @@
 export const qk = {
   session: ['session'] as const,
 
+  adminOverview: () => ['admin', 'overview'] as const,
+  adminMadrasas: () => ['admin', 'madrasas'] as const,
+  adminAudit: (madrasaId?: string) => ['admin', 'audit', madrasaId ?? 'all'] as const,
+
   students: (params?: Record<string, unknown>) => ['students', params ?? {}] as const,
   student: (id: string) => ['student', id] as const,
   classes: () => ['classes'] as const,
@@ -13,6 +17,7 @@ export const qk = {
   lessons: (classId?: string | null) => ['lessons', classId ?? 'all'] as const,
   assignments: (classId?: string | null) => ['assignments', classId ?? 'all'] as const,
   submissions: (assignmentId: string) => ['submissions', assignmentId] as const,
+  mySubmission: (assignmentId: string) => ['my-submission', assignmentId] as const,
 
   attendance: (classId: string, date: string) => ['attendance', classId, date] as const,
   grades: (params: Record<string, unknown>) => ['grades', params] as const,

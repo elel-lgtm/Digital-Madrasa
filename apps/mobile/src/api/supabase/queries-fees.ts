@@ -100,32 +100,35 @@ export async function getFeesSummary(): Promise<FeesSummary> {
 export async function listPayments(params: { studentId?: string }): Promise<Payment[]> {
   const { data, error } = await supabase
     .from('payments')
-    .select('*, payment_allocations(invoice_id)')
+    .select('*, payment_allocations(invoice_id, invoices(student_id)), receipts(receipt_no)')
     .order('created_at', { ascending: false })
     .limit(100);
 
   if (error) fail(error, 'Could not load payments.');
 
-  const rows = (data ?? []).map((row: Row) => ({
-    id: row.id,
-    madrasaId: row.madrasa_id,
-    invoiceIds: (row.payment_allocations ?? []).map((a: Row) => a.invoice_id),
-    parentId: row.parent_id ?? null,
-    amount: Number(row.amount),
-    currency: row.currency ?? 'KES',
-    method: row.method,
-    providerRef: row.provider_ref ?? null,
-    checkoutRequestId: row.checkout_request_id ?? null,
-    status: row.status,
-    createdAt: row.created_at,
-    settledAt: row.settled_at ?? null,
-    receiptNo: null,
-  }));
+  const forStudent = (row: Row) =>
+    (row.payment_allocations ?? []).some((a: Row) => a.invoices?.student_id === params.studentId);
+  const receiptOf = (row: Row) =>
+    (Array.isArray(row.receipts) ? row.receipts[0] : row.receipts)?.receipt_no ?? null;
 
-  // Narrowing only; RLS already bounded the set.
-  return params.studentId
-    ? rows.filter((p) => p.invoiceIds.length > 0)
-    : rows;
+  // The student filter narrows only; RLS already bounded the set.
+  return (data ?? [])
+    .filter((row: Row) => !params.studentId || forStudent(row))
+    .map((row: Row) => ({
+      id: row.id,
+      madrasaId: row.madrasa_id,
+      invoiceIds: (row.payment_allocations ?? []).map((a: Row) => a.invoice_id),
+      parentId: row.parent_id ?? null,
+      amount: Number(row.amount),
+      currency: row.currency ?? 'KES',
+      method: row.method,
+      providerRef: row.provider_ref ?? null,
+      checkoutRequestId: row.checkout_request_id ?? null,
+      status: row.status,
+      createdAt: row.created_at,
+      settledAt: row.settled_at ?? null,
+      receiptNo: receiptOf(row),
+    }));
 }
 
 // ------------------------------------------------------------- recitations

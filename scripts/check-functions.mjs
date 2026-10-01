@@ -286,6 +286,30 @@ async function cleanup() {
   // Invoices first: they reference the structure. Both are removed by the ids
   // this run captured, so a verification fee that happened to share a name
   // with a real one could never take the real one with it.
+  // Notices the functions sent about this run's fixtures go to standing staff
+  // and parent accounts, so nothing cascades to them. Each notice carries the
+  // id it is about in its payload; they are removed by those captured ids.
+  const notices = [
+    ...created.feeStructures.map((id) => `payload->>fee_structure_id=eq.${id}`),
+    ...(created.studentId ? [`payload->>student_id=eq.${created.studentId}`] : []),
+  ];
+  for (const filter of notices) {
+    try {
+      // Delivery (migration 0025) queues email/SMS rows per notice. Their link
+      // is nulled, not cascaded, when a notice goes, so they are removed first
+      // by the notices' own ids.
+      const rows = (await adminFetch(`/rest/v1/notifications?${filter}&select=id`)) ?? [];
+      if (rows.length) {
+        const ids = rows.map((r) => r.id).join(',');
+        await adminFetch(`/rest/v1/mail_outbox?notification_id=in.(${ids})`, { method: 'DELETE' });
+        await adminFetch(`/rest/v1/sms_outbox?notification_id=in.(${ids})`, { method: 'DELETE' });
+      }
+      await adminFetch(`/rest/v1/notifications?${filter}`, { method: 'DELETE' });
+    } catch (error) {
+      failed.push(`notifications ${filter}: ${String(error.message).slice(0, 160)}`);
+    }
+  }
+
   for (const id of created.feeStructures) {
     try {
       await adminFetch(`/rest/v1/invoices?fee_structure_id=eq.${id}`, { method: 'DELETE' });
@@ -789,6 +813,98 @@ try {
     }),
     `${before.length} pre-existing invoice(s) compared`,
   );
+
+  // -------------------------------------------------- teacher management
+  //
+  // Adding a teacher creates a login, so the interesting question is who may
+  // do it. `requireOwner` guards this endpoint and had no callers anywhere
+  // before now, so its behaviour is asserted here rather than assumed — in
+  // particular that an ordinary teacher is refused, which is the case that
+  // separates it from `requireStaff`.
+  console.log('\ninvite-teacher');
+
+  const staffTeacher = await signIn('fatuma@annur.example');
+
+  const inviteEmail = `fixture-teacher-${randomUUID().slice(0, 8)}@digital-madrasa.test`;
+  const invitePayload = {
+    fullName: 'Fixture Teacher',
+    email: inviteEmail,
+    specialisation: 'Tajweed',
+    qiraahStyles: ['hafs'],
+  };
+
+  // G. unauthenticated
+  const anon = await fetch(`${FN}/invite-teacher`, {
+    method: 'POST',
+    headers: { apikey: ANON, 'Content-Type': 'application/json' },
+    body: JSON.stringify(invitePayload),
+  });
+  check('G. unauthenticated refused', anon.status === 401, `HTTP ${anon.status}`);
+
+  // C / D. roles that are not staff at all
+  const asParentInvite = await call('invite-teacher', parent, invitePayload);
+  check('C. a parent cannot add staff', asParentInvite.status === 403,
+        `HTTP ${asParentInvite.status}`);
+  const asStudentInvite = await call('invite-teacher', student, invitePayload);
+  check('D. a student cannot add staff', asStudentInvite.status === 403,
+        `HTTP ${asStudentInvite.status}`);
+
+  // E. staff, but not the owner — the distinction requireOwner exists for
+  const asTeacherInvite = await call('invite-teacher', staffTeacher, invitePayload);
+  check('E. an ordinary teacher cannot add staff', asTeacherInvite.status === 403,
+        `HTTP ${asTeacherInvite.status}`);
+
+  // F. the platform administrator is not madrasa staff and is refused too;
+  // platform administration is a separate surface (madrasa-lifecycle).
+  const asAdminInvite = await call('invite-teacher', admin, invitePayload);
+  check('F. the platform admin is not madrasa staff', asAdminInvite.status === 403,
+        `HTTP ${asAdminInvite.status}`);
+
+  // validation
+  const badEmail = await call('invite-teacher', owner, { ...invitePayload, email: 'nope' });
+  check('   a malformed address is refused', badEmail.status === 400, `HTTP ${badEmail.status}`);
+  const noStyle = await call('invite-teacher', owner, { ...invitePayload, qiraahStyles: [] });
+  check('   a missing qiraah is refused', noStyle.status === 400, `HTTP ${noStyle.status}`);
+
+  // A. the owner, in their own madrasa
+  const invited = await call('invite-teacher', owner, {
+    ...invitePayload,
+    // Sent deliberately: the tenant must come from the caller's own staff
+    // record, never from the request body.
+    madrasaId: tenant.madrasaId,
+  });
+  check('A. the owner can add staff', invited.status === 201, `HTTP ${invited.status}`);
+  if (invited.body.profileId) created.authUsers.unshift(invited.body.profileId);
+
+  check('A. the account is pending until they sign in', invited.body.status === 'invited',
+        invited.body.status);
+  check('A. an employee number was allocated', /^EMP-\d{3}$/.test(invited.body.employeeNo ?? ''),
+        invited.body.employeeNo);
+  check('A. no invitation email is claimed', invited.body.deliveredByEmail === false,
+        String(invited.body.deliveredByEmail));
+
+  // B. the tenant is the caller's, not the one the body asked for
+  check('B. the madrasa comes from the caller, not the request',
+        invited.body.madrasaId === madrasa.id && invited.body.madrasaId !== tenant.madrasaId,
+        invited.body.madrasaId);
+  const storedTeacher = await adminFetch(
+    '/rest/v1/teachers?select=madrasa_id,status,is_owner&profile_id=eq.' + invited.body.profileId,
+  );
+  check('B. and the stored row agrees', storedTeacher[0]?.madrasa_id === madrasa.id);
+  check('B. the new teacher is not an owner', storedTeacher[0]?.is_owner === false);
+
+  // duplicates
+  const again = await call('invite-teacher', owner, invitePayload);
+  check('   the same address twice is refused', again.status === 409, `HTTP ${again.status}`);
+  const stillOne = await adminFetch('/rest/v1/profiles?select=id&email=eq.' + inviteEmail);
+  check('   and no second account was created', stillOne.length === 1, `${stillOne.length}`);
+
+  // The staff list the screen reads must show them, scoped to this madrasa.
+  const listed = await adminFetch(
+    '/rest/v1/teachers?select=id,employee_no&madrasa_id=eq.' + madrasa.id + '&deleted_at=is.null',
+  );
+  check('   the new teacher appears in the madrasa roster',
+        listed.some((r) => r.id === invited.body.id), `${listed.length} on staff`);
 
   console.log('\nmadrasa-lifecycle');
   const notAdmin = await call('madrasa-lifecycle', owner, {

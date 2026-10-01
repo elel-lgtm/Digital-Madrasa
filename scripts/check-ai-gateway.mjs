@@ -2,14 +2,16 @@
 /**
  * Proves the AI gateway cannot see past the caller's permissions.
  *
- *   node scripts/check-ai-gateway.mjs
+ *   node scripts/check-ai-gateway.mjs            the self-hosted gateway
+ *   node scripts/check-ai-gateway.mjs --hosted   the ai-assistant Edge Function
  *
- * The gateway must be running. Works in stub mode, which is the point: these
- * are authorisation tests, and they should pass or fail identically whether or
- * not a language model is installed.
+ * A self-hosted gateway must be running. Works in stub mode, and hosted with
+ * no model key, which is the point: these are authorisation tests, and they
+ * should pass or fail identically whether or not a language model answers.
  */
 import { readFileSync } from 'node:fs';
 
+const HOSTED = process.argv.includes('--hosted');
 const GATEWAY = process.env.AI_GATEWAY_URL ?? 'http://127.0.0.1:8787';
 
 function loadEnv(path) {
@@ -39,10 +41,12 @@ async function signIn(email, password = 'Madrasa2026!') {
   return body.access_token;
 }
 
+const CHAT = HOSTED ? `${url}/functions/v1/ai-assistant` : `${GATEWAY}/api/ai/chat`;
+
 async function ask(token, message, context) {
-  const res = await fetch(`${GATEWAY}/api/ai/chat`, {
+  const res = await fetch(CHAT, {
     method: 'POST',
-    headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+    headers: { Authorization: `Bearer ${token}`, apikey: anon, 'Content-Type': 'application/json' },
     body: JSON.stringify({ message, context }),
   });
   return { status: res.status, body: await res.json().catch(() => ({})) };
@@ -54,7 +58,7 @@ const check = (label, ok, detail = '') => {
   if (!ok) failures += 1;
 };
 
-const health = await fetch(`${GATEWAY}/health`).catch(() => null);
+const health = HOSTED ? true : await fetch(`${GATEWAY}/health`).catch(() => null);
 if (!health) {
   console.error(`Gateway not reachable at ${GATEWAY}. Start it with: npm run ai:dev`);
   process.exit(1);
@@ -63,14 +67,26 @@ if (!health) {
 // --------------------------------------------------------------- scoping
 console.log('data scoping (the AI only ever sees what RLS returned)');
 
+// The expected scope is whatever the same user can read directly through
+// RLS, not a fixed number: the roster grows as pupils are enrolled, and the
+// property under test is that the gateway sees exactly that and no more.
+const rosterOf = (token) =>
+  fetch(`${url}/rest/v1/students?select=id&deleted_at=is.null`, {
+    headers: { apikey: anon, Authorization: `Bearer ${token}` },
+  }).then((r) => r.json());
+
 const teacher = await signIn('owner@annur.example');
+const teacherSees = (await rosterOf(teacher)).length;
 const teacherAsk = await ask(teacher, 'Summarise my class performance');
-check('teacher sees 4 students', teacherAsk.body.meta?.studentsInScope === 4,
+check(`teacher sees the madrasa roster RLS allows (${teacherSees})`,
+  teacherAsk.body.meta?.studentsInScope === teacherSees,
   `${teacherAsk.body.meta?.studentsInScope}`);
 
 const parent = await signIn('parent@example.com');
+const parentSees = (await rosterOf(parent)).length;
 const parentAsk = await ask(parent, 'How are my children doing?');
-check('parent sees only 2 linked children', parentAsk.body.meta?.studentsInScope === 2,
+check(`parent sees only linked children (${parentSees})`,
+  parentAsk.body.meta?.studentsInScope === parentSees && parentSees < teacherSees,
   `${parentAsk.body.meta?.studentsInScope}`);
 
 const student = await signIn('aisha.hassan@annur.example');
@@ -121,9 +137,9 @@ check('prompt used aliases, reply restored real names',
 
 // -------------------------------------------------------------- hygiene
 console.log('\ntransport');
-const noToken = await fetch(`${GATEWAY}/api/ai/chat`, {
+const noToken = await fetch(CHAT, {
   method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
+  headers: { apikey: anon, 'Content-Type': 'application/json' },
   body: JSON.stringify({ message: 'hi' }),
 });
 check('unauthenticated request rejected', noToken.status === 401, `HTTP ${noToken.status}`);

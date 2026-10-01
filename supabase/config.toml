@@ -24,8 +24,22 @@ verify_jwt = true
 [functions.evaluate-recitation]
 verify_jwt = true
 
+[functions.ai-assistant]
+verify_jwt = true
+
 [functions.madrasa-lifecycle]
 verify_jwt = true
 
 [functions.health]
+verify_jwt = false
+
+[functions.payments]
+verify_jwt = true
+
+# Safaricom calls this with no bearer token; it checks MPESA_CALLBACK_SECRET instead.
+[functions.payment-callback]
+verify_jwt = false
+
+# Called by pg_net / pg_cron with x-dispatch-key (DISPATCH_SECRET), not a JWT.
+[functions.dispatch-notifications]
 verify_jwt = false

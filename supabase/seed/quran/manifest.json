@@ -1,0 +1,457 @@
+{
+  "version": 1,
+  "text": "Uthmani script, The Noble Qur'an Encyclopedia (quranenc.com), via quran-json 3.1.2",
+  "license": "CC-BY-4.0",
+  "juz": [
+    {
+      "juz": 1,
+      "file": "juz-01.json",
+      "ayahs": 148,
+      "bytes": 46689,
+      "sha256": "d09f8a22bfb49cce1af503a39f9aace93d6acb00b226cb2f2fd24f2f08ba1168",
+      "from": [
+        1,
+        1
+      ],
+      "to": [
+        2,
+        141
+      ]
+    },
+    {
+      "juz": 2,
+      "file": "juz-02.json",
+      "ayahs": 111,
+      "bytes": 47394,
+      "sha256": "4b68369778f500fef19833111309b96d3825560a4692a6356b32e14554a1b8e1",
+      "from": [
+        2,
+        142
+      ],
+      "to": [
+        2,
+        252
+      ]
+    },
+    {
+      "juz": 3,
+      "file": "juz-03.json",
+      "ayahs": 126,
+      "bytes": 47140,
+      "sha256": "57310210d8e370e2a0afde50e81d22a5321e3a796c7578f7ac4a8fad5e731bf2",
+      "from": [
+        2,
+        253
+      ],
+      "to": [
+        3,
+        92
+      ]
+    },
+    {
+      "juz": 4,
+      "file": "juz-04.json",
+      "ayahs": 131,
+      "bytes": 46474,
+      "sha256": "8387ea81bb6f4cce5a559c46f25b03408f739ed4ae122c23181c4331e93aef95",
+      "from": [
+        3,
+        93
+      ],
+      "to": [
+        4,
+        23
+      ]
+    },
+    {
+      "juz": 5,
+      "file": "juz-05.json",
+      "ayahs": 124,
+      "bytes": 47086,
+      "sha256": "25b674214e4ab385d26b2e61d384d3111b3aa674c44c0e2c2c556df29ffb447c",
+      "from": [
+        4,
+        24
+      ],
+      "to": [
+        4,
+        147
+      ]
+    },
+    {
+      "juz": 6,
+      "file": "juz-06.json",
+      "ayahs": 111,
+      "bytes": 46790,
+      "sha256": "494ef8f3c2c97f99fc4ef792cf477a5f50e58efa9c0f221a0554b79d989918a3",
+      "from": [
+        4,
+        148
+      ],
+      "to": [
+        5,
+        82
+      ]
+    },
+    {
+      "juz": 7,
+      "file": "juz-07.json",
+      "ayahs": 148,
+      "bytes": 49761,
+      "sha256": "4fe3f58cb8349e43bc8143a6f90576b9a6f5e879b2988e2ed09e2acbf173c1f6",
+      "from": [
+        5,
+        83
+      ],
+      "to": [
+        6,
+        110
+      ]
+    },
+    {
+      "juz": 8,
+      "file": "juz-08.json",
+      "ayahs": 142,
+      "bytes": 47222,
+      "sha256": "5af21465e180f3b46868a70185cf0d3d70387ae65ced3f5a1f08a4d92abd955e",
+      "from": [
+        6,
+        111
+      ],
+      "to": [
+        7,
+        87
+      ]
+    },
+    {
+      "juz": 9,
+      "file": "juz-09.json",
+      "ayahs": 159,
+      "bytes": 47215,
+      "sha256": "0f47cbd4f9a1608a6feeadcda73fe8e963da1fdf04be5b28ae73006e5dacd883",
+      "from": [
+        7,
+        88
+      ],
+      "to": [
+        8,
+        40
+      ]
+    },
+    {
+      "juz": 10,
+      "file": "juz-10.json",
+      "ayahs": 127,
+      "bytes": 45022,
+      "sha256": "91d815df2e99b6f284e32e96a68bcae332c21a3600d5a9c4b48bc257814b8d36",
+      "from": [
+        8,
+        41
+      ],
+      "to": [
+        9,
+        92
+      ]
+    },
+    {
+      "juz": 11,
+      "file": "juz-11.json",
+      "ayahs": 151,
+      "bytes": 48081,
+      "sha256": "ab6d2af6b423cd3d8779ae7e5e01b138a3f12480d0251ce5bcf38870b156e2f6",
+      "from": [
+        9,
+        93
+      ],
+      "to": [
+        11,
+        5
+      ]
+    },
+    {
+      "juz": 12,
+      "file": "juz-12.json",
+      "ayahs": 170,
+      "bytes": 48355,
+      "sha256": "f77b97300a3501a8f87f86eb1a0cd46a78f773b43309268880fd62a7c499df7a",
+      "from": [
+        11,
+        6
+      ],
+      "to": [
+        12,
+        52
+      ]
+    },
+    {
+      "juz": 13,
+      "file": "juz-13.json",
+      "ayahs": 154,
+      "bytes": 47219,
+      "sha256": "be84ba85fca79c641ca5a43d6a0071d71471387ef76dd598657075abe9227c1e",
+      "from": [
+        12,
+        53
+      ],
+      "to": [
+        14,
+        52
+      ]
+    },
+    {
+      "juz": 14,
+      "file": "juz-14.json",
+      "ayahs": 227,
+      "bytes": 47498,
+      "sha256": "c40f01c9eb72b3eee0f5f7e11f148699ac317844cb4d656ee5276834eb8a79d7",
+      "from": [
+        15,
+        1
+      ],
+      "to": [
+        16,
+        128
+      ]
+    },
+    {
+      "juz": 15,
+      "file": "juz-15.json",
+      "ayahs": 185,
+      "bytes": 49401,
+      "sha256": "09bcc1e83c38ab848c381b90348f0358c032997bd6b9273c447e5339f189fde3",
+      "from": [
+        17,
+        1
+      ],
+      "to": [
+        18,
+        74
+      ]
+    },
+    {
+      "juz": 16,
+      "file": "juz-16.json",
+      "ayahs": 269,
+      "bytes": 50767,
+      "sha256": "2bcf69ef67b6125504e873d3d4d35d3ae505c67f58f8630e69a7982e3db9f6be",
+      "from": [
+        18,
+        75
+      ],
+      "to": [
+        20,
+        135
+      ]
+    },
+    {
+      "juz": 17,
+      "file": "juz-17.json",
+      "ayahs": 190,
+      "bytes": 45528,
+      "sha256": "daaa53ea89271e45719232038f0f7c0cc9b92ed68979a4f2672d17fded2c9de9",
+      "from": [
+        21,
+        1
+      ],
+      "to": [
+        22,
+        78
+      ]
+    },
+    {
+      "juz": 18,
+      "file": "juz-18.json",
+      "ayahs": 202,
+      "bytes": 49833,
+      "sha256": "b91f18930682b8ab96c3c91432c648e133d2517eb91443447cce9cfcc124b887",
+      "from": [
+        23,
+        1
+      ],
+      "to": [
+        25,
+        20
+      ]
+    },
+    {
+      "juz": 19,
+      "file": "juz-19.json",
+      "ayahs": 339,
+      "bytes": 51365,
+      "sha256": "77d3520bf5fb8cb07a75676112272da87936bcb38f22e7aadf89cc61516ccecb",
+      "from": [
+        25,
+        21
+      ],
+      "to": [
+        27,
+        55
+      ]
+    },
+    {
+      "juz": 20,
+      "file": "juz-20.json",
+      "ayahs": 171,
+      "bytes": 46628,
+      "sha256": "d91b742a629c7e77db94b40a6a5efb55d863adcd8ece3fd1c67c6ec9133d2df3",
+      "from": [
+        27,
+        56
+      ],
+      "to": [
+        29,
+        45
+      ]
+    },
+    {
+      "juz": 21,
+      "file": "juz-21.json",
+      "ayahs": 178,
+      "bytes": 47876,
+      "sha256": "4683a85b364c53437abb4d3f92616335699d3b59dbfbe0b3917885421c6a8283",
+      "from": [
+        29,
+        46
+      ],
+      "to": [
+        33,
+        30
+      ]
+    },
+    {
+      "juz": 22,
+      "file": "juz-22.json",
+      "ayahs": 169,
+      "bytes": 48454,
+      "sha256": "5af0988e938af6e2703d18c48a85d464d8880cdf0daaf72c848787e67c48eb6b",
+      "from": [
+        33,
+        31
+      ],
+      "to": [
+        36,
+        27
+      ]
+    },
+    {
+      "juz": 23,
+      "file": "juz-23.json",
+      "ayahs": 357,
+      "bytes": 52110,
+      "sha256": "b0c430b5c657faffb3fa0d4440e8a2d207ed0348179ecb08580e2adb456d954e",
+      "from": [
+        36,
+        28
+      ],
+      "to": [
+        39,
+        31
+      ]
+    },
+    {
+      "juz": 24,
+      "file": "juz-24.json",
+      "ayahs": 175,
+      "bytes": 46368,
+      "sha256": "2c7be4944754b2cac798d20161bbc319cd6c272fc68bf3ae90f8165da570f2c0",
+      "from": [
+        39,
+        32
+      ],
+      "to": [
+        41,
+        46
+      ]
+    },
+    {
+      "juz": 25,
+      "file": "juz-25.json",
+      "ayahs": 246,
+      "bytes": 50305,
+      "sha256": "0681bc0957f425f4a98da01d2f84b9fbecbffe7877a1470ce1e6f357a4aa77c8",
+      "from": [
+        41,
+        47
+      ],
+      "to": [
+        45,
+        37
+      ]
+    },
+    {
+      "juz": 26,
+      "file": "juz-26.json",
+      "ayahs": 195,
+      "bytes": 49585,
+      "sha256": "d98bee96bb9b404c716d705e483efd5a0d6c0fc74c8b82ba59ae9e256c7da23c",
+      "from": [
+        46,
+        1
+      ],
+      "to": [
+        51,
+        30
+      ]
+    },
+    {
+      "juz": 27,
+      "file": "juz-27.json",
+      "ayahs": 399,
+      "bytes": 52358,
+      "sha256": "58ae848bdb1124bd19570dcf42e20fea7bdd7f29c1cc41173ad3aac7f1556385",
+      "from": [
+        51,
+        31
+      ],
+      "to": [
+        57,
+        29
+      ]
+    },
+    {
+      "juz": 28,
+      "file": "juz-28.json",
+      "ayahs": 137,
+      "bytes": 49549,
+      "sha256": "a561ffbbedd4e8a2bbe96780a394a92f8c2c120e1182b41a2d1207fca718da41",
+      "from": [
+        58,
+        1
+      ],
+      "to": [
+        66,
+        12
+      ]
+    },
+    {
+      "juz": 29,
+      "file": "juz-29.json",
+      "ayahs": 431,
+      "bytes": 54055,
+      "sha256": "79347559a9dd92b34c558ddaad51b3207b779913153c04741930d05f048cd231",
+      "from": [
+        67,
+        1
+      ],
+      "to": [
+        77,
+        50
+      ]
+    },
+    {
+      "juz": 30,
+      "file": "juz-30.json",
+      "ayahs": 564,
+      "bytes": 52352,
+      "sha256": "96b10b3736ff00e7e136a3011671490fb2abbbc3841029bb4608ae74775d5689",
+      "from": [
+        78,
+        1
+      ],
+      "to": [
+        114,
+        6
+      ]
+    }
+  ]
+}

@@ -38,6 +38,7 @@
       "expo-localization",
       "expo-secure-store",
       "expo-font",
+      "expo-notifications",
       [
         "expo-audio",
         {

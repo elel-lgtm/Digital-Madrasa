@@ -2216,6 +2216,34 @@ export type Database = {
         Returns: boolean
       }
       can_read_student: { Args: { p_student_id: string }; Returns: boolean }
+      can_submit_assignment: { Args: { p_assignment_id: string }; Returns: boolean }
+      withdraw_certificate: { Args: { p_certificate_id: string }; Returns: undefined }
+      cancel_subscription: {
+        Args: { p_reason?: string | null }
+        Returns: Database["public"]["Enums"]["subscription_status"]
+      }
+      resume_subscription: {
+        Args: Record<PropertyKey, never>
+        Returns: Database["public"]["Enums"]["subscription_status"]
+      }
+      set_default_card: { Args: { p_card_id: string }; Returns: undefined }
+      register_push_token: { Args: { p_token: string; p_platform: string }; Returns: undefined }
+      admin_platform_overview: { Args: Record<PropertyKey, never>; Returns: Json }
+      admin_madrasa_summaries: { Args: Record<PropertyKey, never>; Returns: Json }
+      admin_audit_log: { Args: { p_madrasa_id?: string | null; p_limit?: number }; Returns: Json }
+      unregister_push_token: { Args: { p_token: string }; Returns: undefined }
+      remove_saved_card: { Args: { p_card_id: string }; Returns: undefined }
+      verify_certificate: {
+        Args: { p_code: string }
+        Returns: {
+          title: string
+          kind: string
+          student_name: string
+          madrasa_name: string
+          issued_at: string
+          valid: boolean
+        }[]
+      }
       current_madrasa_id: { Args: never; Returns: string }
       current_parent_id: { Args: never; Returns: string }
       current_role_name: {

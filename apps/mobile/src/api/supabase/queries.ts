@@ -1,5 +1,7 @@
 import {
+  isoDate,
   liveSessionState,
+  summariseHifzRows,
   surahName,
   type Announcement,
   type Assignment,
@@ -16,12 +18,18 @@ import {
   type ChildBalance,
   type ChildOverview,
   type HifzSummary,
+  type StudentDetail,
   type StudentDashboard,
   type TeacherDashboard,
 } from '../types';
 import { supabase } from './client';
 import { mapStudent, mapTeacher } from './mappers';
-import { getFeesSummary, listCertificates, listRecitations } from './queries-fees';
+import {
+  getFeesSummary,
+  listCertificates,
+  listFeeStructures,
+  listRecitations,
+} from './queries-fees';
 
 /**
  * Read queries against Supabase.
@@ -89,8 +97,16 @@ export async function listClasses(): Promise<Klass[]> {
 export async function listTeachers(): Promise<Teacher[]> {
   const { data, error } = await supabase
     .from('teachers')
-    .select('*, profiles!teachers_profile_id_fkey(full_name, email, phone, avatar_url)')
-    .is('deleted_at', null);
+    // `classes(count)` is the real number of classes this teacher leads.
+    // `mapTeacher` read `row.class_count`, which is not a column on
+    // `teachers` and never has been, so every teacher reported nought
+    // classes however many they were actually running.
+    .select(
+      '*, profiles!teachers_profile_id_fkey(full_name, email, phone, avatar_url), classes(count)',
+    )
+    .is('deleted_at', null)
+    .is('classes.deleted_at', null)
+    .order('employee_no', { ascending: true });
 
   if (error) fail(error, 'Could not load staff.');
   return (data ?? []).map(mapTeacher);
@@ -244,15 +260,8 @@ export async function listGrades(): Promise<Grade[]> {
   }));
 }
 
-export async function listHifzProgress(): Promise<HifzProgress[]> {
-  const { data, error } = await supabase
-    .from('hifz_progress')
-    .select('*')
-    .order('surah_no', { ascending: false });
-
-  if (error) fail(error, 'Could not load progress.');
-
-  return (data ?? []).map((row: Row) => ({
+export function mapHifz(row: Row): HifzProgress {
+  return {
     id: row.id,
     studentId: row.student_id,
     surahNo: row.surah_no,
@@ -263,7 +272,25 @@ export async function listHifzProgress(): Promise<HifzProgress[]> {
     confidenceScore: row.confidence_score ? Number(row.confidence_score) : 0,
     lastRevisedAt: row.last_revised_at ?? null,
     nextReviewAt: row.next_review_at ?? null,
-  }));
+  };
+}
+
+/**
+ * Progress rows for one student. The id was accepted but ignored, so a
+ * teacher asking about one pupil received every pupil in the madrasa; RLS
+ * kept it inside the tenant, but it was the wrong answer.
+ */
+export async function listHifzProgress(studentId?: string): Promise<HifzProgress[]> {
+  let query = supabase
+    .from('hifz_progress')
+    .select('*')
+    .is('deleted_at', null)
+    .order('surah_no', { ascending: false });
+  if (studentId) query = query.eq('student_id', studentId);
+
+  const { data, error } = await query;
+  if (error) fail(error, 'Could not load progress.');
+  return (data ?? []).map(mapHifz);
 }
 
 export async function listAnnouncements(): Promise<Announcement[]> {
@@ -353,18 +380,7 @@ export async function getChildOverview(studentId: string): Promise<ChildOverview
     note: a.note ?? null,
   }));
 
-  const hifzRows: HifzProgress[] = (hifz.data ?? []).map((h: Row) => ({
-    id: h.id,
-    studentId: h.student_id,
-    surahNo: h.surah_no,
-    surahName: surahName(h.surah_no),
-    juzNo: h.juz_no,
-    ayahNo: h.ayah_no,
-    status: h.status,
-    confidenceScore: h.confidence_score ? Number(h.confidence_score) : 0,
-    lastRevisedAt: h.last_revised_at ?? null,
-    nextReviewAt: h.next_review_at ?? null,
-  }));
+  const hifzRows: HifzProgress[] = (hifz.data ?? []).map(mapHifz);
 
   return {
     student: mapStudent(row),
@@ -396,6 +412,50 @@ export async function getChildOverview(studentId: string): Promise<ChildOverview
   };
 }
 
+/**
+ * A student as staff see them. Built on the same reads as the parent's child
+ * view, so a teacher and a parent can never be shown different numbers for
+ * the same pupil; RLS decides that the caller may see the student at all.
+ */
+export async function getStudent(studentId: string): Promise<StudentDetail> {
+  const [overview, links] = await Promise.all([
+    getChildOverview(studentId).catch((error: unknown) => {
+      if (error instanceof ApiError && error.code === 'not_found') {
+        throw new ApiError('not_found', 'That student is not in your madrasa.');
+      }
+      throw error;
+    }),
+    supabase
+      .from('parent_student_links')
+      .select('*, parents(profiles!parents_profile_id_fkey(full_name, phone))')
+      .eq('student_id', studentId)
+      .eq('status', 'approved')
+      .is('deleted_at', null),
+  ]);
+
+  return {
+    student: overview.student,
+    attendanceRate: overview.attendanceRate,
+    hifzSummary: overview.hifzSummary,
+    recentGrades: overview.grades.slice(0, 10),
+    outstandingBalance: overview.outstandingBalance,
+    linkedParents: (links.data ?? []).map((row: Row) => ({
+      id: row.id,
+      parentId: row.parent_id,
+      parentName: row.parents?.profiles?.full_name ?? '',
+      parentPhone: row.parents?.profiles?.phone ?? null,
+      studentId: row.student_id,
+      studentName: overview.student.fullName,
+      admissionNo: overview.student.admissionNo,
+      madrasaId: row.madrasa_id,
+      relationship: row.relationship,
+      status: row.status,
+      requestedAt: row.requested_at,
+      decidedAt: row.decided_at ?? null,
+    })),
+  };
+}
+
 export async function getChildBalances(): Promise<ChildBalance[]> {
   const children = await listChildren();
   const { data } = await supabase
@@ -420,16 +480,13 @@ export async function getChildBalances(): Promise<ChildBalance[]> {
 
 // -------------------------------------------------------------- dashboards
 
-function summariseHifz(rows: HifzProgress[]): HifzSummary {
-  const mastered = rows.filter((r) => r.status === 'mastered');
-  return {
-    memorisedAyahs: mastered.length,
-    totalAyahs: Math.max(rows.length, 1),
-    juzCompleted: new Set(mastered.map((r) => r.juzNo)).size,
-    surahsMemorised: mastered.length,
-    currentStreak: 0,
-    dueForRevision: rows.filter((r) => r.status === 'revising').length,
-  };
+/**
+ * Totals come from the shared definition (packages/shared/src/hifz.ts). The
+ * previous local version counted mastered rows as "ayahs" and any juz that
+ * contained a mastered surah as "completed".
+ */
+function summariseHifz(rows: HifzProgress[], currentStreak = 0): HifzSummary {
+  return { ...summariseHifzRows(rows, isoDate()), currentStreak };
 }
 
 /**
@@ -480,8 +537,18 @@ function findLive(lessons: Lesson[]): Lesson | null {
 }
 
 export async function getTeacherDashboard(): Promise<TeacherDashboard> {
-  const [madrasaName, students, classes, lessons, attendance, announcements, pendingReviews, fees] =
-    await Promise.all([
+  const [
+    madrasaName,
+    students,
+    classes,
+    lessons,
+    attendance,
+    announcements,
+    pendingReviews,
+    fees,
+    teachers,
+    feeStructures,
+  ] = await Promise.all([
       currentMadrasaName(),
       listStudents(),
       listClasses(),
@@ -501,6 +568,12 @@ export async function getTeacherDashboard(): Promise<TeacherDashboard> {
       // of the app already treats as authoritative. It is not a count of
       // invoices issued, so an unpaid invoice never inflates it.
       getFeesSummary(),
+      // Both of these answer an onboarding step below. Without them the
+      // checklist reported two tasks as never done, so the "finish setting
+      // up" card could not be dismissed by doing the work — it stayed on the
+      // dashboard of a madrasa that had completed everything.
+      listTeachers(),
+      listFeeStructures(),
     ]);
 
   const { count: pendingLinks } = await supabase
@@ -508,11 +581,21 @@ export async function getTeacherDashboard(): Promise<TeacherDashboard> {
     .select('id', { count: 'exact', head: true })
     .eq('status', 'pending');
 
+  const today = isoDate();
+
   return {
     madrasaName,
     pendingReviewCount: pendingReviews.length,
     pendingLinkRequests: pendingLinks ?? 0,
-    todaysClasses: classes.map((klass) => ({ klass, attendanceMarked: false })),
+    // A class counts as marked when a register exists for it today. This was
+    // hardcoded false, so the dashboard asked a teacher to take a register
+    // they had already taken, every time they opened it.
+    todaysClasses: classes.map((klass) => ({
+      klass,
+      attendanceMarked: attendance.some(
+        (record) => record.classId === klass.id && record.sessionDate === today,
+      ),
+    })),
     studentCount: students.items.length,
     attendanceRateThisWeek: attendanceRate(attendance),
     feesCollected: fees.collected,
@@ -520,8 +603,9 @@ export async function getTeacherDashboard(): Promise<TeacherDashboard> {
     onboarding: [
       { key: 'add_class', done: classes.length > 0 },
       { key: 'add_student', done: students.items.length > 0 },
-      { key: 'invite_teacher', done: false },
-      { key: 'set_fees', done: false },
+      // More than the owner's own record means staff have been added.
+      { key: 'invite_teacher', done: teachers.length > 1 },
+      { key: 'set_fees', done: feeStructures.length > 0 },
     ],
     recentAnnouncements: announcements.slice(0, 3),
     liveLesson: findLive(lessons),
@@ -539,7 +623,7 @@ export async function getStudentDashboard(): Promise<StudentDashboard> {
   const student = mapStudent(studentRow);
 
   const [hifz, attendance, lessons, assignments, submissions] = await Promise.all([
-    listHifzProgress(),
+    listHifzProgress(student.id),
     recentAttendance(),
     listLessons({ classId: student.classId }),
     // The dashboard renders an assignments list that was fed a hardcoded
@@ -598,7 +682,7 @@ export async function getStudentDashboard(): Promise<StudentDashboard> {
           studentCount: 0,
         })) as Assignment[];
     })(),
-    hifzSummary: summariseHifz(hifz),
+    hifzSummary: summariseHifz(hifz, attendanceStreak(attendance)),
     attendanceRate: attendanceRate(attendance),
     lastRecitation: null,
   };

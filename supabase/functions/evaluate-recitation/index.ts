@@ -2,6 +2,13 @@ import { authenticate } from '../_shared/auth.ts';
 import { writeAudit } from '../_shared/audit.ts';
 import { handler, json, PublicError, readJson } from '../_shared/http.ts';
 import { LIMITS, rateLimit } from '../_shared/rate-limit.ts';
+import { encodeBase64 } from 'jsr:@std/encoding@1/base64';
+import { geminiGenerateAny, modelChain } from '../_shared/gemini.ts';
+import {
+  ASSESSMENT_SCHEMA, ASSESSMENT_SYSTEM, assessmentPrompt, audioMimeType, capByCoverage,
+  juzForPassage, MIN_COVERAGE, parseAssessment, parseTranscript, passageCoverage, passageText,
+  TRANSCRIPT_SCHEMA, TRANSCRIPT_SYSTEM, type Assessment, type Finding, type JuzFile,
+} from '../_shared/tajweed.ts';
 
 /**
  * Records a recitation and produces tajweed feedback.
@@ -14,18 +21,58 @@ import { LIMITS, rateLimit } from '../_shared/rate-limit.ts';
  * to Storage with a signed URL, which keeps a 10 MB file out of the function's
  * memory and off its execution time.
  *
- * On the evaluation itself — the honest position: real tajweed assessment
- * needs forced alignment of audio against the Quranic text for a specific
- * qiraah, and that is a speech-processing problem, not a prompt. What runs
- * here is a deterministic placeholder that produces a well-formed, clearly
- * provisional result, so the whole pipeline — upload, row, feedback UI,
- * teacher override — is real and testable while the model is chosen.
+ * On the evaluation itself: when GEMINI_API_KEY is set, the recording and the
+ * text the student was asked to recite are sent to Gemini, which hears the
+ * audio and returns a score and the tajweed mistakes it can clearly hear
+ * (_shared/tajweed.ts). That is a real assessment of the audio, but from a
+ * general model, not a validated tajweed assessor, so it stays provisional
+ * and the teacher's review is final.
  *
- * `model_version` records exactly what produced each score, so nothing here
- * can later be mistaken for a graded assessment.
+ * Without a key, or if the model cannot be reached, a deterministic
+ * placeholder keeps the pipeline working: the teacher can only review a
+ * recitation that has a feedback row.
+ *
+ * `model_version` records exactly what produced each score, so a placeholder
+ * can never be mistaken for an assessment, nor one model for another.
  */
 
 const PLACEHOLDER_MODEL = 'placeholder-v1';
+
+// Gemini takes at most 20 MB per request, and base64 adds a third.
+const MAX_AUDIO_BYTES = 14 * 1024 * 1024;
+
+const RULES = ['madd', 'ghunnah', 'qalqalah', 'ikhfa', 'idgham'] as const;
+
+/**
+ * Deterministic in the recitation id so a given recording always yields the
+ * same result. Plainly labelled by `model_version`.
+ */
+function placeholderAssessment(id: string, ayahFrom: number, ayahTo: number): Assessment {
+  const seed = [...id].reduce((a, c) => a + c.charCodeAt(0), 0);
+  const findings: Finding[] = Array.from({ length: seed % 3 }, (_, i) => ({
+    ayah: ayahFrom + ((seed + i) % Math.max(1, ayahTo - ayahFrom + 1)),
+    word_index: (seed + i * 7) % 9,
+    rule: RULES[(seed + i) % RULES.length],
+    severity: (['minor', 'moderate'] as const)[(seed + i) % 2],
+    note: 'Provisional finding. Your teacher\u2019s assessment is final.',
+  }));
+  return { overall: 62 + (seed % 33), findings };
+}
+
+/** The passage from the public Quran text the offline library also uses. */
+async function expectedText(surahNo: number, ayahFrom: number, ayahTo: number) {
+  const base = `${Deno.env.get('SUPABASE_URL')}/storage/v1/object/public/quran`;
+  const files = await Promise.all(
+    juzForPassage(surahNo, ayahFrom, ayahTo).map(async (juz) => {
+      const res = await fetch(`${base}/juz-${String(juz).padStart(2, '0')}.json`);
+      if (!res.ok) throw new Error(`Quran text for juz ${juz} is not published.`);
+      return (await res.json()) as JuzFile;
+    }),
+  );
+  const ayahs = passageText(files, surahNo, ayahFrom, ayahTo);
+  if (!ayahs) throw new Error('That passage is not in the published Quran text.');
+  return ayahs;
+}
 
 interface Body {
   action?: 'upload-url' | 'evaluate';
@@ -125,32 +172,76 @@ Deno.serve(handler(async (req) => {
     throw new PublicError(500, 'internal', 'Could not save your recitation.');
   }
 
-  /**
-   * Provisional scoring.
-   *
-   * Deterministic in the recitation id so a given recording always yields the
-   * same result — a score that changes on refresh would look like a real
-   * assessment behaving erratically. Scores sit in a plausible band and are
-   * plainly labelled as provisional by `model_version`.
-   */
-  const seed = [...recitation.id].reduce((a, c) => a + c.charCodeAt(0), 0);
-  const overall = 62 + (seed % 33);
+  // The model hears the recording. Any failure falls back to the placeholder:
+  // a student's submission must never be lost because a third party is down.
+  const apiKey = Deno.env.get('GEMINI_API_KEY');
+  // The lightest models are left out: one heard a perfect recitation in silence.
+  const models = modelChain(Deno.env.get('GEMINI_MODEL'), Deno.env.get('GEMINI_FALLBACK_MODELS'))
+    .filter((m) => !m.includes('lite'));
+  let assessment: Assessment | null = null;
+  let modelVersion = PLACEHOLDER_MODEL;
 
-  const RULES = ['madd', 'ghunnah', 'qalqalah', 'ikhfa', 'idgham'];
-  const findings = Array.from({ length: seed % 3 }, (_, i) => ({
-    ayah: ayahFrom + ((seed + i) % Math.max(1, ayahTo - ayahFrom + 1)),
-    word_index: (seed + i * 7) % 9,
-    rule: RULES[(seed + i) % RULES.length],
-    severity: ['minor', 'moderate'][(seed + i) % 2],
-    note: 'Provisional finding. Your teacher\u2019s assessment is final.',
-  }));
+  if (apiKey) {
+    try {
+      const [ayahs, audio] = await Promise.all([
+        expectedText(surahNo, ayahFrom, ayahTo),
+        caller.admin.storage.from('recitations').download(storagePath),
+      ]);
+      if (audio.error || !audio.data) throw new Error('The recording could not be read.');
+      if (audio.data.size === 0 || audio.data.size > MAX_AUDIO_BYTES) {
+        throw new Error(`Recording of ${audio.data.size} bytes cannot be assessed.`);
+      }
+
+      const audioPart = {
+        inline_data: {
+          mime_type: audioMimeType(audio.data.type),
+          data: encodeBase64(new Uint8Array(await audio.data.arrayBuffer())),
+        },
+      };
+
+      // 1. What was actually said, heard blind: the model is not shown the
+      //    passage, so it cannot simply report it back.
+      const heard = await geminiGenerateAny({
+        apiKey,
+        system: TRANSCRIPT_SYSTEM,
+        parts: [audioPart],
+        schema: TRANSCRIPT_SCHEMA,
+        temperature: 0,
+        timeoutMs: 30_000,
+      }, models);
+      const coverage = passageCoverage(ayahs, parseTranscript(heard.text));
+      modelVersion = heard.model;
+
+      if (coverage < MIN_COVERAGE) {
+        // Silence, other speech or another passage. Nothing to assess.
+        assessment = { overall: 0, findings: [] };
+      } else {
+        // 2. How well it was recited. No name, admission number or madrasa
+        //    goes with the audio.
+        const judged = await geminiGenerateAny({
+          apiKey,
+          system: ASSESSMENT_SYSTEM,
+          parts: [{ text: assessmentPrompt(surahNo, ayahs) }, audioPart],
+          schema: ASSESSMENT_SCHEMA,
+          temperature: 0.1,
+          timeoutMs: 30_000,
+        }, models);
+        assessment = capByCoverage(parseAssessment(judged.text, ayahFrom, ayahTo), coverage);
+        modelVersion = judged.model;
+      }
+    } catch (error) {
+      console.error('[evaluate] model assessment failed:', error instanceof Error ? error.message : error);
+    }
+  }
+
+  const { overall, findings } = assessment ?? placeholderAssessment(recitation.id, ayahFrom, ayahTo);
 
   await caller.admin.from('tajweed_feedback').insert({
     recitation_id: recitation.id,
     madrasa_id: student.madrasa_id,
     overall_score: overall,
     errors: findings,
-    model_version: PLACEHOLDER_MODEL,
+    model_version: modelVersion,
     processing_ms: Date.now() - started,
   });
 
@@ -171,7 +262,7 @@ Deno.serve(handler(async (req) => {
       id: recitation.id,
       overallScore: overall,
       findings,
-      modelVersion: PLACEHOLDER_MODEL,
+      modelVersion,
       provisional: true,
       disclaimer: 'AI feedback assists practice; your teacher\u2019s assessment is final.',
     },

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { I18nManager, Text as RNText, type TextProps, type TextStyle } from 'react-native';
 import { useTheme } from '@/theme/ThemeProvider';
 import type { TypographyVariant } from '@/theme/tokens';
@@ -41,7 +42,13 @@ export function AppText({
   ...rest
 }: AppTextProps) {
   const theme = useTheme();
+  const { i18n } = useTranslation();
   const base = theme.typography[variant];
+  // Arabic interface text is set in a Latin UI face, so its glyphs come from
+  // the system's Arabic fallback, which is taller: at Latin line heights the
+  // dots and descenders are cut off. Tracking and uppercasing are dropped too —
+  // Arabic has no case, and letter spacing pulls its joined letters apart.
+  const arabicUi = i18n.language === 'ar';
 
   const resolved: TextStyle = arabic
     ? {
@@ -54,8 +61,8 @@ export function AppText({
     : {
         fontFamily: base.fontFamily,
         fontSize: base.fontSize,
-        lineHeight: base.lineHeight,
-        ...(base.letterSpacing !== undefined ? { letterSpacing: base.letterSpacing } : {}),
+        lineHeight: arabicUi ? Math.max(base.lineHeight, Math.round(base.fontSize * 1.75)) : base.lineHeight,
+        ...(base.letterSpacing !== undefined && !arabicUi ? { letterSpacing: base.letterSpacing } : {}),
         textAlign: align ?? (I18nManager.isRTL ? 'right' : 'left'),
       };
 
@@ -65,7 +72,7 @@ export function AppText({
       style={[
         resolved,
         { color: theme.colors[color] },
-        uppercase ? { textTransform: 'uppercase' } : null,
+        uppercase && !arabicUi ? { textTransform: 'uppercase' } : null,
         style,
       ]}
     >

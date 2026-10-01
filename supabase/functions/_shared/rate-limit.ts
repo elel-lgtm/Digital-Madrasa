@@ -16,9 +16,14 @@ export const LIMITS = {
   linkChildHourly: { limit: 5, windowSeconds: 3600 },
   linkChildDaily: { limit: 20, windowSeconds: 86_400 },
   createStudent: { limit: 60, windowSeconds: 3600 },
+  inviteTeacher: { limit: 20, windowSeconds: 3600 },
   issueInvoices: { limit: 10, windowSeconds: 3600 },
   recitationUpload: { limit: 30, windowSeconds: 3600 },
   qrScan: { limit: 30, windowSeconds: 3600 },
+  // Each attempt puts a prompt on somebody's phone.
+  payment: { limit: 5, windowSeconds: 600 },
+  // Each question is a call to a metered model.
+  aiChat: { limit: 10, windowSeconds: 60 },
   generic: { limit: 100, windowSeconds: 60 },
 } as const;
 

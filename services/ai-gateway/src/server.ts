@@ -107,7 +107,9 @@ async function handleChat(req: IncomingMessage, res: ServerResponse): Promise<vo
       role: caller.role,
       studentsInScope: context.students.length,
       provider: config.modelProvider,
-      model: config.modelProvider === 'ollama' ? config.ollamaModel : 'stub',
+      model:
+        config.modelProvider === 'ollama' ? config.ollamaModel
+          : config.modelProvider === 'gemini' ? config.geminiModel : 'stub',
       /** False when the model stated a figure we could not verify. */
       verified: verification.ok,
     },

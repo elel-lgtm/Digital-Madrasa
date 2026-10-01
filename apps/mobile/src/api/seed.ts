@@ -119,6 +119,8 @@ const TEACHER_2_ID = uid(NS.profile, 2);
 const TEACHER_3_ID = uid(NS.profile, 3);
 const PARENT_1_ID = uid(NS.profile, 10);
 const PARENT_2_ID = uid(NS.profile, 11);
+/** The platform admin: belongs to no madrasa and uses the web console. */
+const ADMIN_ID = uid(NS.profile, 90);
 
 const CLASS_HIFZ_1 = uid(NS.klass, 1);
 const CLASS_HIFZ_2 = uid(NS.klass, 2);
@@ -169,6 +171,19 @@ export function createSeed(): MockDatabase {
   };
 
   const profiles: Profile[] = [
+    {
+      id: ADMIN_ID,
+      role: 'admin',
+      madrasaId: null,
+      fullName: 'Platform Administrator',
+      email: 'admin@digitalmadrasa.example',
+      phone: null,
+      avatarUrl: null,
+      locale: 'en',
+      isPlatformAdmin: true,
+      isActive: true,
+      createdAt: daysAgo(500),
+    },
     {
       id: OWNER_ID,
       role: 'teacher',
@@ -1327,6 +1342,7 @@ export function createSeed(): MockDatabase {
     admissionCounters: { [YEAR - 1]: 8, [YEAR]: 8 },
     credentials: [
       { email: 'owner@annur.example', password: 'Madrasa2026!', profileId: OWNER_ID },
+      { email: 'admin@digitalmadrasa.example', password: 'Madrasa2026!', profileId: ADMIN_ID },
       { email: 'fatuma@annur.example', password: 'Madrasa2026!', profileId: TEACHER_2_ID },
       { email: 'parent@example.com', password: 'Madrasa2026!', profileId: PARENT_1_ID },
       {
@@ -1347,6 +1363,7 @@ export const DEMO_ACCOUNTS = {
   owner: { email: 'owner@annur.example', password: 'Madrasa2026!' },
   teacher: { email: 'fatuma@annur.example', password: 'Madrasa2026!' },
   parent: { email: 'parent@example.com', password: 'Madrasa2026!' },
+  admin: { email: 'admin@digitalmadrasa.example', password: 'Madrasa2026!' },
   student: {
     email: `${admissionNo(YEAR - 1, 1).toLowerCase()}@annur.example`,
     password: 'Madrasa2026!',

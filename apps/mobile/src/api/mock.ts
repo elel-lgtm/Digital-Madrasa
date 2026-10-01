@@ -1,14 +1,24 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
-  TOTAL_AYAHS,
+  MEMORISED_STATUSES,
   getSurah,
+  juzForAyah,
+  summariseHifzRows,
+  madrasaLifecycleSchema,
+  type AdminMadrasa,
+  type AdminOverview,
+  type AuditEntry,
+  type MadrasaLifecycleInput,
+  type MadrasaStatus,
+  type Certificate,
+  type HifzProgress,
+  type Submission,
   GRACE_DAYS,
   canManageMeetingLink,
   canUseAdminFeatures,
   cardDetailsSchema,
   isMeetingUrl,
   isoDate,
-  juzForSurah,
   liveSessionState,
   normaliseKenyanPhone,
   surahName,
@@ -84,7 +94,7 @@ const MAX_DB_AGE_MS = 3 * 24 * 60 * 60 * 1000;
  * no way to supply it, so we discard it and re-seed rather than hand the app
  * rows with missing properties.
  */
-const SEED_SCHEMA_VERSION = 4;
+const SEED_SCHEMA_VERSION = 5;
 
 interface PersistedDb {
   seededAt: string;
@@ -94,7 +104,6 @@ interface PersistedDb {
 
 let db: MockDatabase | null = null;
 let currentProfileId: string | null = null;
-let bootstrapped = false;
 
 /** Charges awaiting their callback, keyed by checkout request id. */
 const pendingSettlement = new Map<
@@ -165,32 +174,43 @@ function refreshDemoLiveLessons(database: MockDatabase): void {
   }
 }
 
-async function bootstrap(): Promise<MockDatabase> {
-  if (db) return db;
-  if (!bootstrapped) {
-    bootstrapped = true;
-    try {
-      const raw = await AsyncStorage.getItem(DB_KEY);
-      if (raw) {
-        const parsed = JSON.parse(raw) as PersistedDb;
-        const age = Date.now() - new Date(parsed.seededAt).getTime();
-        const current = parsed.schemaVersion === SEED_SCHEMA_VERSION;
-        if (age < MAX_DB_AGE_MS && current) {
-          db = parsed.data;
-          refreshDemoLiveLessons(db);
-        }
+/**
+ * Loads the demo database once. Every caller shares the same promise: screens
+ * fire several requests at once on first render, and when this was a boolean
+ * flag, the second caller found "already bootstrapping" but no database yet,
+ * seeded a fresh one and saved it over the stored data — wiping whatever the
+ * demo user had done, a page load after they did it.
+ */
+let loading: Promise<MockDatabase> | null = null;
+
+async function loadDatabase(): Promise<MockDatabase> {
+  try {
+    const raw = await AsyncStorage.getItem(DB_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw) as PersistedDb;
+      const age = Date.now() - new Date(parsed.seededAt).getTime();
+      const current = parsed.schemaVersion === SEED_SCHEMA_VERSION;
+      if (age < MAX_DB_AGE_MS && current) {
+        db = parsed.data;
+        refreshDemoLiveLessons(db);
       }
-      const sessionRaw = await AsyncStorage.getItem(SESSION_KEY);
-      if (sessionRaw) currentProfileId = sessionRaw;
-    } catch {
-      // Corrupt storage just means we start from a fresh seed.
     }
+    const sessionRaw = await AsyncStorage.getItem(SESSION_KEY);
+    if (sessionRaw) currentProfileId = sessionRaw;
+  } catch {
+    // Corrupt storage just means we start from a fresh seed.
   }
   if (!db) {
     db = createSeed();
     await persist();
   }
   return db;
+}
+
+async function bootstrap(): Promise<MockDatabase> {
+  if (db) return db;
+  loading ??= loadDatabase();
+  return loading;
 }
 
 function requireDb(): MockDatabase {
@@ -324,29 +344,9 @@ function nextAdmissionNo(year: number): string {
 // -------------------------------------------------------------- derived
 
 function hifzSummaryFor(studentId: string): HifzSummary {
-  const data = requireDb();
-  const rows = data.hifz.filter((h) => h.studentId === studentId);
-  const memorisedRows = rows.filter(
-    (h) => h.status === 'memorised' || h.status === 'mastered' || h.status === 'revising',
-  );
-  const memorisedAyahs = memorisedRows.reduce(
-    (sum, row) => sum + (getSurah(row.surahNo)?.ayahCount ?? 0),
-    0,
-  );
-  const juzSet = new Set(memorisedRows.map((h) => juzForSurah(h.surahNo)));
-  const today = isoDate();
-  const dueForRevision = rows.filter(
-    (h) => h.nextReviewAt !== null && h.nextReviewAt.slice(0, 10) <= today,
-  ).length;
-
-  return {
-    memorisedAyahs,
-    totalAyahs: TOTAL_AYAHS,
-    juzCompleted: juzSet.size,
-    surahsMemorised: memorisedRows.length,
-    currentStreak: streakFor(studentId),
-    dueForRevision,
-  };
+  const rows = requireDb().hifz.filter((h) => h.studentId === studentId);
+  // Same definition as the Supabase client (packages/shared/src/hifz.ts).
+  return { ...summariseHifzRows(rows, isoDate()), currentStreak: streakFor(studentId) };
 }
 
 /** Consecutive days ending today on which the student recited or attended. */
@@ -539,6 +539,15 @@ function resolveCard(
 }
 
 /** Asserts the caller is madrasa staff, returning their profile. */
+/** Mirrors `public.is_platform_admin()`. */
+function requireAdmin(): Profile {
+  const profile = requireProfile();
+  if (!profile.isPlatformAdmin) {
+    throw new ApiError('forbidden', 'Platform administrators only.');
+  }
+  return profile;
+}
+
 function requireStaff(): Profile {
   const profile = requireProfile();
   if (profile.role !== 'teacher') {
@@ -1217,6 +1226,72 @@ export const mockApi: ApiClient = {
     return requireDb().submissions.filter((s) => s.assignmentId === assignmentId);
   },
 
+  async getMySubmission(assignmentId) {
+    await bootstrap();
+    await delay();
+    const studentId = myStudentId();
+    return (
+      requireDb().submissions.find(
+        (s) => s.assignmentId === assignmentId && s.studentId === studentId,
+      ) ?? null
+    );
+  },
+
+  async submitAssignment(input) {
+    await bootstrap();
+    await delay(400, 700);
+    const data = requireDb();
+    const studentId = myStudentId();
+    const student = data.students.find((s) => s.id === studentId)!;
+    const assignment = data.assignments.find((a) => a.id === input.assignmentId);
+    // Mirrors can_submit_assignment(): own class, own madrasa only.
+    if (!assignment || assignment.classId !== student.classId) {
+      throw new ApiError('forbidden', 'That assignment is not for your class.');
+    }
+    const existing = data.submissions.find(
+      (s) => s.assignmentId === assignment.id && s.studentId === studentId,
+    );
+    if (existing?.status === 'graded') {
+      throw new ApiError('conflict', 'This work has already been marked.');
+    }
+    if (existing) {
+      existing.textBody = input.textBody;
+      existing.status = 'pending';
+      existing.submittedAt = new Date().toISOString();
+      await persist();
+      return existing;
+    }
+    const submission: Submission = {
+      id: newId(NS.submission),
+      assignmentId: assignment.id,
+      assignmentTitle: assignment.title,
+      studentId,
+      studentName: student.fullName,
+      madrasaId: student.madrasaId,
+      audioUrl: null,
+      textBody: input.textBody,
+      submittedAt: new Date().toISOString(),
+      status: 'pending',
+      score: null,
+    };
+    data.submissions.push(submission);
+    assignment.submissionCount += 1;
+    await persist();
+    return submission;
+  },
+
+  async gradeSubmission(input) {
+    await bootstrap();
+    await delay(300, 600);
+    requireStaff();
+    const submission = requireDb().submissions.find((s) => s.id === input.submissionId);
+    if (!submission) throw new ApiError('not_found', 'Submission not found.');
+    submission.score = input.score;
+    submission.status = input.status;
+    await persist();
+    return submission;
+  },
+
   // ------------------------------------------------------ attendance
   async listAttendance(params) {
     await bootstrap();
@@ -1467,6 +1542,37 @@ export const mockApi: ApiClient = {
     await delay();
     assertCanSeeStudent(studentId);
     return requireDb().hifz.filter((h) => h.studentId === studentId);
+  },
+
+  async upsertHifzProgress(input) {
+    await bootstrap();
+    await delay(300, 600);
+    requireStaff();
+    const data = requireDb();
+    const surah = getSurah(input.surahNo);
+    if (!surah) throw new ApiError('validation', 'Unknown surah.');
+    const whole = MEMORISED_STATUSES.includes(input.status);
+    const ayahNo = whole ? surah.ayahCount : Math.min(Math.max(input.ayahNo, 1), surah.ayahCount);
+    const now = new Date();
+    const existing = data.hifz.find(
+      (h) => h.studentId === input.studentId && h.surahNo === input.surahNo,
+    );
+    const row: HifzProgress = {
+      id: existing?.id ?? newId(NS.hifz),
+      studentId: input.studentId,
+      surahNo: input.surahNo,
+      surahName: surah.name,
+      juzNo: juzForAyah(input.surahNo, ayahNo),
+      ayahNo,
+      status: input.status,
+      confidenceScore: input.confidenceScore ?? 0,
+      lastRevisedAt: now.toISOString(),
+      nextReviewAt: whole ? new Date(now.getTime() + 7 * 86_400_000).toISOString() : null,
+    };
+    if (existing) Object.assign(existing, row);
+    else data.hifz.push(row);
+    await persist();
+    return row;
   },
 
   // ---------------------------------------------------- parent links
@@ -1921,21 +2027,24 @@ export const mockApi: ApiClient = {
   },
 
   async getPaymentStatus(checkoutRequestId) {
+    // Always a copy. The stored payment is updated in place when it settles;
+    // handing out the same object let React Query see "no change" and the pay
+    // screen wait forever on a payment that had already succeeded.
     await bootstrap();
     await delay(300, 600);
     const data = requireDb();
     const payment = data.payments.find((p) => p.checkoutRequestId === checkoutRequestId);
     if (!payment) throw new ApiError('not_found', 'Payment not found.');
-    if (payment.status !== 'pending') return payment;
+    if (payment.status !== 'pending') return { ...payment };
 
     const pending = pendingSettlement.get(checkoutRequestId);
-    if (!pending || Date.now() < pending.settleAt) return payment;
+    if (!pending || Date.now() < pending.settleAt) return { ...payment };
 
     if (pending.shouldFail) {
       payment.status = 'failed';
       pendingSettlement.delete(checkoutRequestId);
       await persist();
-      return payment;
+      return { ...payment };
     }
 
     // Settlement mirrors the M-Pesa callback: money is applied server-side and
@@ -1973,7 +2082,7 @@ export const mockApi: ApiClient = {
 
     pendingSettlement.delete(checkoutRequestId);
     await persist();
-    return payment;
+    return { ...payment };
   },
 
   // --------------------------------------------------- communication
@@ -2088,15 +2197,18 @@ export const mockApi: ApiClient = {
   },
 
   async getSubscriptionPaymentStatus(checkoutRequestId) {
+    // Always a copy. The stored payment is updated in place when it settles;
+    // handing out the same object let React Query see "no change" and the pay
+    // screen wait forever on a payment that had already succeeded.
     await bootstrap();
     await delay(300, 600);
     const data = requireDb();
     const payment = data.subPayments.find((p) => p.checkoutRequestId === checkoutRequestId);
     if (!payment) throw new ApiError('not_found', 'Payment not found.');
-    if (payment.status !== 'pending' && payment.status !== 'initiated') return payment;
+    if (payment.status !== 'pending' && payment.status !== 'initiated') return { ...payment };
 
     const pending = pendingSettlement.get(checkoutRequestId);
-    if (!pending || Date.now() < pending.settleAt) return payment;
+    if (!pending || Date.now() < pending.settleAt) return { ...payment };
 
     pendingSettlement.delete(checkoutRequestId);
 
@@ -2104,7 +2216,7 @@ export const mockApi: ApiClient = {
       payment.status = 'failed';
       payment.failureReason = pending.failureReason ?? 'The payment did not go through.';
       await persist();
-      return payment;
+      return { ...payment };
     }
 
     // Settlement mirrors a gateway callback: the invoice and the subscription
@@ -2140,7 +2252,7 @@ export const mockApi: ApiClient = {
     }
 
     await persist();
-    return payment;
+    return { ...payment };
   },
 
   async cancelSubscription(input) {
@@ -2222,6 +2334,153 @@ export const mockApi: ApiClient = {
     if (sub && !target.parentId) sub.defaultCard = target;
     await persist();
   },
+
+  // --------------------------------------------------- platform admin
+  async getAdminOverview() {
+    await bootstrap();
+    await delay(300, 600);
+    requireAdmin();
+    const data = requireDb();
+    const count = (status: MadrasaStatus) => data.madrasas.filter((m) => m.status === status).length;
+    const since = Date.now() - 30 * 86_400_000;
+    const subscriptions: AdminOverview['subscriptions'] = {};
+    for (const s of data.subscriptions) {
+      const status = refreshSubscription(s).status;
+      subscriptions[status] = (subscriptions[status] ?? 0) + 1;
+    }
+    return {
+      madrasas: {
+        active: count('active'),
+        suspended: count('suspended'),
+        pending_deletion: count('pending_deletion'),
+        deleted: count('deleted'),
+      },
+      people: {
+        students: data.students.length,
+        teachers: data.teachers.length,
+        parents: data.profiles.filter((p) => p.role === 'parent').length,
+      },
+      subscriptions,
+      revenue30d: {
+        subscriptions: data.subPayments
+          .filter((p) => p.status === 'success' && p.settledAt && Date.parse(p.settledAt) > since)
+          .reduce((sum, p) => sum + p.amount, 0),
+        feesCollected: data.payments
+          .filter((p) => p.status === 'success' && p.settledAt && Date.parse(p.settledAt) > since)
+          .reduce((sum, p) => sum + p.amount, 0),
+        currency: 'KES',
+      },
+      // The mock delivers nothing, so nothing can stall.
+      delivery: { stalled: 0, emailFailed: 0, smsFailed: 0 },
+      generatedAt: new Date().toISOString(),
+    } satisfies AdminOverview;
+  },
+
+  async listAdminMadrasas() {
+    await bootstrap();
+    await delay(300, 600);
+    requireAdmin();
+    const data = requireDb();
+    return data.madrasas.map((m) => {
+      const owner = data.profiles.find((p) => p.id === m.ownerId);
+      const sub = data.subscriptions.find((s) => s.madrasaId === m.id);
+      const lastAudit = data.audit
+        .filter((a) => a.madrasaId === m.id)
+        .reduce<string | null>((max, a) => (!max || a.createdAt > max ? a.createdAt : max), null);
+      return {
+        id: m.id,
+        name: m.name,
+        slug: m.slug,
+        county: m.county,
+        town: m.town,
+        status: m.status,
+        createdAt: m.createdAt,
+        suspendedAt: null,
+        deletionScheduledAt: null,
+        deletionReason: null,
+        ownerName: owner?.fullName ?? null,
+        ownerEmail: owner?.email ?? null,
+        contactPhone: m.contactPhone,
+        subscriptionStatus: sub ? refreshSubscription(sub).status : null,
+        trialEndsAt: sub?.trialEndsAt ?? null,
+        currentPeriodEnd: sub?.currentPeriodEnd ?? null,
+        students: data.students.filter((s) => s.madrasaId === m.id).length,
+        teachers: data.teachers.filter((t) => t.madrasaId === m.id).length,
+        parents: new Set(
+          data.links.filter((l) => l.madrasaId === m.id && l.status === 'approved').map((l) => l.parentId),
+        ).size,
+        feesOutstanding: data.invoices
+          .filter((i) => i.madrasaId === m.id && ['issued', 'partially_paid', 'overdue'].includes(i.status))
+          .reduce((sum, i) => sum + (i.amountDue - i.amountPaid), 0),
+        lastActivityAt: lastAudit,
+      } satisfies AdminMadrasa;
+    });
+  },
+
+  async listAdminAudit(params) {
+    await bootstrap();
+    await delay(300, 600);
+    requireAdmin();
+    const data = requireDb();
+    return sortByDateDesc(
+      data.audit.filter((a) => !params.madrasaId || a.madrasaId === params.madrasaId),
+      (a) => a.createdAt,
+    )
+      .slice(0, 200)
+      .map((a) => ({
+        id: a.id,
+        createdAt: a.createdAt,
+        action: a.action,
+        entityType: a.entityType,
+        entityId: a.entityId,
+        actorName: a.actorName,
+        actorRole: a.actorRole,
+        madrasaId: a.madrasaId,
+        madrasaName: data.madrasas.find((m) => m.id === a.madrasaId)?.name ?? null,
+        reason: (a as AuditEntry & { reason?: string }).reason ?? null,
+      }));
+  },
+
+  async changeMadrasaStatus(input) {
+    await bootstrap();
+    await delay(500, 900);
+    const admin = requireAdmin();
+    const parsed = madrasaLifecycleSchema.safeParse(input);
+    if (!parsed.success) throw new ApiError('validation', 'A written reason is required.');
+    const data = requireDb();
+    const madrasa = data.madrasas.find((m) => m.id === input.madrasaId);
+    if (!madrasa) throw new ApiError('not_found', 'Madrasa not found.');
+    if (input.action === 'purge' && input.confirmName?.trim() !== madrasa.name) {
+      throw new ApiError('validation', 'Type the madrasa name exactly to confirm permanent deletion.');
+    }
+    const next: Record<MadrasaLifecycleInput['action'], MadrasaStatus> = {
+      suspend: 'suspended',
+      schedule_deletion: 'pending_deletion',
+      reinstate: 'active',
+      // The mock marks it deleted rather than erasing the demo's only school.
+      purge: 'deleted',
+    };
+    madrasa.status = next[input.action];
+    data.audit.push({
+      id: newId(NS.audit),
+      actorId: admin.id,
+      actorName: admin.fullName,
+      actorRole: 'admin',
+      madrasaId: madrasa.id,
+      action: `madrasa.${input.action}`,
+      entityType: 'madrasa',
+      entityId: madrasa.id,
+      createdAt: new Date().toISOString(),
+      ip: null,
+      reason: input.reason ?? null,
+    } as AuditEntry);
+    await persist();
+    return { status: madrasa.status };
+  },
+
+  // The mock has no push service; registration is accepted and forgotten.
+  async registerPushToken() {},
+  async unregisterPushToken() {},
 
   async listAnnouncements() {
     await bootstrap();
@@ -2587,6 +2846,79 @@ export const mockApi: ApiClient = {
     await delay();
     assertCanSeeStudent(studentId);
     return requireDb().certificates.filter((c) => c.studentId === studentId);
+  },
+
+  async issueCertificate(input) {
+    await bootstrap();
+    await delay(400, 700);
+    requireStaff();
+    const data = requireDb();
+    const student = data.students.find((s) => s.id === input.studentId);
+    if (!student) throw new ApiError('not_found', 'Student not found.');
+    // The code is the server's to choose, as in migration 0023.
+    const alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    const code = Array.from({ length: 10 }, () => alphabet[Math.floor(Math.random() * 32)]).join('');
+    const certificate: Certificate = {
+      id: newId(NS.certificate),
+      studentId: student.id,
+      studentName: student.fullName,
+      kind: input.kind,
+      title: input.title,
+      issuedAt: new Date().toISOString(),
+      verificationCode: code,
+      pdfUrl: null,
+    };
+    data.certificates.push(certificate);
+    const recipients = [
+      student.profileId,
+      ...data.links
+        .filter((l) => l.studentId === student.id && l.status === 'approved')
+        .map((l) => l.parentId),
+    ];
+    recipients.forEach((userId) =>
+      data.mail.push({
+        id: newId(NS.mail),
+        userId,
+        kind: 'certificate_issued',
+        title: 'Certificate awarded',
+        preview: input.title,
+        body: `${student.fullName} has been awarded: ${input.title}. Verification code ${code}.`,
+        payload: { certificateId: certificate.id },
+        createdAt: certificate.issuedAt,
+        readAt: null,
+        attachmentLabel: null,
+      }),
+    );
+    await persist();
+    return certificate;
+  },
+
+  async withdrawCertificate(certificateId) {
+    await bootstrap();
+    await delay();
+    requireStaff();
+    const data = requireDb();
+    data.certificates = data.certificates.filter((c) => c.id !== certificateId);
+    await persist();
+  },
+
+  async verifyCertificate(code) {
+    await bootstrap();
+    await delay();
+    const clean = code.replace(/[^a-z0-9]/gi, '').toUpperCase();
+    const data = requireDb();
+    const certificate = data.certificates.find((c) => c.verificationCode === clean);
+    if (!certificate) return null;
+    const student = data.students.find((s) => s.id === certificate.studentId);
+    const madrasa = data.madrasas.find((m) => m.id === student?.madrasaId);
+    return {
+      title: certificate.title,
+      kind: certificate.kind,
+      studentName: certificate.studentName,
+      madrasaName: madrasa?.name ?? '',
+      issuedAt: certificate.issuedAt,
+      valid: madrasa?.status === 'active',
+    };
   },
 
   async getAttendanceQrToken(classId) {
