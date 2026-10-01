@@ -5,8 +5,9 @@
  *   node scripts/check-tajweed.mjs                     silence, a real recitation, a wrong surah
  *   node scripts/check-tajweed.mjs <file> <surah> <from> <to>    assess one recording of your own
  *
- * Needs GEMINI_API_KEY set as a Supabase secret; without it the function
- * answers with the placeholder and this script says so and fails.
+ * Needs GEMINI_API_KEY set as a Supabase secret. Also checks that without
+ * the pupil's AI feedback consent nothing is sent or scored; the pupil's
+ * consent is restored to what it was.
  *
  * Submits as the test student, exactly as the app does, and removes every row
  * and object it created, by id and by exact path.
@@ -30,6 +31,7 @@ const SERVICE = { apikey: adminEnv.SUPABASE_SERVICE_ROLE_KEY, Authorization: 'Be
 const PW = (readFileSync('scripts/check-screens.mjs', 'utf8').match(/Madrasa2026[^'"]*/) || [])[0];
 
 let fail = 0;
+let inconclusive = 0;
 const ck = (label, ok, detail) => {
   console.log('  ' + (ok ? '✓' : '✗') + ' ' + label + (detail ? ' — ' + detail : ''));
   if (!ok) fail += 1;
@@ -69,10 +71,21 @@ async function assess(audio, contentType, surahNo, ayahFrom, ayahTo) {
   const res = await fn({ action: 'evaluate', storagePath: up.body.path, durationMs: 10000, surahNo, ayahFrom, ayahTo });
   if (res.status !== 201) throw new Error('evaluate: HTTP ' + res.status + ' ' + JSON.stringify(res.body));
   created.ids.push(res.body.id);
-  console.log(`    model ${res.body.modelVersion}, score ${res.body.overallScore}, ` +
+  console.log(`    ${res.body.assessment}, model ${res.body.modelVersion}, score ${res.body.overallScore}, ` +
     `${res.body.findings.length} finding(s), ${Date.now() - started} ms`);
   for (const f of res.body.findings) console.log(`      ayah ${f.ayah}, word ${f.word_index}, ${f.rule} (${f.severity}): ${f.note}`);
   return res.body;
+}
+
+/**
+ * Google's models were busy: the recitation was correctly saved unassessed,
+ * but that says nothing about how well assessment works. Not a failure.
+ */
+function settled(r) {
+  if (r.assessment !== 'unavailable') return r;
+  console.log('    ~ the AI was unavailable (saved as not assessed); this case is inconclusive');
+  inconclusive += 1;
+  return null;
 }
 
 /** Two seconds of silence as a 16 kHz mono WAV. */
@@ -97,36 +110,62 @@ async function recitedIkhlas() {
   return Buffer.concat(parts);
 }
 
-const usesModel = (r) => r.modelVersion !== 'placeholder-v1';
+const usesModel = (r) => r.assessment === 'assessed' && r.modelVersion !== 'none';
+
+// The test pupil's consent, set directly with the service role and put back
+// exactly as it was at the end.
+const pupil = (await fetch(URL_BASE + '/rest/v1/students?select=id,ai_feedback_consent&profile_id=eq.' + signed.user.id, {
+  headers: SERVICE,
+}).then((r) => r.json()))[0];
+const setConsent = (value) => fetch(URL_BASE + '/rest/v1/students?id=eq.' + pupil.id, {
+  method: 'PATCH',
+  headers: { ...SERVICE, 'Content-Type': 'application/json' },
+  body: JSON.stringify({ ai_feedback_consent: value }),
+});
 
 try {
   const [file, surah, from, to] = process.argv.slice(2);
   if (file) {
     console.log(`assessing ${file} as surah ${surah}, ayah ${from} to ${to}`);
     const type = file.endsWith('.mp3') ? 'audio/mpeg' : file.endsWith('.wav') ? 'audio/wav' : 'audio/m4a';
-    const r = await assess(readFileSync(file), type, Number(surah), Number(from), Number(to));
-    ck('assessed by a model, not the placeholder', usesModel(r), r.modelVersion);
+    await setConsent(true);
+    const r = settled(await assess(readFileSync(file), type, Number(surah), Number(from), Number(to)));
+    if (r) ck('assessed by a model', usesModel(r), r.modelVersion);
   } else {
-    console.log('silence');
-    const silent = await assess(silentWav(), 'audio/wav', 112, 1, 4);
-    ck('assessed by a model, not the placeholder', usesModel(silent), silent.modelVersion);
-    ck('a silent recording scores 0 with no findings', silent.overallScore === 0 && silent.findings.length === 0,
-      'score ' + silent.overallScore);
+    console.log('without consent');
+    await setConsent(false);
+    const none = await assess(silentWav(), 'audio/wav', 112, 1, 4);
+    ck('nothing is sent and nothing is scored', none.assessment === 'not_consented' && none.overallScore === null
+      && none.modelVersion === 'none' && none.findings.length === 0, `${none.assessment}, score ${none.overallScore}`);
+
+    await setConsent(true);
+    console.log('\nsilence');
+    const silent = settled(await assess(silentWav(), 'audio/wav', 112, 1, 4));
+    if (silent) {
+      ck('assessed by a model', usesModel(silent), silent.modelVersion);
+      ck('a silent recording scores 0 with no findings', silent.overallScore === 0 && silent.findings.length === 0,
+        'score ' + silent.overallScore);
+    }
 
     console.log('\na correct recitation of Al-Ikhlas');
     const audio = await recitedIkhlas();
-    const good = await assess(audio, 'audio/mpeg', 112, 1, 4);
-    ck('assessed by a model', usesModel(good), good.modelVersion);
-    ck('a correct recitation scores high', good.overallScore >= 80, 'score ' + good.overallScore);
-    ck('every finding is about an ayah that was recited', good.findings.every((f) => f.ayah >= 1 && f.ayah <= 4));
+    const good = settled(await assess(audio, 'audio/mpeg', 112, 1, 4));
+    if (good) {
+      ck('assessed by a model', usesModel(good), good.modelVersion);
+      ck('a correct recitation scores high', good.overallScore >= 80, 'score ' + good.overallScore);
+      ck('every finding is about an ayah that was recited', good.findings.every((f) => f.ayah >= 1 && f.ayah <= 4));
+    }
 
     console.log('\nthe same audio, submitted as Al-Falaq');
-    const wrong = await assess(audio, 'audio/mpeg', 113, 1, 5);
-    ck('assessed by a model', usesModel(wrong), wrong.modelVersion);
-    ck('a different passage is not given a passing score', wrong.overallScore <= 30, 'score ' + wrong.overallScore);
+    const wrong = settled(await assess(audio, 'audio/mpeg', 113, 1, 5));
+    if (wrong) {
+      ck('assessed by a model', usesModel(wrong), wrong.modelVersion);
+      ck('a different passage is not given a passing score', wrong.overallScore <= 30, 'score ' + wrong.overallScore);
+    }
   }
 } finally {
   console.log('\ncleanup');
+  await setConsent(pupil.ai_feedback_consent);
   for (const id of created.ids) {
     const r = await fetch(URL_BASE + '/rest/v1/recitations?id=eq.' + id, { method: 'DELETE', headers: SERVICE });
     if (!r.ok) console.log('  ! recitation ' + id + ': HTTP ' + r.status);
@@ -138,5 +177,7 @@ try {
   console.log(`  removed ${created.ids.length} recitation(s) and ${created.paths.length} object(s)`);
 }
 
-console.log(fail === 0 ? '\n✓ Recitations are assessed from the audio.' : `\n✗ ${fail} check(s) failed.`);
-process.exit(fail === 0 ? 0 : 1);
+if (fail > 0) console.log(`\n✗ ${fail} check(s) failed.`);
+else if (inconclusive > 0) console.log(`\n~ No failures, but ${inconclusive} case(s) were inconclusive: the AI was busy. Run again later.`);
+else console.log('\n✓ Recitations are assessed from the audio, and only with consent.');
+process.exit(fail > 0 ? 1 : inconclusive > 0 ? 2 : 0);

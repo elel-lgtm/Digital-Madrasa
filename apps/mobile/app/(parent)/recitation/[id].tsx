@@ -6,6 +6,7 @@ import { View } from 'react-native';
 import { api } from '@/api';
 import { qk } from '@/api/keys';
 import { RecitationPlayer } from '@/components/RecitationPlayer';
+import { AssessmentNote, recitationScore } from '@/components/AiFeedback';
 import { AiDisclaimer, FindingList, ScoreRing } from '@/components/TajweedFeedback';
 import {
   AppText,
@@ -75,7 +76,7 @@ export default function ParentRecitation() {
   const data = recitation.data;
   const feedback = data.feedback;
   const override = feedback?.teacherOverride ?? null;
-  const displayScore = override?.overallScore ?? feedback?.overallScore;
+  const { score: displayScore, badge } = recitationScore(feedback);
 
   return (
     <Screen
@@ -103,18 +104,17 @@ export default function ParentRecitation() {
         {feedback ? (
           <>
             <View style={{ alignItems: 'center', gap: theme.spacing.sm }}>
-              {displayScore !== undefined ? <ScoreRing score={displayScore} /> : null}
+              <ScoreRing score={displayScore} />
               <AppText variant="label" color="textMuted" uppercase>
                 {t('student.overallScore')}
               </AppText>
               {/* Whose score this is, said plainly rather than implied by a
                   colour. A provisional model result and a teacher's assessment
                   must never be mistaken for one another. */}
-              <Badge
-                label={override ? t('teacher.reviewed') : t('student.aiOnly')}
-                tone={override ? 'success' : undefined}
-              />
+              <Badge label={t(badge)} tone={override ? 'success' : undefined} />
             </View>
+
+            <AssessmentNote feedback={feedback} />
 
             {override ? (
               <Card accent="success">

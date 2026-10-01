@@ -169,7 +169,11 @@ try {
   const evalMs = Date.now() - t1;
   ck('evaluation accepted', ev.status === 201, 'HTTP ' + ev.status + ' in ' + evalMs + 'ms');
   ck('result labelled provisional', ev.body.provisional === true);
-  ck('model version recorded', ev.body.modelVersion === 'placeholder-v1', ev.body.modelVersion);
+  // What produced the result: a model when assessed, 'none' when not (the test
+  // pupils have not consented to AI feedback, so nothing is sent).
+  ck('model version recorded', Boolean(ev.body.modelVersion)
+    && (ev.body.assessment === 'assessed') === (ev.body.modelVersion !== 'none'),
+    ev.body.modelVersion + ' / ' + ev.body.assessment);
   ck('carries a teacher-authority disclaimer', /teacher/i.test(ev.body.disclaimer || ''));
   if (ev.body.id) created.recitationIds.push(ev.body.id);
 
@@ -332,7 +336,7 @@ try {
      Boolean(after[0] && after[0].teacher_override && after[0].teacher_override.remarks !== 'anon'));
   ck('AI score NOT overwritten', Boolean(after[0]) && Number(after[0].overall_score) !== 88,
      after[0] && 'ai ' + after[0].overall_score);
-  ck('model version preserved', Boolean(after[0]) && after[0].model_version === 'placeholder-v1');
+  ck('model version preserved', Boolean(after[0]) && after[0].model_version === ev.body.modelVersion);
 
   // ------------------------------------------------ storage read authorization
   //

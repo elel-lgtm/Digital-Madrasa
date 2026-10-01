@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 import { api } from '@/api';
 import { qk } from '@/api/keys';
+import { AiConsentCard, recitationScore } from '@/components/AiFeedback';
 import { CertificateCard } from '@/components/CertificateCard';
 import { ScoreRing } from '@/components/TajweedFeedback';
 import {
@@ -122,6 +123,12 @@ export default function ChildDetail() {
               </View>
             </Card>
 
+            <AiConsentCard
+              studentId={data.student.id}
+              allowed={data.student.aiFeedbackConsent}
+              audience="parent"
+            />
+
             <View>
               <SectionHeader title={t('student.feedbackTitle')} />
               {data.recentRecitations.length === 0 ? (
@@ -133,10 +140,7 @@ export default function ChildDetail() {
               ) : (
                 <View style={{ gap: theme.spacing.md }}>
                   {data.recentRecitations.map((recitation) => {
-                    const score =
-                      recitation.feedback?.teacherOverride?.overallScore ??
-                      recitation.feedback?.overallScore;
-                    const reviewed = Boolean(recitation.feedback?.teacherOverride);
+                    const { score, badge, reviewed } = recitationScore(recitation.feedback);
                     return (
                       <Card
                         key={recitation.id}
@@ -154,7 +158,7 @@ export default function ChildDetail() {
                             gap: theme.spacing.lg,
                           }}
                         >
-                          {score !== undefined ? <ScoreRing score={score} size={72} /> : null}
+                          <ScoreRing score={score} size={72} />
                           <View style={{ flex: 1, gap: 4 }}>
                             <AppText variant="bodyStrong">
                               {recitation.surahName} · {recitation.ayahFrom}–{recitation.ayahTo}
@@ -167,10 +171,7 @@ export default function ChildDetail() {
                                 provisional model result is never taken for a
                                 teacher's assessment. */}
                             <View style={{ alignSelf: 'flex-start' }}>
-                              <Badge
-                                label={reviewed ? t('teacher.reviewed') : t('student.aiOnly')}
-                                tone={reviewed ? 'success' : undefined}
-                              />
+                              <Badge label={t(badge)} tone={reviewed ? 'success' : undefined} />
                             </View>
                             {recitation.feedback?.teacherOverride?.remarks ? (
                               <AppText variant="caption" color="textSubtle" numberOfLines={2}>

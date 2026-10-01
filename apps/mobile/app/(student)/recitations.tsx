@@ -4,6 +4,7 @@ import { Microphone } from 'phosphor-react-native';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 import { api } from '@/api';
+import { recitationScore } from '@/components/AiFeedback';
 import { qk } from '@/api/keys';
 import {
   AppText,
@@ -76,8 +77,7 @@ export default function StudentRecitations() {
                 const feedback = recitation.feedback;
                 // The teacher's score is the one that counts; the model's is
                 // shown only until a teacher has spoken.
-                const reviewed = Boolean(feedback?.teacherOverride);
-                const score = feedback?.teacherOverride?.overallScore ?? feedback?.overallScore;
+                const { score, badge, reviewed } = recitationScore(feedback);
 
                 return (
                   <ListRow
@@ -86,13 +86,10 @@ export default function StudentRecitations() {
                     subtitle={`${longDate(recitation.createdAt)} · ${duration(recitation.durationMs)} · ${recitation.qiraahStyle}`}
                     right={
                       <View style={{ alignItems: 'flex-end', gap: 4 }}>
-                        {score !== undefined ? (
-                          <AppText variant="bodyStrong">{Math.round(score)}</AppText>
-                        ) : null}
-                        <Badge
-                          label={reviewed ? t('teacher.reviewed') : t('student.aiOnly')}
-                          tone={reviewed ? 'success' : undefined}
-                        />
+                        <AppText variant="bodyStrong">
+                          {score === null ? '—' : Math.round(score)}
+                        </AppText>
+                        <Badge label={t(badge)} tone={reviewed ? 'success' : undefined} />
                       </View>
                     }
                     onPress={() =>

@@ -996,6 +996,7 @@ export const mockApi: ApiClient = {
       className: klass?.name ?? null,
       enrollmentStatus: 'active',
       guardianNotes: input.guardianNotes ?? null,
+      aiFeedbackConsent: false,
       createdAt: new Date().toISOString(),
     };
 
@@ -1493,6 +1494,20 @@ export const mockApi: ApiClient = {
     const recitation = data.recitations.find((r) => r.id === recitationId);
     if (!recitation) throw new ApiError('not_found', 'Recitation not found.');
 
+    const pupil = data.students.find((s) => s.id === recitation.studentId);
+    if (!recitation.feedback && !pupil?.aiFeedbackConsent) {
+      // As on the server: without consent nothing is assessed or scored.
+      recitation.feedback = {
+        overallScore: null,
+        assessment: 'not_consented',
+        errors: [],
+        modelVersion: 'none',
+        processingMs: 0,
+        reviewedByTeacherId: null,
+        teacherOverride: null,
+      };
+      await persist();
+    }
     if (!recitation.feedback) {
       const result = evaluateRecitation(
         recitation.surahNo,
@@ -1501,6 +1516,7 @@ export const mockApi: ApiClient = {
       );
       recitation.feedback = {
         overallScore: result.score,
+        assessment: 'assessed',
         errors: result.errors,
         modelVersion: 'tajweed-eval-0.4.2',
         processingMs: 4100,
@@ -2891,6 +2907,22 @@ export const mockApi: ApiClient = {
     );
     await persist();
     return certificate;
+  },
+
+  async setAiFeedbackConsent(studentId, allowed) {
+    await bootstrap();
+    await delay();
+    const data = requireDb();
+    const profile = requireProfile();
+    const student = data.students.find((s) => s.id === studentId);
+    if (!student) throw new ApiError('not_found', 'Student not found.');
+    const isStaff = profile.role === 'teacher' && profile.madrasaId === student.madrasaId;
+    const isParent = profile.role === 'parent' && approvedChildIds(profile.id).includes(studentId);
+    if (!isStaff && !isParent) {
+      throw new ApiError('forbidden', 'Only the pupil\u2019s madrasa or an approved parent can change this.');
+    }
+    student.aiFeedbackConsent = allowed;
+    await persist();
   },
 
   async withdrawCertificate(certificateId) {

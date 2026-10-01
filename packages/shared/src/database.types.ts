@@ -1690,6 +1690,9 @@ export type Database = {
         Row: {
           admission_no: string
           admission_year: number
+          ai_feedback_consent: boolean
+          ai_feedback_consent_at: string | null
+          ai_feedback_consent_by: string | null
           class_id: string | null
           created_at: string
           date_of_birth: string
@@ -1703,6 +1706,9 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          ai_feedback_consent?: boolean
+          ai_feedback_consent_at?: string | null
+          ai_feedback_consent_by?: string | null
           admission_no: string
           admission_year: number
           class_id?: string | null
@@ -1718,6 +1724,9 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          ai_feedback_consent?: boolean
+          ai_feedback_consent_at?: string | null
+          ai_feedback_consent_by?: string | null
           admission_no?: string
           admission_year?: number
           class_id?: string | null
@@ -2081,13 +2090,14 @@ export type Database = {
       }
       tajweed_feedback: {
         Row: {
+          assessment: string
           created_at: string
           deleted_at: string | null
           errors: Json
           id: string
           madrasa_id: string
           model_version: string
-          overall_score: number
+          overall_score: number | null
           processing_ms: number
           recitation_id: string
           reviewed_by_teacher_id: string | null
@@ -2095,13 +2105,14 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          assessment?: string
           created_at?: string
           deleted_at?: string | null
           errors?: Json
           id?: string
           madrasa_id: string
           model_version: string
-          overall_score: number
+          overall_score?: number | null
           processing_ms: number
           recitation_id: string
           reviewed_by_teacher_id?: string | null
@@ -2109,13 +2120,14 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          assessment?: string
           created_at?: string
           deleted_at?: string | null
           errors?: Json
           id?: string
           madrasa_id?: string
           model_version?: string
-          overall_score?: number
+          overall_score?: number | null
           processing_ms?: number
           recitation_id?: string
           reviewed_by_teacher_id?: string | null
@@ -2218,6 +2230,10 @@ export type Database = {
       can_read_student: { Args: { p_student_id: string }; Returns: boolean }
       can_submit_assignment: { Args: { p_assignment_id: string }; Returns: boolean }
       withdraw_certificate: { Args: { p_certificate_id: string }; Returns: undefined }
+      set_ai_feedback_consent: {
+        Args: { p_allowed: boolean; p_student_id: string }
+        Returns: undefined
+      }
       cancel_subscription: {
         Args: { p_reason?: string | null }
         Returns: Database["public"]["Enums"]["subscription_status"]

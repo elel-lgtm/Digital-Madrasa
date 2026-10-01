@@ -376,6 +376,8 @@ export interface ApiClient {
   /** Staff award a certificate; the verification code is issued by the server. */
   issueCertificate(input: IssueCertificateInput): Promise<Certificate>;
   withdrawCertificate(certificateId: string): Promise<void>;
+  /** An approved parent or the pupil's madrasa allows AI feedback on recordings. */
+  setAiFeedbackConsent(studentId: string, allowed: boolean): Promise<void>;
   /** Public check of a certificate code; works without signing in. */
   verifyCertificate(code: string): Promise<VerifiedCertificate | null>;
   /** Rotating QR payload for attendance; refreshes every 30 seconds. */

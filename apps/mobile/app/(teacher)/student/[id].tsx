@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { Alert, Pressable, View } from 'react-native';
 import { api } from '@/api';
 import { qk } from '@/api/keys';
+import { AiConsentCard } from '@/components/AiFeedback';
 import { CertificateCard } from '@/components/CertificateCard';
 import {
   AppText,
@@ -212,6 +213,8 @@ export default function StudentDetail() {
             )}
           </Card>
         </View>
+
+        <AiConsentCard studentId={student.id} allowed={student.aiFeedbackConsent} audience="staff" />
 
         <View style={{ gap: theme.spacing.md }}>
           <SectionHeader title={t('learning.certificates')} />

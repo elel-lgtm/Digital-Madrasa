@@ -844,5 +844,13 @@
     "noAudit": "Nothing recorded yet",
     "noAuditBody": "Actions will appear here as they happen.",
     "reasonLabel": "Reason: {{reason}}"
+  },
+  "aiFeedback": {
+    "consentTitle": "AI recitation feedback",
+    "consentBodyParent": "When on, your child’s recitation recordings are sent to Google’s Gemini AI for automatic tajweed feedback. No name is sent, and the teacher’s review is always final. You can turn this off at any time.",
+    "consentBodyStaff": "Turn on only with the parent’s written consent. Recordings are sent to Google’s Gemini AI for automatic feedback; no name is sent.",
+    "notConsented": "AI feedback is off for this student, so the recording was not sent for automatic feedback. The teacher will review it.",
+    "unavailable": "Automatic feedback was not available this time. The teacher will review this recitation.",
+    "awaitingTeacher": "Awaiting teacher"
   }
 }

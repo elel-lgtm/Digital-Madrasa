@@ -7,6 +7,7 @@ import { View } from 'react-native';
 import { api } from '@/api';
 import { RecitationPlayer } from '@/components/RecitationPlayer';
 import { qk } from '@/api/keys';
+import { AssessmentNote } from '@/components/AiFeedback';
 import { AiDisclaimer, FindingList, ScoreRing } from '@/components/TajweedFeedback';
 import {
   AppText,
@@ -59,7 +60,11 @@ export default function ReviewRecitation() {
     if (!feedback) return;
     setScore((current) =>
       current === ''
-        ? String(Math.round(feedback.teacherOverride?.overallScore ?? feedback.overallScore))
+        ? (() => {
+            // Nothing to seed from when the recording was not assessed.
+            const seed = feedback.teacherOverride?.overallScore ?? feedback.overallScore;
+            return seed === null ? '' : String(Math.round(seed));
+          })()
         : current,
     );
     setRemarks((current) => (current === '' ? (feedback.teacherOverride?.remarks ?? '') : current));
@@ -162,6 +167,8 @@ export default function ReviewRecitation() {
                 {feedback.modelVersion}
               </AppText>
             </View>
+
+            <AssessmentNote feedback={feedback} />
 
             <View>
               <SectionHeader

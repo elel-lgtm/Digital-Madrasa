@@ -6,6 +6,7 @@ import { ActivityIndicator, View } from 'react-native';
 import { api } from '@/api';
 import { RecitationPlayer } from '@/components/RecitationPlayer';
 import { qk } from '@/api/keys';
+import { AssessmentNote, recitationScore } from '@/components/AiFeedback';
 import { AiDisclaimer, FindingList, ScoreRing } from '@/components/TajweedFeedback';
 import {
   AppText,
@@ -73,7 +74,7 @@ export default function RecitationFeedback() {
 
   const recitation = feedback.data;
   const result = recitation.feedback!;
-  const displayScore = result.teacherOverride?.overallScore ?? result.overallScore;
+  const { score: displayScore } = recitationScore(result);
 
   return (
     <Screen>
@@ -93,6 +94,8 @@ export default function RecitationFeedback() {
             {formatDuration(recitation.durationMs)} · {recitation.qiraahStyle}
           </AppText>
         </View>
+
+        <AssessmentNote feedback={result} />
 
         {/* Hearing the recording back is most of what makes a correction
             useful. The same player the teacher uses, on the same short-lived

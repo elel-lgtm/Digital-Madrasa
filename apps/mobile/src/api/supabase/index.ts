@@ -88,6 +88,7 @@ const implemented: Partial<ApiClient> = {
   listCertificates: fees.listCertificates,
   issueCertificate: learning.issueCertificate,
   withdrawCertificate: learning.withdrawCertificate,
+  setAiFeedbackConsent: learning.setAiFeedbackConsent,
   verifyCertificate: learning.verifyCertificate,
   upsertHifzProgress: learning.upsertHifzProgress,
   getMySubmission: learning.getMySubmission,

@@ -844,5 +844,13 @@
     "noAudit": "Weli waxba lama diiwaangelin",
     "noAuditBody": "Tallaabooyinku halkan ayay ka muuqan doonaan markay dhacaan.",
     "reasonLabel": "Sababta: {{reason}}"
+  },
+  "aiFeedback": {
+    "consentTitle": "Jawaabcelinta AI ee akhriska",
+    "consentBodyParent": "Marka la shido, duubista akhriska ilmahaaga waxaa loo diraa Gemini AI ee Google si loogu helo jawaabcelin tajwiid oo toos ah. Magac lama diro, qiimeynta macallinkuna had iyo jeer waa tan kama dambaysta ah. Waad dami kartaa wakhti kasta.",
+    "consentBodyStaff": "Shid kaliya marka waalidku bixiyo oggolaansho qoran. Duubista waxaa loo diraa Gemini AI ee Google si jawaabcelin toos ah loo helo; magac lama diro.",
+    "notConsented": "Jawaabcelinta AI waa ka xiran tahay ardaygan, sidaa darteed duubista looma dirin jawaabcelin toos ah. Macallinka ayaa dib u eegi doona.",
+    "unavailable": "Jawaabcelinta tooska ah lama heli karin markan. Macallinka ayaa dib u eegi doona akhriskan.",
+    "awaitingTeacher": "Sugaya macallinka"
   }
 }

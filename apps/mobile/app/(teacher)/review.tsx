@@ -103,7 +103,15 @@ export default function ReviewQueue() {
                         tone={score >= 85 ? 'success' : score >= 65 ? 'accent' : 'danger'}
                       />
                     ) : (
-                      <Badge label={t('student.processing')} />
+                      // No score: still being processed, or not assessed by the AI
+                      // (no consent, or it was unavailable) and waiting for the teacher.
+                      <Badge
+                        label={
+                          recitation.feedback
+                            ? t('aiFeedback.awaitingTeacher')
+                            : t('student.processing')
+                        }
+                      />
                     )}
                   </View>
                 </Card>

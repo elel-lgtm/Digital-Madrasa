@@ -72,6 +72,8 @@ export async function createStudent(input: CreateStudentInput): Promise<Student>
     className: body.className ?? null,
     enrollmentStatus: body.enrollmentStatus,
     guardianNotes: body.guardianNotes ?? null,
+    // A new pupil starts without consent; a parent or the madrasa turns it on.
+    aiFeedbackConsent: false,
     avatarUrl: body.avatarUrl ?? null,
     createdAt: body.createdAt,
   };

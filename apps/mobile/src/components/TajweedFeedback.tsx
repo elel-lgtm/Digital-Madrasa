@@ -7,12 +7,13 @@ import { AppText, Badge, Card } from '@/components/ui';
 import { useTheme } from '@/theme/ThemeProvider';
 
 /** Circular score dial. Colour and number both carry the meaning. */
-export function ScoreRing({ score, size = 132 }: { score: number; size?: number }) {
+/** A null score (not assessed) draws an empty ring with a dash, never a number. */
+export function ScoreRing({ score, size = 132 }: { score: number | null; size?: number }) {
   const theme = useTheme();
   const stroke = 10;
   const radius = (size - stroke) / 2;
   const circumference = 2 * Math.PI * radius;
-  const clamped = Math.max(0, Math.min(100, score));
+  const clamped = score === null ? 0 : Math.max(0, Math.min(100, score));
   const dash = (clamped / 100) * circumference;
 
   const colour =
@@ -22,7 +23,7 @@ export function ScoreRing({ score, size = 132 }: { score: number; size?: number 
     <View
       accessible
       accessibilityRole="progressbar"
-      accessibilityValue={{ min: 0, max: 100, now: Math.round(clamped) }}
+      accessibilityValue={score === null ? { text: '—' } : { min: 0, max: 100, now: Math.round(clamped) }}
       style={{ width: size, height: size, alignItems: 'center', justifyContent: 'center' }}
     >
       <Svg width={size} height={size} style={{ position: 'absolute' }}>
@@ -47,7 +48,7 @@ export function ScoreRing({ score, size = 132 }: { score: number; size?: number 
           transform={`rotate(-90 ${size / 2} ${size / 2})`}
         />
       </Svg>
-      <AppText variant="display">{Math.round(clamped)}</AppText>
+      <AppText variant="display">{score === null ? '—' : Math.round(clamped)}</AppText>
     </View>
   );
 }

@@ -372,6 +372,8 @@ export function createSeed(): MockDatabase {
     className: classNameById.get(classId) ?? null,
     enrollmentStatus: 'active' as const,
     guardianNotes: null,
+    // The demo families have said yes, so demo recitations show AI feedback.
+    aiFeedbackConsent: true,
     createdAt: daysAgo(300 - seq * 5),
   }));
 
@@ -741,6 +743,7 @@ export function createSeed(): MockDatabase {
             note: 'Give the qaf a light bounce when you stop on it.',
           },
         ],
+        assessment: 'assessed',
         modelVersion: 'tajweed-eval-0.4.2',
         processingMs: 4210,
         reviewedByTeacherId: uid(NS.teacher, 1),
@@ -792,6 +795,7 @@ export function createSeed(): MockDatabase {
             note: 'The ra is heavy in this position — round the mouth a little more.',
           },
         ],
+        assessment: 'assessed',
         modelVersion: 'tajweed-eval-0.4.2',
         processingMs: 3980,
         reviewedByTeacherId: null,
@@ -824,6 +828,7 @@ export function createSeed(): MockDatabase {
             note: 'Merge the two letters smoothly rather than reciting them separately.',
           },
         ],
+        assessment: 'assessed',
         modelVersion: 'tajweed-eval-0.4.2',
         processingMs: 4402,
         reviewedByTeacherId: null,
@@ -847,6 +852,7 @@ export function createSeed(): MockDatabase {
       feedback: {
         overallScore: 92,
         errors: [],
+        assessment: 'assessed',
         modelVersion: 'tajweed-eval-0.4.1',
         processingMs: 3110,
         reviewedByTeacherId: uid(NS.teacher, 1),

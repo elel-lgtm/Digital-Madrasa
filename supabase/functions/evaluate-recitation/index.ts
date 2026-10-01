@@ -28,36 +28,20 @@ import {
  * general model, not a validated tajweed assessor, so it stays provisional
  * and the teacher's review is final.
  *
- * Without a key, or if the model cannot be reached, a deterministic
- * placeholder keeps the pipeline working: the teacher can only review a
- * recitation that has a feedback row.
+ * The recording is a child's voice, so nothing is sent unless the pupil's
+ * parent or madrasa has switched AI feedback on (migration 0028). Without
+ * consent, without a key, or when no model can be reached, the recitation is
+ * saved as not assessed: no score at all rather than an invented one. The
+ * teacher reviews it exactly as before; every recitation has a feedback row.
  *
- * `model_version` records exactly what produced each score, so a placeholder
- * can never be mistaken for an assessment, nor one model for another.
+ * `model_version` records exactly which model produced each score.
  */
 
-const PLACEHOLDER_MODEL = 'placeholder-v1';
+/** What produced the result, when it was not a model. */
+const NO_MODEL = 'none';
 
 // Gemini takes at most 20 MB per request, and base64 adds a third.
 const MAX_AUDIO_BYTES = 14 * 1024 * 1024;
-
-const RULES = ['madd', 'ghunnah', 'qalqalah', 'ikhfa', 'idgham'] as const;
-
-/**
- * Deterministic in the recitation id so a given recording always yields the
- * same result. Plainly labelled by `model_version`.
- */
-function placeholderAssessment(id: string, ayahFrom: number, ayahTo: number): Assessment {
-  const seed = [...id].reduce((a, c) => a + c.charCodeAt(0), 0);
-  const findings: Finding[] = Array.from({ length: seed % 3 }, (_, i) => ({
-    ayah: ayahFrom + ((seed + i) % Math.max(1, ayahTo - ayahFrom + 1)),
-    word_index: (seed + i * 7) % 9,
-    rule: RULES[(seed + i) % RULES.length],
-    severity: (['minor', 'moderate'] as const)[(seed + i) % 2],
-    note: 'Provisional finding. Your teacher\u2019s assessment is final.',
-  }));
-  return { overall: 62 + (seed % 33), findings };
-}
 
 /** The passage from the public Quran text the offline library also uses. */
 async function expectedText(surahNo: number, ayahFrom: number, ayahTo: number) {
@@ -96,7 +80,7 @@ Deno.serve(handler(async (req) => {
 
   const { data: student } = await caller.db
     .from('students')
-    .select('id, madrasa_id')
+    .select('id, madrasa_id, ai_feedback_consent')
     .eq('profile_id', caller.userId)
     .maybeSingle();
 
@@ -172,16 +156,18 @@ Deno.serve(handler(async (req) => {
     throw new PublicError(500, 'internal', 'Could not save your recitation.');
   }
 
-  // The model hears the recording. Any failure falls back to the placeholder:
-  // a student's submission must never be lost because a third party is down.
+  // The model hears the recording only with consent. Any failure leaves the
+  // recitation unassessed: a submission is never lost because a third party
+  // is down, and never given a score that did not come from the audio.
   const apiKey = Deno.env.get('GEMINI_API_KEY');
+  const consented = student.ai_feedback_consent === true;
   // The lightest models are left out: one heard a perfect recitation in silence.
   const models = modelChain(Deno.env.get('GEMINI_MODEL'), Deno.env.get('GEMINI_FALLBACK_MODELS'))
     .filter((m) => !m.includes('lite'));
   let assessment: Assessment | null = null;
-  let modelVersion = PLACEHOLDER_MODEL;
+  let modelVersion = NO_MODEL;
 
-  if (apiKey) {
+  if (apiKey && consented) {
     try {
       const [ayahs, audio] = await Promise.all([
         expectedText(surahNo, ayahFrom, ayahTo),
@@ -234,12 +220,17 @@ Deno.serve(handler(async (req) => {
     }
   }
 
-  const { overall, findings } = assessment ?? placeholderAssessment(recitation.id, ayahFrom, ayahTo);
+  // A model that answered the first step but not the second assessed nothing.
+  if (!assessment) modelVersion = NO_MODEL;
+  const status = assessment ? 'assessed' : consented ? 'unavailable' : 'not_consented';
+  const overall = assessment ? assessment.overall : null;
+  const findings: Finding[] = assessment ? assessment.findings : [];
 
   await caller.admin.from('tajweed_feedback').insert({
     recitation_id: recitation.id,
     madrasa_id: student.madrasa_id,
     overall_score: overall,
+    assessment: status,
     errors: findings,
     model_version: modelVersion,
     processing_ms: Date.now() - started,
@@ -261,6 +252,7 @@ Deno.serve(handler(async (req) => {
     {
       id: recitation.id,
       overallScore: overall,
+      assessment: status,
       findings,
       modelVersion,
       provisional: true,

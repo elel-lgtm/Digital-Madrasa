@@ -844,5 +844,13 @@
     "noAudit": "Bado hakuna kilichorekodiwa",
     "noAuditBody": "Hatua zitaonekana hapa zinapotokea.",
     "reasonLabel": "Sababu: {{reason}}"
+  },
+  "aiFeedback": {
+    "consentTitle": "Maoni ya AI kuhusu usomaji",
+    "consentBodyParent": "Ikiwashwa, rekodi za usomaji za mtoto wako hutumwa kwa Gemini AI ya Google ili kupata maoni ya tajwidi kiotomatiki. Hakuna jina linalotumwa, na tathmini ya mwalimu ndiyo ya mwisho daima. Unaweza kuizima wakati wowote.",
+    "consentBodyStaff": "Washa tu kwa idhini ya maandishi ya mzazi. Rekodi hutumwa kwa Gemini AI ya Google kwa maoni ya kiotomatiki; hakuna jina linalotumwa.",
+    "notConsented": "Maoni ya AI yamezimwa kwa mwanafunzi huyu, kwa hiyo rekodi haikutumwa kwa maoni ya kiotomatiki. Mwalimu ataikagua.",
+    "unavailable": "Maoni ya kiotomatiki hayakupatikana wakati huu. Mwalimu atakagua usomaji huu.",
+    "awaitingTeacher": "Inasubiri mwalimu"
   }
 }

@@ -73,6 +73,8 @@ export interface Student {
   className: string | null;
   enrollmentStatus: 'active' | 'graduated' | 'withdrawn';
   guardianNotes: string | null;
+  /** Recordings may be sent to the AI service for feedback (migration 0028). */
+  aiFeedbackConsent: boolean;
   createdAt: string;
 }
 
@@ -218,7 +220,10 @@ export interface Recitation {
   createdAt: string;
   /** `null` while the evaluation job is still running. */
   feedback: {
-    overallScore: number;
+    /** Null unless `assessment` is 'assessed'. Never a stand-in score. */
+    overallScore: number | null;
+    /** Why there is or is not an AI score: consent off, or AI unavailable. */
+    assessment: 'assessed' | 'not_consented' | 'unavailable';
     errors: TajweedFinding[];
     modelVersion: string;
     processingMs: number;

@@ -218,6 +218,18 @@ export async function withdrawCertificate(certificateId: string): Promise<void> 
   if (error) fail(error, 'Could not withdraw the certificate.');
 }
 
+/**
+ * Allows or stops AI feedback on a pupil's recordings. The database decides
+ * who may (an approved parent or the pupil's madrasa) and records who did.
+ */
+export async function setAiFeedbackConsent(studentId: string, allowed: boolean): Promise<void> {
+  const { error } = await supabase.rpc('set_ai_feedback_consent', {
+    p_student_id: studentId,
+    p_allowed: allowed,
+  });
+  if (error) fail(error, 'Could not change the AI feedback setting.');
+}
+
 /** Public check of a certificate code. Works signed out. */
 export async function verifyCertificate(code: string): Promise<VerifiedCertificate | null> {
   const clean = code.replace(/[^a-z0-9]/gi, '').toUpperCase();

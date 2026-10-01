@@ -208,7 +208,8 @@ function mapRecitation(row: Row): Recitation {
     createdAt: row.created_at,
     feedback: fb
       ? {
-          overallScore: Number(fb.overall_score),
+          overallScore: fb.overall_score === null || fb.overall_score === undefined ? null : Number(fb.overall_score),
+          assessment: fb.assessment ?? 'assessed',
           // The column is `errors` and so is the field on `Recitation`. This
           // was emitted as `findings`, which left `feedback.errors` undefined
           // and crashed the feedback screen on `result.errors.length` the
