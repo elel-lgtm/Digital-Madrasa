@@ -30,20 +30,33 @@ export function recitationScore(feedback: Feedback | null | undefined): {
   return { score: null, badge: 'aiFeedback.awaitingTeacher', reviewed: false };
 }
 
-/** Says why there is no AI score, where a score would otherwise be. */
+/**
+ * Whether "no issues found" may be said. Only of a recording that was
+ * assessed and in which the passage was heard: a score of 0 means the model
+ * heard silence, other speech or another passage, and that is not praise.
+ */
+export function praiseAllowed(feedback: Feedback): boolean {
+  return feedback.assessment === 'assessed' && feedback.overallScore !== null && feedback.overallScore > 0;
+}
+
+/** Says why there is no AI score, or why it is 0, where a score would otherwise be. */
 export function AssessmentNote({ feedback }: { feedback: Feedback }) {
   const { t } = useTranslation();
   const theme = useTheme();
-  if (feedback.assessment === 'assessed' || feedback.teacherOverride) return null;
+  if (feedback.teacherOverride) return null;
+  const notHeard = feedback.assessment === 'assessed' && feedback.overallScore === 0;
+  if (feedback.assessment === 'assessed' && !notHeard) return null;
 
   return (
     <Card>
       <View style={{ flexDirection: 'row', gap: theme.spacing.sm, alignItems: 'flex-start' }}>
         <Info size={20} color={theme.colors.textMuted} />
         <AppText variant="body" color="textMuted" style={{ flex: 1 }}>
-          {feedback.assessment === 'not_consented'
-            ? t('aiFeedback.notConsented')
-            : t('aiFeedback.unavailable')}
+          {notHeard
+            ? t('aiFeedback.notHeard')
+            : feedback.assessment === 'not_consented'
+              ? t('aiFeedback.notConsented')
+              : t('aiFeedback.unavailable')}
         </AppText>
       </View>
     </Card>

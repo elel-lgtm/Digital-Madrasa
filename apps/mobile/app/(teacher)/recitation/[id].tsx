@@ -7,7 +7,7 @@ import { View } from 'react-native';
 import { api } from '@/api';
 import { RecitationPlayer } from '@/components/RecitationPlayer';
 import { qk } from '@/api/keys';
-import { AssessmentNote } from '@/components/AiFeedback';
+import { AssessmentNote, praiseAllowed } from '@/components/AiFeedback';
 import { AiDisclaimer, FindingList, ScoreRing } from '@/components/TajweedFeedback';
 import {
   AppText,
@@ -177,6 +177,7 @@ export default function ReviewRecitation() {
               />
               <FindingList
                 findings={feedback.errors}
+                assessed={praiseAllowed(feedback)}
                 dismissed={dismissed}
                 onToggleDismiss={(index) =>
                   setDismissed((current) =>

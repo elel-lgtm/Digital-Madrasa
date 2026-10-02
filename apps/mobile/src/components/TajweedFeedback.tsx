@@ -64,11 +64,17 @@ interface FindingListProps {
   /** Teachers can strike findings off; students only read them. */
   dismissed?: number[];
   onToggleDismiss?: (index: number) => void;
+  /** False when the recording was not assessed (no consent, AI unavailable). */
+  assessed?: boolean;
 }
 
-export function FindingList({ findings, dismissed = [], onToggleDismiss }: FindingListProps) {
+export function FindingList({ findings, dismissed = [], onToggleDismiss, assessed = true }: FindingListProps) {
   const theme = useTheme();
   const { t } = useTranslation();
+
+  // "No issues found" is praise only when the audio was actually assessed.
+  // An unassessed recording has no findings because nobody listened yet.
+  if (findings.length === 0 && !assessed) return null;
 
   if (findings.length === 0) {
     return (

@@ -853,6 +853,7 @@
     "consentBodyStaff": "Shid kaliya marka waalidku bixiyo oggolaansho qoran. Duubista waxaa loo diraa Gemini AI ee Google si jawaabcelin toos ah loo helo; magac lama diro.",
     "notConsented": "Jawaabcelinta AI waa ka xiran tahay ardaygan, sidaa darteed duubista looma dirin jawaabcelin toos ah. Macallinka ayaa dib u eegi doona.",
     "unavailable": "Jawaabcelinta tooska ah lama heli karin markan. Macallinka ayaa dib u eegi doona akhriskan.",
-    "awaitingTeacher": "Sugaya macallinka"
+    "awaitingTeacher": "Sugaya macallinka",
+    "notHeard": "Qaybta lama maqli karin duubistan. Si cad u akhri, adigoo u dhow taleefanka, oo isku day mar kale. Macallinka ayaa sidoo kale dib u eegi doona."
   }
 }

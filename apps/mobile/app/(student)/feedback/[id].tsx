@@ -6,7 +6,7 @@ import { ActivityIndicator, View } from 'react-native';
 import { api } from '@/api';
 import { RecitationPlayer } from '@/components/RecitationPlayer';
 import { qk } from '@/api/keys';
-import { AssessmentNote, recitationScore } from '@/components/AiFeedback';
+import { AssessmentNote, praiseAllowed, recitationScore } from '@/components/AiFeedback';
 import { AiDisclaimer, FindingList, ScoreRing } from '@/components/TajweedFeedback';
 import {
   AppText,
@@ -129,7 +129,7 @@ export default function RecitationFeedback() {
                 : t('student.findings', { count: result.errors.length })
             }
           />
-          <FindingList findings={result.errors} />
+          <FindingList findings={result.errors} assessed={praiseAllowed(result)} />
         </View>
 
         <AiDisclaimer />

@@ -853,6 +853,7 @@
     "consentBodyStaff": "Turn on only with the parent’s written consent. Recordings are sent to Google’s Gemini AI for automatic feedback; no name is sent.",
     "notConsented": "AI feedback is off for this student, so the recording was not sent for automatic feedback. The teacher will review it.",
     "unavailable": "Automatic feedback was not available this time. The teacher will review this recitation.",
-    "awaitingTeacher": "Awaiting teacher"
+    "awaitingTeacher": "Awaiting teacher",
+    "notHeard": "The passage could not be heard in this recording. Recite clearly, close to the phone, and try again. The teacher will also review it."
   }
 }

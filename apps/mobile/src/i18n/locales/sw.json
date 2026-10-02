@@ -853,6 +853,7 @@
     "consentBodyStaff": "Washa tu kwa idhini ya maandishi ya mzazi. Rekodi hutumwa kwa Gemini AI ya Google kwa maoni ya kiotomatiki; hakuna jina linalotumwa.",
     "notConsented": "Maoni ya AI yamezimwa kwa mwanafunzi huyu, kwa hiyo rekodi haikutumwa kwa maoni ya kiotomatiki. Mwalimu ataikagua.",
     "unavailable": "Maoni ya kiotomatiki hayakupatikana wakati huu. Mwalimu atakagua usomaji huu.",
-    "awaitingTeacher": "Inasubiri mwalimu"
+    "awaitingTeacher": "Inasubiri mwalimu",
+    "notHeard": "Kifungu hakikusikika katika rekodi hii. Soma kwa uwazi, karibu na simu, kisha ujaribu tena. Mwalimu pia ataikagua."
   }
 }
