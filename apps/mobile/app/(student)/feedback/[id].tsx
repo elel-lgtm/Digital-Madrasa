@@ -121,16 +121,20 @@ export default function RecitationFeedback() {
           </Card>
         ) : null}
 
-        <View>
-          <SectionHeader
-            title={
-              result.errors.length === 0
-                ? t('student.noFindings')
-                : t('student.findings', { count: result.errors.length })
-            }
-          />
-          <FindingList findings={result.errors} assessed={praiseAllowed(result)} />
-        </View>
+        {/* With no findings, the heading is itself praise ("No tajweed issues
+            found"), so the section is left out when nobody listened. */}
+        {result.errors.length > 0 || praiseAllowed(result) ? (
+          <View>
+            <SectionHeader
+              title={
+                result.errors.length === 0
+                  ? t('student.noFindings')
+                  : t('student.findings', { count: result.errors.length })
+              }
+            />
+            <FindingList findings={result.errors} assessed={praiseAllowed(result)} />
+          </View>
+        ) : null}
 
         <AiDisclaimer />
 
