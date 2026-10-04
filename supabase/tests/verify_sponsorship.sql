@@ -129,6 +129,12 @@ begin
   if v_n <> 0 then v_failed := v_failed || text 'paid pupil still listed';
   else raise notice 'PASS  paid pupil no longer listed'; end if;
 
+  -- 8. students keeps a single key to profiles, or unqualified embeds break
+  select count(*) into v_n from pg_constraint
+   where conrelid = 'public.students'::regclass and confrelid = 'public.profiles'::regclass and contype = 'f';
+  if v_n <> 1 then v_failed := v_failed || format('students has %s keys to profiles; embeds become ambiguous', v_n);
+  else raise notice 'PASS  one students -> profiles key'; end if;
+
   if array_length(v_failed, 1) > 0 then
     raise exception E'\n\nFAILURES:\n  - %\n', array_to_string(v_failed, E'\n  - ');
   end if;

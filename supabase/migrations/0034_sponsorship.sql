@@ -13,8 +13,14 @@
 alter table public.students
   add column if not exists sponsorship_open      boolean not null default false,
   add column if not exists sponsorship_note      text,
-  add column if not exists sponsorship_agreed_by uuid references public.profiles (id) on delete set null,
+  add column if not exists sponsorship_agreed_by uuid,
   add column if not exists sponsorship_agreed_at timestamptz;
+
+-- No foreign key on sponsorship_agreed_by, as with ai_feedback_consent_by
+-- (0028): a second students -> profiles key makes every unqualified
+-- `students(profiles(...))` embed ambiguous, and PostgREST answers those
+-- with an error instead of rows.
+alter table public.students drop constraint if exists students_sponsorship_agreed_by_fkey;
 
 alter table public.students drop constraint if exists students_sponsorship_note_len;
 alter table public.students add constraint students_sponsorship_note_len
