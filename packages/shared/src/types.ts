@@ -502,7 +502,7 @@ export interface Certificate {
   id: ID;
   studentId: ID;
   studentName: string;
-  kind: 'juz_completion' | 'quran_completion' | 'tajweed_level';
+  kind: 'juz_completion' | 'quran_completion' | 'tajweed_level' | 'ijazah';
   title: string;
   issuedAt: string;
   verificationCode: string;
@@ -519,6 +519,8 @@ export interface VerifiedCertificate {
   madrasaName: string;
   issuedAt: string;
   valid: boolean;
+  /** Ijazah only: the chain of transmission, the awarding teacher first. */
+  sanad?: string[] | null;
 }
 
 export interface AuditEntry {

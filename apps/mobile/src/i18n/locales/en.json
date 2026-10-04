@@ -746,7 +746,8 @@
     "recordInstead": "This assignment is answered by recording a recitation.",
     "goRecite": "Go to Recite",
     "lockedMarked": "This work has been marked and can no longer be changed.",
-    "certificatePdf": "Certificate PDF"
+    "certificatePdf": "Certificate PDF",
+    "kind_ijazah": "Ijazah"
   },
   "library": {
     "juz": "Juz {{n}}",
@@ -859,5 +860,16 @@
   },
   "hijri": {
     "ramadanMubarak": "Ramadan Mubarak"
+  },
+  "sanad": {
+    "title": "My chain of transmission",
+    "subtitle": "Your sanad, printed on every ijazah you award",
+    "fieldLabel": "One teacher per line, starting with the sheikh who gave you ijazah",
+    "hint": "Each line is the teacher of the line above.",
+    "preview": "How it will appear",
+    "you": "You",
+    "saved": "Saved.",
+    "needed": "An ijazah carries your chain of transmission. Record it first.",
+    "record": "Record my chain"
   }
 }

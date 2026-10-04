@@ -183,6 +183,7 @@ function mapCertificate(row: Row): Certificate {
     issuedAt: row.issued_at,
     verificationCode: row.verification_code,
     pdfUrl: row.pdf_url ?? null,
+    sanad: row.sanad ?? null,
   };
 }
 
@@ -245,5 +246,25 @@ export async function verifyCertificate(code: string): Promise<VerifiedCertifica
     madrasaName: row.madrasa_name,
     issuedAt: row.issued_at,
     valid: Boolean(row.valid),
+    sanad: row.sanad ? String(row.sanad).split('\n') : null,
   };
+}
+
+/** The signed-in teacher's chain of transmission. */
+export async function getMySanad(): Promise<string[]> {
+  const { data: auth } = await supabase.auth.getUser();
+  const { data, error } = await supabase
+    .from('teachers')
+    .select('sanad')
+    .eq('profile_id', auth.user?.id ?? '')
+    .maybeSingle();
+  if (error) fail(error, 'Could not load your chain of transmission.');
+  return (data?.sanad as string[] | null) ?? [];
+}
+
+/** Saves the teacher's own chain; the database trims and checks it. */
+export async function setMySanad(chain: string[]): Promise<string[]> {
+  const { data, error } = await supabase.rpc('set_my_sanad', { p_chain: chain });
+  if (error) fail(error, 'Could not save your chain of transmission.');
+  return (data as string[] | null) ?? [];
 }

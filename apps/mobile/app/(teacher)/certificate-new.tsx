@@ -5,7 +5,7 @@ import {
   type Certificate,
 } from '@digital-madrasa/shared';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { Link, useLocalSearchParams, useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { KeyboardAvoidingView, Platform, View } from 'react-native';
@@ -50,6 +50,9 @@ export default function NewCertificate() {
     enabled: Boolean(studentId),
   });
   const done = useMemo(() => completedJuz(hifz.data ?? []), [hifz.data]);
+  // An ijazah carries the awarding teacher's chain, so one must be recorded.
+  const sanad = useQuery({ queryKey: ['my-sanad'], queryFn: () => api.getMySanad() });
+  const chain = sanad.data ?? [];
 
   const issue = useMutation({
     mutationFn: api.issueCertificate,
@@ -68,11 +71,14 @@ export default function NewCertificate() {
       ? `Memorisation of Juz ${juz}`
       : kind === 'quran_completion'
         ? 'Memorisation of the Holy Quran'
-        : '';
+        : kind === 'ijazah'
+          ? 'Ijazah in the recitation of the Holy Quran'
+          : '';
 
   const blocked =
     (kind === 'juz_completion' && (done.length === 0 || !juz)) ||
-    (kind === 'quran_completion' && done.length < 30);
+    (kind === 'quran_completion' && done.length < 30) ||
+    (kind === 'ijazah' && chain.length === 0);
 
   const submit = () => {
     setFormError(null);
@@ -140,6 +146,26 @@ export default function NewCertificate() {
               <AppText variant="body" color="textMuted">
                 {t('learning.quranNotComplete')}
               </AppText>
+            ) : null}
+
+            {kind === 'ijazah' ? (
+              chain.length === 0 ? (
+                <View style={{ gap: theme.spacing.sm }}>
+                  <AppText variant="body" color="textMuted">
+                    {t('sanad.needed')}
+                  </AppText>
+                  <Link href="/(teacher)/sanad" asChild>
+                    <Button label={t('sanad.record')} variant="secondary" />
+                  </Link>
+                </View>
+              ) : (
+                <View style={{ gap: theme.spacing.xs }}>
+                  <AppText variant="label" color="textMuted" uppercase>
+                    {t('sanad.title')}
+                  </AppText>
+                  <AppText variant="body">{[t('sanad.you'), ...chain].join(' ← ')}</AppText>
+                </View>
+              )
             ) : null}
 
             <TextField

@@ -746,7 +746,8 @@
     "recordInstead": "Hawshan waxaa lagaga jawaabaa duubista akhris.",
     "goRecite": "U gudub Akhri",
     "lockedMarked": "Hawshan waa la saxay, mar dambena lama beddeli karo.",
-    "certificatePdf": "Shahaado (PDF)"
+    "certificatePdf": "Shahaado (PDF)",
+    "kind_ijazah": "Ijaasad"
   },
   "library": {
     "juz": "Juz {{n}}",
@@ -859,5 +860,16 @@
   },
   "hijri": {
     "ramadanMubarak": "Ramadaan Mubaarak"
+  },
+  "sanad": {
+    "title": "Silsiladayda gudbinta",
+    "subtitle": "Sanadkaaga, oo lagu daabaco ijaasad kasta oo aad bixiso",
+    "fieldLabel": "Macallin kasta xariiq gaar ah, adigoo ka bilaabaya sheekha ku siiyay ijaasada",
+    "hint": "Xariiq kastaa waa macallinka xariiqda ka sarreysa.",
+    "preview": "Sida ay u muuqan doonto",
+    "you": "Adiga",
+    "saved": "Waa la kaydiyay.",
+    "needed": "Ijaasadu waxay xambaarsan tahay silsiladaada gudbinta. Marka hore qor.",
+    "record": "Qor silsiladayda"
   }
 }

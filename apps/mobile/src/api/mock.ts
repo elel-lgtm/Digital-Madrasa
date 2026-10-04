@@ -488,6 +488,9 @@ function myStudentId(): string {
   return student.id;
 }
 
+/** Teachers' chains of transmission in demo mode (kept for the session). */
+const mockSanad = new Map<string, string[]>();
+
 /** Asserts the caller is madrasa staff, returning their profile. */
 /** Mirrors `public.is_platform_admin()`. */
 function requireAdmin(): Profile {
@@ -2818,6 +2821,7 @@ export const mockApi: ApiClient = {
     // The code is the server's to choose, as in migration 0023.
     const alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
     const code = Array.from({ length: 10 }, () => alphabet[Math.floor(Math.random() * 32)]).join('');
+    const issuer = requireProfile();
     const certificate: Certificate = {
       id: newId(NS.certificate),
       studentId: student.id,
@@ -2827,6 +2831,8 @@ export const mockApi: ApiClient = {
       issuedAt: new Date().toISOString(),
       verificationCode: code,
       pdfUrl: null,
+      // As in migration 0030: an ijazah carries the awarding teacher, then their chain.
+      sanad: input.kind === 'ijazah' ? [issuer.fullName, ...(mockSanad.get(issuer.id) ?? [])] : null,
     };
     data.certificates.push(certificate);
     const recipients = [
@@ -2867,6 +2873,23 @@ export const mockApi: ApiClient = {
     }
     student.aiFeedbackConsent = allowed;
     await persist();
+  },
+
+  async getMySanad() {
+    await bootstrap();
+    await delay();
+    const profile = requireStaff();
+    return mockSanad.get(profile.id) ?? [];
+  },
+
+  async setMySanad(chain) {
+    await bootstrap();
+    await delay();
+    const profile = requireStaff();
+    const clean = chain.map((n) => n.trim()).filter(Boolean);
+    if (clean.length > 40) throw new ApiError('validation', 'A chain can list at most 40 teachers.');
+    mockSanad.set(profile.id, clean);
+    return clean;
   },
 
   async withdrawCertificate(certificateId) {

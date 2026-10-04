@@ -30,6 +30,7 @@
     "db:verify:admin": "node scripts/db-run.mjs supabase/tests/verify_admin_console.sql",
     "db:verify:rls": "node scripts/db-run.mjs supabase/tests/verify_rls_equivalence.sql",
     "db:verify:consent": "node scripts/db-run.mjs supabase/tests/verify_ai_consent.sql",
+    "db:verify:ijazah": "node scripts/db-run.mjs supabase/tests/verify_ijazah.sql",
     "db:seed": "node scripts/seed-remote.mjs",
     "db:check-auth": "node scripts/check-supabase-auth.mjs",
     "db:types": "npx supabase gen types typescript --project-id rblnistltccysizdcnvt > packages/shared/src/database.types.ts",

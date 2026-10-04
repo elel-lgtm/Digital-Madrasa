@@ -281,6 +281,7 @@ export type Database = {
       }
       certificates: {
         Row: {
+          sanad: string[] | null
           created_at: string
           deleted_at: string | null
           id: string
@@ -293,6 +294,7 @@ export type Database = {
           verification_code: string
         }
         Insert: {
+          sanad?: string[] | null
           created_at?: string
           deleted_at?: string | null
           id?: string
@@ -305,6 +307,7 @@ export type Database = {
           verification_code: string
         }
         Update: {
+          sanad?: string[] | null
           created_at?: string
           deleted_at?: string | null
           id?: string
@@ -2160,6 +2163,7 @@ export type Database = {
       }
       teachers: {
         Row: {
+          sanad: string[]
           created_at: string
           deleted_at: string | null
           employee_no: string
@@ -2173,6 +2177,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          sanad?: string[]
           created_at?: string
           deleted_at?: string | null
           employee_no: string
@@ -2186,6 +2191,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          sanad?: string[]
           created_at?: string
           deleted_at?: string | null
           employee_no?: string
@@ -2230,6 +2236,7 @@ export type Database = {
       can_read_student: { Args: { p_student_id: string }; Returns: boolean }
       can_submit_assignment: { Args: { p_assignment_id: string }; Returns: boolean }
       withdraw_certificate: { Args: { p_certificate_id: string }; Returns: undefined }
+      set_my_sanad: { Args: { p_chain: string[] }; Returns: string[] }
       set_ai_feedback_consent: {
         Args: { p_allowed: boolean; p_student_id: string }
         Returns: undefined
@@ -2258,6 +2265,7 @@ export type Database = {
           madrasa_name: string
           issued_at: string
           valid: boolean
+          sanad: string
         }[]
       }
       current_madrasa_id: { Args: never; Returns: string }

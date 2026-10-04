@@ -98,6 +98,11 @@ export default function VerifyCertificate() {
                 <AppText variant="caption" color="textMuted">
                   {t('learning.issuedOn')}: {longDate(result.issuedAt)}
                 </AppText>
+                {result.sanad && result.sanad.length > 0 ? (
+                  <AppText variant="caption">
+                    {t('sanad.title')}: {result.sanad.join(' ← ')}
+                  </AppText>
+                ) : null}
               </View>
             </Card>
           ) : null}

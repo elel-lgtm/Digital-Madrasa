@@ -378,6 +378,9 @@ export interface ApiClient {
   withdrawCertificate(certificateId: string): Promise<void>;
   /** An approved parent or the pupil's madrasa allows AI feedback on recordings. */
   setAiFeedbackConsent(studentId: string, allowed: boolean): Promise<void>;
+  /** The signed-in teacher's own chain of transmission (sanad), sheikh first. */
+  getMySanad(): Promise<string[]>;
+  setMySanad(chain: string[]): Promise<string[]>;
   /** Public check of a certificate code; works without signing in. */
   verifyCertificate(code: string): Promise<VerifiedCertificate | null>;
   /** Rotating QR payload for attendance; refreshes every 30 seconds. */

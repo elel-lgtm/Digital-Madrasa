@@ -126,7 +126,7 @@ export const gradeSubmissionSchema = z.object({
 });
 export type GradeSubmissionInput = z.infer<typeof gradeSubmissionSchema>;
 
-export const CERTIFICATE_KINDS = ['juz_completion', 'quran_completion', 'tajweed_level'] as const;
+export const CERTIFICATE_KINDS = ['juz_completion', 'quran_completion', 'tajweed_level', 'ijazah'] as const;
 
 /** The code is never sent: the database issues it. */
 export const issueCertificateSchema = z.object({
