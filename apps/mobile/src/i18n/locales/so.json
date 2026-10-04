@@ -855,5 +855,8 @@
     "unavailable": "Jawaabcelinta tooska ah lama heli karin markan. Macallinka ayaa dib u eegi doona akhriskan.",
     "awaitingTeacher": "Sugaya macallinka",
     "notHeard": "Qaybta lama maqli karin duubistan. Si cad u akhri, adigoo u dhow taleefanka, oo isku day mar kale. Macallinka ayaa sidoo kale dib u eegi doona."
+  },
+  "hijri": {
+    "ramadanMubarak": "Ramadaan Mubaarak"
   }
 }

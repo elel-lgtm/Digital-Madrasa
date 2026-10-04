@@ -5,6 +5,7 @@ export * from './quran';
 export * from './hifz';
 export * from './meetings';
 export * from './billing';
+export * from './hijri';
 export type { Database, Json } from './database.types';
 export * from './schemas/common';
 export * from './schemas/auth';

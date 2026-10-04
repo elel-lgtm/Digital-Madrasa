@@ -26,11 +26,13 @@ import {
 import { useApiError } from '@/hooks/useApiError';
 import { useChildren } from '@/hooks/useChildren';
 import { useRequiredSession } from '@/hooks/useSession';
+import { useHijriToday } from '@/hooks/useHijriToday';
 import { useTheme } from '@/theme/ThemeProvider';
 import { shortDate } from '@/utils/dates';
 
 export default function ParentDashboard() {
   const { t } = useTranslation();
+  const hijriToday = useHijriToday();
   const theme = useTheme();
   const router = useRouter();
   const session = useRequiredSession();
@@ -97,7 +99,7 @@ export default function ParentDashboard() {
     >
       <PageHeader
         title={t('parent.greeting', { name: session.user.fullName.split(' ')[0] })}
-        subtitle={session.madrasa?.name}
+        subtitle={[session.madrasa?.name, hijriToday].filter(Boolean).join(' · ')}
       />
 
       <View style={{ marginTop: theme.spacing.md }}>

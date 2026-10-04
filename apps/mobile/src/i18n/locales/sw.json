@@ -855,5 +855,8 @@
     "unavailable": "Maoni ya kiotomatiki hayakupatikana wakati huu. Mwalimu atakagua usomaji huu.",
     "awaitingTeacher": "Inasubiri mwalimu",
     "notHeard": "Kifungu hakikusikika katika rekodi hii. Soma kwa uwazi, karibu na simu, kisha ujaribu tena. Mwalimu pia ataikagua."
+  },
+  "hijri": {
+    "ramadanMubarak": "Ramadhani Mubarak"
   }
 }

@@ -855,5 +855,8 @@
     "unavailable": "Automatic feedback was not available this time. The teacher will review this recitation.",
     "awaitingTeacher": "Awaiting teacher",
     "notHeard": "The passage could not be heard in this recording. Recite clearly, close to the phone, and try again. The teacher will also review it."
+  },
+  "hijri": {
+    "ramadanMubarak": "Ramadan Mubarak"
   }
 }

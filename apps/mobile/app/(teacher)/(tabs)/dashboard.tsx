@@ -32,10 +32,12 @@ import {
 } from '@/components/ui';
 import { useApiError } from '@/hooks/useApiError';
 import { useRequiredSession } from '@/hooks/useSession';
+import { useHijriToday } from '@/hooks/useHijriToday';
 import { useTheme } from '@/theme/ThemeProvider';
 
 export default function TeacherDashboard() {
   const { t } = useTranslation();
+  const hijriToday = useHijriToday();
   const theme = useTheme();
   const router = useRouter();
   const session = useRequiredSession();
@@ -85,7 +87,7 @@ export default function TeacherDashboard() {
     <Screen refreshing={dashboard.isFetching} onRefresh={() => void dashboard.refetch()}>
       <PageHeader
         title={t('teacher.greeting', { name: firstName(session.user.fullName) })}
-        subtitle={data.madrasaName}
+        subtitle={[data.madrasaName, hijriToday].filter(Boolean).join(' · ')}
       />
 
       <View style={{ gap: theme.spacing.xl, marginTop: theme.spacing.lg }}>

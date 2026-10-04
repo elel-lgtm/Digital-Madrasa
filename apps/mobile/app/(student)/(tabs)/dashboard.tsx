@@ -23,11 +23,13 @@ import {
   StatTile,
 } from '@/components/ui';
 import { useApiError } from '@/hooks/useApiError';
+import { useHijriToday } from '@/hooks/useHijriToday';
 import { useTheme } from '@/theme/ThemeProvider';
 import { formatDueLabel } from '@/utils/dates';
 
 export default function StudentDashboard() {
   const { t } = useTranslation();
+  const hijriToday = useHijriToday();
   const theme = useTheme();
   const router = useRouter();
   const describeError = useApiError();
@@ -67,7 +69,7 @@ export default function StudentDashboard() {
     <Screen refreshing={dashboard.isFetching} onRefresh={() => void dashboard.refetch()}>
       <PageHeader
         title={t('student.greeting', { name: data.studentName.split(' ')[0] })}
-        subtitle={data.className ?? data.admissionNo}
+        subtitle={`${data.className ?? data.admissionNo} · ${hijriToday}`}
         right={
           data.streakDays > 0 ? (
             <View
