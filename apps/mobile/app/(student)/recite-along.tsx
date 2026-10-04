@@ -41,15 +41,24 @@ export default function ReciteAlongScreen() {
   const words = useMemo<MushafWord[]>(() => (surah ? mushafWords(surah.ayahs) : []), [surah]);
   const follow = useMemo(() => followRecitation(words, heard), [words, heard]);
 
-  const onDevice = useMemo(() => {
-    try {
-      return Platform.OS === 'android' && ExpoSpeechRecognitionModule.supportsOnDeviceRecognition();
-    } catch {
-      return false;
-    }
+  // On the phone only if the Arabic offline pack is actually installed;
+  // "supports on-device" alone says nothing about which languages are.
+  const [onDevice, setOnDevice] = useState(false);
+  useEffect(() => {
+    if (Platform.OS !== 'android') return;
+    let live = true;
+    ExpoSpeechRecognitionModule.getSupportedLocales({ androidRecognitionServicePackage: 'com.google.android.as' })
+      .then((r) => {
+        if (live) setOnDevice(r.installedLocales.some((l) => l.toLowerCase().startsWith('ar')));
+      })
+      .catch(() => undefined);
+    return () => {
+      live = false;
+    };
   }, []);
   const consented = Boolean(session.student?.aiFeedbackConsent);
   const allowed = onDevice || consented;
+  const useOnDevice = useRef(false);
 
   useSpeechRecognitionEvent('result', (event) => {
     const text = event.results[0]?.transcript ?? '';
@@ -67,9 +76,20 @@ export default function ReciteAlongScreen() {
   });
   useSpeechRecognitionEvent('error', (event) => {
     if (event.error === 'no-speech' && wantListening.current) return;
+    // The offline pack failed: carry on with the online service, but only
+    // where the parent has agreed to the child's voice being processed.
+    if (useOnDevice.current && consented && wantListening.current && event.error !== 'not-allowed') {
+      useOnDevice.current = false;
+      void begin();
+      return;
+    }
     wantListening.current = false;
     setListening(false);
-    setError(event.error === 'not-allowed' ? t('reciteAlong.noPermission') : t('reciteAlong.unavailable'));
+    setError(
+      event.error === 'not-allowed'
+        ? t('reciteAlong.noPermission')
+        : `${t('reciteAlong.unavailable')} (${event.error})`,
+    );
   });
 
   useEffect(() => {
@@ -86,7 +106,7 @@ export default function ReciteAlongScreen() {
       lang: 'ar-SA',
       interimResults: true,
       continuous: true,
-      requiresOnDeviceRecognition: onDevice,
+      requiresOnDeviceRecognition: useOnDevice.current,
       addsPunctuation: false,
       androidIntentOptions: { EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS: 4000 },
     });
@@ -101,6 +121,7 @@ export default function ReciteAlongScreen() {
     }
     finals.current = [];
     setHeard('');
+    useOnDevice.current = onDevice;
     wantListening.current = true;
     setListening(true);
     await begin();
