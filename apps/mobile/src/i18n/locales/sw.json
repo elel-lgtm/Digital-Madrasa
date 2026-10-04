@@ -917,5 +917,12 @@
     "memorised_one": "{{name}} amehifadhi sura {{count}} wiki hii. Hongera!",
     "memorised_other": "{{name}} amehifadhi sura {{count}} wiki hii. Hongera!",
     "improving": "Alama za kisomo za {{name}} zimepanda kutoka {{prev}} hadi {{recent}}."
+  },
+  "voice": {
+    "title": "Sikiliza ripoti",
+    "hint": "Sikia maendeleo ya mtoto wako yakisomwa kwa sauti kwa lugha unayochagua.",
+    "listen": "Sikiliza",
+    "preparing": "Inaandaa sauti…",
+    "stop": "Simamisha"
   }
 }

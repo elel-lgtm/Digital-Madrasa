@@ -1,4 +1,5 @@
 import type {
+  VoiceLang,
   CreateRecitationInput,
   CreateStudentInput,
   DecideLinkInput,
@@ -16,7 +17,7 @@ import type {
   Teacher,
   Student,
 } from '@digital-madrasa/shared';
-import { ApiError, type PaymentIntent } from '../types';
+import { ApiError, type PaymentIntent, type VoiceReport } from '../types';
 import { invokeFunction } from './functions';
 import { listLinkRequests } from './queries-comms';
 import { getRecitation } from './queries-fees';
@@ -47,6 +48,12 @@ type Row = Record<string, any>;
  * function does not store — there is no column for it on `students`. It is
  * dropped rather than silently sent.
  */
+/** voice-report builds the text from the child's records (RLS) and speaks it. */
+export async function getVoiceReport(studentId: string, lang: VoiceLang): Promise<VoiceReport> {
+  const body = await invokeFunction<VoiceReport>('voice-report', { body: { studentId, lang } });
+  return { text: body.text, lang: body.lang ?? lang, audio: body.audio ?? null };
+}
+
 export async function createStudent(input: CreateStudentInput): Promise<Student> {
   const body = await invokeFunction<Row>('create-student', {
     body: {

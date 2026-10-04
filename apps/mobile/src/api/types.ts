@@ -69,6 +69,7 @@ import type {
   VerifiedCertificate,
   HeatmapCell,
   PupilSignals,
+  VoiceLang,
 } from '@digital-madrasa/shared';
 
 /**
@@ -116,6 +117,13 @@ export class ApiError extends Error {
     this.code = code;
     if (retryAfter !== undefined) this.retryAfter = retryAfter;
   }
+}
+
+export interface VoiceReport {
+  text: string;
+  lang: VoiceLang;
+  /** Base64 WAV, or null when the phone should read `text` itself. */
+  audio: string | null;
 }
 
 export interface ListParams {
@@ -308,6 +316,8 @@ export interface ApiClient {
   linkChild(input: LinkChildInput): Promise<{ madrasaName: string }>;
   listChildren(): Promise<Student[]>;
   getChildOverview(studentId: string): Promise<ChildOverview>;
+  /** The child's report as spoken sentences, with a recording when the server could make one. */
+  getVoiceReport(studentId: string, lang: VoiceLang): Promise<VoiceReport>;
 
   // -- fees ---------------------------------------------------------------
   listFeeStructures(): Promise<FeeStructure[]>;

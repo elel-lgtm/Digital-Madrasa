@@ -9,6 +9,7 @@ export * from './hijri';
 export * from './hifzPlan';
 export * from './heatmap';
 export * from './insights';
+export * from './voiceReport';
 export type { Database, Json } from './database.types';
 export * from './schemas/common';
 export * from './schemas/auth';

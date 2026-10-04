@@ -917,5 +917,12 @@
     "memorised_one": "{{name}} memorised {{count}} surah this week. Well done!",
     "memorised_other": "{{name}} memorised {{count}} surahs this week. Well done!",
     "improving": "{{name}}’s recitation scores rose from {{prev}} to {{recent}}."
+  },
+  "voice": {
+    "title": "Listen to the report",
+    "hint": "Hear how your child is doing, read aloud in the language you choose.",
+    "listen": "Listen",
+    "preparing": "Preparing the recording…",
+    "stop": "Stop"
   }
 }

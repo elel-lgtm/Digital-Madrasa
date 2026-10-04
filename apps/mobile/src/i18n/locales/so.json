@@ -917,5 +917,12 @@
     "memorised_one": "{{name}} wuxuu xifdiyey {{count}} suurad toddobaadkan. Hambalyo!",
     "memorised_other": "{{name}} wuxuu xifdiyey {{count}} suuradood toddobaadkan. Hambalyo!",
     "improving": "Dhibcaha akhriska {{name}} waxay ka kaceen {{prev}} ilaa {{recent}}."
+  },
+  "voice": {
+    "title": "Dhageyso warbixinta",
+    "hint": "Maqal sida ilmahaagu u socdo, oo lagu akhriyey luqadda aad doorato.",
+    "listen": "Dhageyso",
+    "preparing": "Codka ayaa la diyaarinayaa…",
+    "stop": "Jooji"
   }
 }

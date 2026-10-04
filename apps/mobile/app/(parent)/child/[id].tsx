@@ -9,6 +9,7 @@ import { qk } from '@/api/keys';
 import { AiConsentCard, recitationScore } from '@/components/AiFeedback';
 import { CertificateCard } from '@/components/CertificateCard';
 import { HifzPlanCard } from '@/components/HifzPlanCard';
+import { VoiceReportCard } from '@/components/VoiceReportCard';
 import { ScoreRing } from '@/components/TajweedFeedback';
 import {
   AppText,
@@ -105,6 +106,8 @@ export default function ChildDetail() {
 
         {tab === 'progress' ? (
           <View style={{ gap: theme.spacing.xl }}>
+            <VoiceReportCard studentId={data.student.id} />
+
             <Card>
               <View style={{ gap: theme.spacing.sm }}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>

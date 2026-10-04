@@ -52,6 +52,7 @@ const implemented: Partial<ApiClient> = {
   listClasses: q.listClasses,
   listTeachers: q.listTeachers,
   inviteTeacher: edge.inviteTeacher,
+  getVoiceReport: edge.getVoiceReport,
 
   // ------------------------------------------------------------- learning
   listLessons: q.listLessons,

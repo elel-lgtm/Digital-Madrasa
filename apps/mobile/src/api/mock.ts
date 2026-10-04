@@ -4,12 +4,14 @@ import {
   getSurah,
   juzForAyah,
   summariseHifzRows,
+  voiceReportText,
   madrasaLifecycleSchema,
   type AdminMadrasa,
   type AdminOverview,
   type AuditEntry,
   type HeatmapCell,
   type PupilSignals,
+  type VoiceLang,
   type MadrasaLifecycleInput,
   type MadrasaStatus,
   type Certificate,
@@ -1686,6 +1688,40 @@ export const mockApi: ApiClient = {
       ).slice(0, 5),
       certificates: data.certificates.filter((c) => c.studentId === studentId),
     } satisfies ChildOverview;
+  },
+
+  async getVoiceReport(studentId: string, lang: VoiceLang) {
+    await bootstrap();
+    await delay();
+    assertCanSeeStudent(studentId);
+    const data = requireDb();
+    const student = data.students.find((s) => s.id === studentId);
+    if (!student) throw new ApiError('not_found', 'Student not found.');
+    // The same facts the voice-report function gathers. Demo mode has no
+    // speech service, so the phone reads the text with its own voice.
+    const since = Date.now() - 30 * 86_400_000;
+    const att = data.attendance.filter((a) => a.studentId === studentId && new Date(a.sessionDate).getTime() >= since);
+    const hifz = data.hifz.filter((h) => h.studentId === studentId);
+    const learning = hifz.find((h) => h.status === 'learning');
+    const surah = learning ? getSurah(learning.surahNo) : undefined;
+    const latest = sortByDateDesc(
+      data.recitations.filter((r) => r.studentId === studentId && r.feedback),
+      (r) => r.createdAt,
+    ).find((r) => r.feedback?.teacherOverride || r.feedback?.overallScore !== null);
+    const text = voiceReportText(
+      {
+        childName: student.fullName,
+        attended: att.filter((a) => a.status === 'present' || a.status === 'late').length,
+        sessions: att.filter((a) => a.status !== 'excused').length,
+        memorisedSurahs: hifz.filter((h) => ['memorised', 'mastered', 'revising'].includes(h.status)).length,
+        learning: learning && surah ? { surahName: lang === 'ar' ? surah.arabicName : surah.name, ayah: learning.ayahNo } : null,
+        lastScore: latest?.feedback?.teacherOverride?.overallScore ?? latest?.feedback?.overallScore ?? null,
+        teacherRemark: latest?.feedback?.teacherOverride?.remarks || null,
+        balance: outstandingFor(studentId),
+      },
+      lang,
+    );
+    return { text, lang, audio: null };
   },
 
   // ------------------------------------------------------------ fees
