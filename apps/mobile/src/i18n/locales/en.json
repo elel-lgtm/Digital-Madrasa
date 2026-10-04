@@ -871,5 +871,18 @@
     "saved": "Saved.",
     "needed": "An ijazah carries your chain of transmission. Record it first.",
     "record": "Record my chain"
+  },
+  "plan": {
+    "title": "Today’s hifz plan",
+    "sabaq": "Sabaq",
+    "sabaqHint": "New lesson",
+    "sabqi": "Sabqi",
+    "sabqiHint": "Recent revision — the last two weeks",
+    "manzil": "Manzil",
+    "manzilHint": "Old revision — all of it every {{days}} days",
+    "whole": "whole surah",
+    "nothing": "Nothing for today",
+    "more_one": "and {{count}} more",
+    "more_other": "and {{count}} more"
   }
 }

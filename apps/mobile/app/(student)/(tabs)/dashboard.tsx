@@ -24,11 +24,14 @@ import {
 } from '@/components/ui';
 import { useApiError } from '@/hooks/useApiError';
 import { useHijriToday } from '@/hooks/useHijriToday';
+import { HifzPlanCard } from '@/components/HifzPlanCard';
+import { useRequiredSession } from '@/hooks/useSession';
 import { useTheme } from '@/theme/ThemeProvider';
 import { formatDueLabel } from '@/utils/dates';
 
 export default function StudentDashboard() {
   const { t } = useTranslation();
+  const session = useRequiredSession();
   const hijriToday = useHijriToday();
   const theme = useTheme();
   const router = useRouter();
@@ -136,6 +139,8 @@ export default function StudentDashboard() {
             />
           </View>
         </Card>
+
+        {session.student?.id ? <HifzPlanCard studentId={session.student.id} /> : null}
 
         <View style={{ flexDirection: 'row', gap: theme.spacing.md }}>
           <StatTile

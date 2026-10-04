@@ -871,5 +871,18 @@
     "saved": "Waa la kaydiyay.",
     "needed": "Ijaasadu waxay xambaarsan tahay silsiladaada gudbinta. Marka hore qor.",
     "record": "Qor silsiladayda"
+  },
+  "plan": {
+    "title": "Qorshaha xifdiga maanta",
+    "sabaq": "Sabaq",
+    "sabaqHint": "Cashar cusub",
+    "sabqi": "Sabqi",
+    "sabqiHint": "Dib-u-eegis dhow — labadii toddobaad ee la soo dhaafay",
+    "manzil": "Manzil",
+    "manzilHint": "Dib-u-eegis hore — dhammaan {{days}}-kii maalmoodba",
+    "whole": "suurad dhan",
+    "nothing": "Waxba maanta",
+    "more_one": "iyo {{count}} kale",
+    "more_other": "iyo {{count}} kale"
   }
 }

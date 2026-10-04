@@ -871,5 +871,18 @@
     "saved": "Imehifadhiwa.",
     "needed": "Ijaza hubeba mnyororo wako wa upokezi. Uandike kwanza.",
     "record": "Andika mnyororo wangu"
+  },
+  "plan": {
+    "title": "Mpango wa hifdhi wa leo",
+    "sabaq": "Sabaq",
+    "sabaqHint": "Somo jipya",
+    "sabqi": "Sabqi",
+    "sabqiHint": "Marudio ya karibuni — wiki mbili zilizopita",
+    "manzil": "Manzil",
+    "manzilHint": "Marudio ya zamani — yote kila siku {{days}}",
+    "whole": "sura nzima",
+    "nothing": "Hakuna kwa leo",
+    "more_one": "na {{count}} zaidi",
+    "more_other": "na {{count}} zaidi"
   }
 }

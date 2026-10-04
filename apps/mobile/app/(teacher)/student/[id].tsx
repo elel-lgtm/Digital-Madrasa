@@ -10,6 +10,7 @@ import { api } from '@/api';
 import { qk } from '@/api/keys';
 import { AiConsentCard } from '@/components/AiFeedback';
 import { CertificateCard } from '@/components/CertificateCard';
+import { HifzPlanCard } from '@/components/HifzPlanCard';
 import {
   AppText,
   Avatar,
@@ -215,6 +216,8 @@ export default function StudentDetail() {
         </View>
 
         <AiConsentCard studentId={student.id} allowed={student.aiFeedbackConsent} audience="staff" />
+
+        <HifzPlanCard studentId={student.id} />
 
         <View style={{ gap: theme.spacing.md }}>
           <SectionHeader title={t('learning.certificates')} />
