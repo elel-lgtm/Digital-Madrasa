@@ -507,6 +507,8 @@ export interface Certificate {
   issuedAt: string;
   verificationCode: string;
   pdfUrl: string | null;
+  /** Ijazah only: the chain of transmission, the awarding teacher first. */
+  sanad?: string[] | null;
 }
 
 /** What a public certificate check returns; nothing beyond the certificate itself. */

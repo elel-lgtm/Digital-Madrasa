@@ -745,7 +745,8 @@
     "markedScore": "Mark: {{score}}/100",
     "recordInstead": "This assignment is answered by recording a recitation.",
     "goRecite": "Go to Recite",
-    "lockedMarked": "This work has been marked and can no longer be changed."
+    "lockedMarked": "This work has been marked and can no longer be changed.",
+    "certificatePdf": "Certificate PDF"
   },
   "library": {
     "juz": "Juz {{n}}",

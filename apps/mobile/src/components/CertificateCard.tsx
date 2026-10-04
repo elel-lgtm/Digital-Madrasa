@@ -1,7 +1,10 @@
 import type { Certificate } from '@digital-madrasa/shared';
-import { Certificate as CertificateIcon, ShareNetwork } from 'phosphor-react-native';
+import { Certificate as CertificateIcon, FilePdf, ShareNetwork } from 'phosphor-react-native';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Share, View } from 'react-native';
+import { shareCertificatePdf, verifyUrlFor } from '@/certificates/print';
+import { env } from '@/config/env';
 import { AppText, Button, Card } from '@/components/ui';
 import { useTheme } from '@/theme/ThemeProvider';
 import { longDate } from '@/utils/dates';
@@ -22,15 +25,35 @@ export function CertificateCard({ certificate, madrasaName, onWithdraw, withdraw
   const { t } = useTranslation();
   const theme = useTheme();
 
+  const [printing, setPrinting] = useState(false);
+
   const share = () => {
     void Share.share({
-      message: t('learning.shareText', {
+      message: `${t('learning.shareText', {
         title: certificate.title,
         name: certificate.studentName,
         madrasa: madrasaName ?? 'Digital Madrasa',
         code: certificate.verificationCode,
-      }),
+      })}
+${verifyUrlFor(env.supabaseUrl, certificate.verificationCode)}`,
     });
+  };
+
+  const pdf = async () => {
+    setPrinting(true);
+    try {
+      await shareCertificatePdf({
+        title: certificate.title,
+        kindLabel: t(`learning.kind_${certificate.kind}`),
+        studentName: certificate.studentName,
+        madrasaName: madrasaName ?? 'Digital Madrasa',
+        issuedAt: certificate.issuedAt,
+        verificationCode: certificate.verificationCode,
+        sanad: certificate.sanad ?? undefined,
+      });
+    } finally {
+      setPrinting(false);
+    }
   };
 
   return (
@@ -67,6 +90,12 @@ export function CertificateCard({ certificate, madrasaName, onWithdraw, withdraw
             {certificate.verificationCode}
           </AppText>
         </View>
+        <Button
+          label={t('learning.certificatePdf')}
+          icon={<FilePdf size={18} color={theme.colors.textOnAccent} />}
+          loading={printing}
+          onPress={() => void pdf()}
+        />
         <View style={{ flexDirection: 'row', gap: theme.spacing.sm }}>
           <View style={{ flex: 1 }}>
             <Button

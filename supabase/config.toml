@@ -32,6 +32,10 @@ verify_jwt = true
 [functions.card-callback]
 verify_jwt = false
 
+# Public certificate check opened by a certificate's QR code.
+[functions.verify]
+verify_jwt = false
+
 [functions.madrasa-lifecycle]
 verify_jwt = true
 

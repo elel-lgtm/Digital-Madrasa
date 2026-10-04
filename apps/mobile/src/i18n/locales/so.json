@@ -745,7 +745,8 @@
     "markedScore": "Dhibcaha: {{score}}/100",
     "recordInstead": "Hawshan waxaa lagaga jawaabaa duubista akhris.",
     "goRecite": "U gudub Akhri",
-    "lockedMarked": "Hawshan waa la saxay, mar dambena lama beddeli karo."
+    "lockedMarked": "Hawshan waa la saxay, mar dambena lama beddeli karo.",
+    "certificatePdf": "Shahaado (PDF)"
   },
   "library": {
     "juz": "Juz {{n}}",

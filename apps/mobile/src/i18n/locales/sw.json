@@ -745,7 +745,8 @@
     "markedScore": "Alama: {{score}}/100",
     "recordInstead": "Kazi hii inajibiwa kwa kurekodi kisomo.",
     "goRecite": "Nenda kwenye Soma",
-    "lockedMarked": "Kazi hii imesahihishwa na haiwezi kubadilishwa tena."
+    "lockedMarked": "Kazi hii imesahihishwa na haiwezi kubadilishwa tena.",
+    "certificatePdf": "Cheti (PDF)"
   },
   "library": {
     "juz": "Juzuu {{n}}",
