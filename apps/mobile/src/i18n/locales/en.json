@@ -884,5 +884,22 @@
     "nothing": "Nothing for today",
     "more_one": "and {{count}} more",
     "more_other": "and {{count}} more"
+  },
+  "heatmap": {
+    "title": "Mistake map",
+    "subtitle": "Where pupils slip most in their recitation",
+    "year": "1 year",
+    "days_one": "{{count}} day",
+    "days_other": "{{count}} days",
+    "commonRules": "Most common rules",
+    "tapRule": "Tap a rule to show only its mistakes.",
+    "filtered": "Showing {{rule}} only. Tap it again to show all.",
+    "ayah": "{{surah}}, ayah {{ayah}}",
+    "mistakes_one": "{{count}} mistake",
+    "mistakes_other": "{{count}} mistakes",
+    "pupils_one": "{{count}} pupil",
+    "pupils_other": "{{count}} pupils",
+    "emptyTitle": "No mistakes recorded yet",
+    "emptyBody": "Once recitations are assessed, the ayahs pupils find hardest appear here."
   }
 }

@@ -67,6 +67,7 @@ import type {
   SubmitAssignmentInput,
   UpdateHifzProgressInput,
   VerifiedCertificate,
+  HeatmapCell,
 } from '@digital-madrasa/shared';
 
 /**
@@ -380,6 +381,8 @@ export interface ApiClient {
   setAiFeedbackConsent(studentId: string, allowed: boolean): Promise<void>;
   /** The signed-in teacher's own chain of transmission (sanad), sheikh first. */
   getMySanad(): Promise<string[]>;
+  /** Staff: tajweed findings per ayah and rule across the madrasa, over the last `days`. */
+  getTajweedHeatmap(days: number): Promise<HeatmapCell[]>;
   setMySanad(chain: string[]): Promise<string[]>;
   /** Public check of a certificate code; works without signing in. */
   verifyCertificate(code: string): Promise<VerifiedCertificate | null>;

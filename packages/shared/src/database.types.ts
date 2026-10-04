@@ -2237,6 +2237,10 @@ export type Database = {
       can_submit_assignment: { Args: { p_assignment_id: string }; Returns: boolean }
       withdraw_certificate: { Args: { p_certificate_id: string }; Returns: undefined }
       set_my_sanad: { Args: { p_chain: string[] }; Returns: string[] }
+      tajweed_heatmap: {
+        Args: { p_days?: number }
+        Returns: { surah_no: number; ayah_no: number; rule: string; mistakes: number; students: number }[]
+      }
       set_ai_feedback_consent: {
         Args: { p_allowed: boolean; p_student_id: string }
         Returns: undefined

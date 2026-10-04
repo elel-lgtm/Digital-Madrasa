@@ -4,6 +4,7 @@ import {
   MEMORISED_STATUSES,
   type Certificate,
   type GradeSubmissionInput,
+  type HeatmapCell,
   type HifzProgress,
   type IssueCertificateInput,
   type Submission,
@@ -260,6 +261,19 @@ export async function getMySanad(): Promise<string[]> {
     .maybeSingle();
   if (error) fail(error, 'Could not load your chain of transmission.');
   return (data?.sanad as string[] | null) ?? [];
+}
+
+/** The madrasa's tajweed mistake map, read through RLS (migration 0031). */
+export async function getTajweedHeatmap(days: number): Promise<HeatmapCell[]> {
+  const { data, error } = await supabase.rpc('tajweed_heatmap', { p_days: days });
+  if (error) fail(error, 'Could not load the mistake map.');
+  return ((data as Row[] | null) ?? []).map((r) => ({
+    surahNo: r.surah_no,
+    ayahNo: r.ayah_no,
+    rule: r.rule,
+    mistakes: r.mistakes,
+    students: r.students,
+  }));
 }
 
 /** Saves the teacher's own chain; the database trims and checks it. */

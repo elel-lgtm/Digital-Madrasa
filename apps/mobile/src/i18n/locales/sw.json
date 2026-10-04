@@ -884,5 +884,22 @@
     "nothing": "Hakuna kwa leo",
     "more_one": "na {{count}} zaidi",
     "more_other": "na {{count}} zaidi"
+  },
+  "heatmap": {
+    "title": "Ramani ya makosa",
+    "subtitle": "Wanafunzi wanapokosea zaidi katika kisomo",
+    "year": "Mwaka 1",
+    "days_one": "Siku {{count}}",
+    "days_other": "Siku {{count}}",
+    "commonRules": "Hukumu zinazokosewa zaidi",
+    "tapRule": "Gusa hukumu kuona makosa yake pekee.",
+    "filtered": "Inaonyesha {{rule}} pekee. Gusa tena kuona yote.",
+    "ayah": "{{surah}}, aya {{ayah}}",
+    "mistakes_one": "Kosa {{count}}",
+    "mistakes_other": "Makosa {{count}}",
+    "pupils_one": "Mwanafunzi {{count}}",
+    "pupils_other": "Wanafunzi {{count}}",
+    "emptyTitle": "Hakuna makosa bado",
+    "emptyBody": "Visomo vikishatathminiwa, aya ngumu zaidi kwa wanafunzi zitaonekana hapa."
   }
 }

@@ -90,6 +90,7 @@ const implemented: Partial<ApiClient> = {
   withdrawCertificate: learning.withdrawCertificate,
   setAiFeedbackConsent: learning.setAiFeedbackConsent,
   getMySanad: learning.getMySanad,
+  getTajweedHeatmap: learning.getTajweedHeatmap,
   setMySanad: learning.setMySanad,
   verifyCertificate: learning.verifyCertificate,
   upsertHifzProgress: learning.upsertHifzProgress,

@@ -8,6 +8,7 @@ import {
   type AdminMadrasa,
   type AdminOverview,
   type AuditEntry,
+  type HeatmapCell,
   type MadrasaLifecycleInput,
   type MadrasaStatus,
   type Certificate,
@@ -89,7 +90,7 @@ const MAX_DB_AGE_MS = 3 * 24 * 60 * 60 * 1000;
  * no way to supply it, so we discard it and re-seed rather than hand the app
  * rows with missing properties.
  */
-const SEED_SCHEMA_VERSION = 5;
+const SEED_SCHEMA_VERSION = 6;
 
 interface PersistedDb {
   seededAt: string;
@@ -2880,6 +2881,29 @@ export const mockApi: ApiClient = {
     await delay();
     const profile = requireStaff();
     return mockSanad.get(profile.id) ?? [];
+  },
+
+  async getTajweedHeatmap(days) {
+    await bootstrap();
+    await delay();
+    requireStaff();
+    const madrasaId = requireMadrasaId();
+    const since = Date.now() - days * 86_400_000;
+    // As in migration 0031: assessed findings only; dismissed ones are already gone.
+    const cells = new Map<string, HeatmapCell & { pupils: Set<string> }>();
+    for (const r of requireDb().recitations) {
+      if (r.madrasaId !== madrasaId || r.feedback?.assessment !== 'assessed') continue;
+      if (new Date(r.createdAt).getTime() < since) continue;
+      for (const e of r.feedback.errors) {
+        const key = `${e.surahNo}:${e.ayahNo}:${e.rule}`;
+        const cell = cells.get(key) ?? { surahNo: e.surahNo, ayahNo: e.ayahNo, rule: e.rule, mistakes: 0, students: 0, pupils: new Set<string>() };
+        cell.mistakes += 1;
+        cell.pupils.add(r.studentId);
+        cell.students = cell.pupils.size;
+        cells.set(key, cell);
+      }
+    }
+    return [...cells.values()].map(({ pupils: _pupils, ...cell }) => cell);
   },
 
   async setMySanad(chain) {

@@ -884,5 +884,22 @@
     "nothing": "Waxba maanta",
     "more_one": "iyo {{count}} kale",
     "more_other": "iyo {{count}} kale"
+  },
+  "heatmap": {
+    "title": "Khariidadda khaladaadka",
+    "subtitle": "Meelaha ardaydu ugu badan ku qaldamaan akhriska",
+    "year": "1 sano",
+    "days_one": "{{count}} maalin",
+    "days_other": "{{count}} maalmood",
+    "commonRules": "Xukunnada ugu badan ee la qaldo",
+    "tapRule": "Taabo xukun si aad u aragto khaladaadkiisa oo keliya.",
+    "filtered": "Waxaa la muujinayaa {{rule}} oo keliya. Mar kale taabo si aad dhammaan u aragto.",
+    "ayah": "{{surah}}, aayadda {{ayah}}",
+    "mistakes_one": "{{count}} khalad",
+    "mistakes_other": "{{count}} khalad",
+    "pupils_one": "{{count}} arday",
+    "pupils_other": "{{count}} arday",
+    "emptyTitle": "Weli khalad lama diiwaangelin",
+    "emptyBody": "Marka akhrisyada la qiimeeyo, aayadaha ardayda ugu adag halkan ayay ka muuqan doonaan."
   }
 }

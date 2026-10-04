@@ -6,6 +6,7 @@ import {
   Gear,
   Info,
   Megaphone,
+  SquaresFour,
   TreeStructure,
   Question,
   SignOut,
@@ -66,6 +67,11 @@ export default function TeacherMore() {
           icon: WaveTriangle,
           label: t('teacher.gradingQueue'),
           onPress: () => router.push('/(teacher)/review'),
+        },
+        {
+          icon: SquaresFour,
+          label: t('heatmap.title'),
+          onPress: () => router.push('/(teacher)/mistakes'),
         },
         {
           icon: TreeStructure,

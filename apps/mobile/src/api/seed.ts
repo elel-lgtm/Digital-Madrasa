@@ -6,6 +6,8 @@ import {
   juzForSurah,
   surahName,
   type SavedCard,
+  type TajweedFinding,
+  type TajweedRule,
   type Subscription,
   type SubscriptionInvoice,
   type SubscriptionPayment,
@@ -861,6 +863,69 @@ export function createSeed(): MockDatabase {
       syncState: 'synced',
     },
   ];
+
+  // A term of older, already reviewed recitations, so the teacher's mistake
+  // map has something to show. The slips cluster where pupils really do
+  // stumble: the long madd of Al-Fatiha's last ayah, the qalqalah letters of
+  // Al-Ikhlas and Al-Falaq, the ghunnah of An-Nas. Deterministic, so the demo
+  // looks the same on every device.
+  const HOTSPOTS: { surahNo: number; ayahTo: number; spots: [number, TajweedRule, number][] }[] = [
+    { surahNo: 1, ayahTo: 7, spots: [[7, 'madd', 6], [4, 'madd', 3], [6, 'tafkhim', 2], [1, 'madd', 1], [5, 'ghunnah', 1]] },
+    { surahNo: 112, ayahTo: 4, spots: [[1, 'qalqalah', 5], [2, 'qalqalah', 4], [3, 'qalqalah', 3], [4, 'ghunnah', 1]] },
+    { surahNo: 113, ayahTo: 5, spots: [[1, 'qalqalah', 4], [3, 'qalqalah', 3], [5, 'ikhfa', 2], [4, 'ghunnah', 1]] },
+    { surahNo: 114, ayahTo: 6, spots: [[1, 'ghunnah', 3], [4, 'madd', 3], [6, 'ghunnah', 2], [5, 'ikhfa', 1]] },
+    { surahNo: 108, ayahTo: 3, spots: [[1, 'ghunnah', 2], [2, 'tafkhim', 3], [3, 'ghunnah', 2]] },
+    { surahNo: 67, ayahTo: 10, spots: [[1, 'idgham', 3], [2, 'ikhfa', 2], [3, 'madd', 2], [5, 'iqlab', 1], [8, 'ghunnah', 1]] },
+  ];
+  let seedState = 20260904;
+  const next = (n: number) => {
+    seedState = (seedState * 1103515245 + 12345) % 2147483648;
+    return seedState % n;
+  };
+  const pick = (spots: [number, TajweedRule, number][]) => {
+    let roll = next(spots.reduce((sum, [, , w]) => sum + w, 0));
+    for (const spot of spots) {
+      roll -= spot[2];
+      if (roll < 0) return spot;
+    }
+    return spots[0]!;
+  };
+  for (let i = 0; i < 40; i += 1) {
+    const pupil = students[next(students.length)]!;
+    const passage = HOTSPOTS[next(HOTSPOTS.length)]!;
+    const errors: TajweedFinding[] = [];
+    const slips = 1 + next(3);
+    for (let k = 0; k < slips; k += 1) {
+      const [ayahNo, rule] = pick(passage.spots);
+      if (errors.some((e) => e.ayahNo === ayahNo && e.rule === rule)) continue;
+      errors.push({ surahNo: passage.surahNo, ayahNo, wordIndex: next(4), rule, severity: next(3) === 0 ? 'major' : 'minor', note: '' });
+    }
+    const score = 92 - errors.length * 6 - next(6);
+    recitations.push({
+      id: uid(NS.recitation, 100 + i),
+      studentId: pupil.id,
+      studentName: pupil.fullName,
+      madrasaId: MADRASA_ID,
+      audioUrl: `mock://recitation/history/${i}`,
+      durationMs: 40_000 + next(60) * 1000,
+      surahNo: passage.surahNo,
+      surahName: surahName(passage.surahNo),
+      ayahFrom: 1,
+      ayahTo: passage.ayahTo,
+      qiraahStyle: 'hafs',
+      createdAt: daysAgo(5 + i * 2, 16),
+      feedback: {
+        overallScore: score,
+        errors,
+        assessment: 'assessed',
+        modelVersion: 'tajweed-eval-0.4.1',
+        processingMs: 3000 + next(1500),
+        reviewedByTeacherId: uid(NS.teacher, 1),
+        teacherOverride: { overallScore: Math.min(100, score + 2), remarks: '' },
+      },
+      syncState: 'synced',
+    });
+  }
 
   // ---------------------------------------------------------- attendance
   const attendance: AttendanceRecord[] = [];
