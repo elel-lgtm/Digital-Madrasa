@@ -900,7 +900,9 @@
     "pupils_one": "{{count}} pupil",
     "pupils_other": "{{count}} pupils",
     "emptyTitle": "No mistakes recorded yet",
-    "emptyBody": "Once recitations are assessed, the ayahs pupils find hardest appear here."
+    "emptyBody": "Once recitations are assessed, the ayahs pupils find hardest appear here.",
+    "fewer": "fewer",
+    "more": "more"
   },
   "insights": {
     "title": "Co-pilot: this week",

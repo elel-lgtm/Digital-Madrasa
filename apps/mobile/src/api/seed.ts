@@ -1047,7 +1047,7 @@ export function createSeed(): MockDatabase {
 
   // Three pupils whose guardians agreed to sponsorship, for the sponsor screen.
   const sponsored: [Student, string | null][] = [
-    [students[3]!, 'Lost her father last year; memorising steadily and never misses Fajr class.'],
+    [students[3]!, 'Memorising steadily and never misses Fajr class; the family cannot meet this term’s fees.'],
     [students[9]!, 'Eldest of six. Wants to finish Juz Amma before Ramadan.'],
     [students[12]!, null],
   ];

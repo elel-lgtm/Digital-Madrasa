@@ -991,7 +991,9 @@
     "pupils_many": "{{count}} طالب",
     "days_other": "{{count}} يومًا",
     "mistakes_other": "{{count}} خطأ",
-    "pupils_other": "{{count}} طالب"
+    "pupils_other": "{{count}} طالب",
+    "fewer": "أقل",
+    "more": "أكثر"
   },
   "insights": {
     "title": "المساعد: هذا الأسبوع",

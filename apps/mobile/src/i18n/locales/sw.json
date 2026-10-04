@@ -900,7 +900,9 @@
     "pupils_one": "Mwanafunzi {{count}}",
     "pupils_other": "Wanafunzi {{count}}",
     "emptyTitle": "Hakuna makosa bado",
-    "emptyBody": "Visomo vikishatathminiwa, aya ngumu zaidi kwa wanafunzi zitaonekana hapa."
+    "emptyBody": "Visomo vikishatathminiwa, aya ngumu zaidi kwa wanafunzi zitaonekana hapa.",
+    "fewer": "machache",
+    "more": "mengi"
   },
   "insights": {
     "title": "Msaidizi: wiki hii",

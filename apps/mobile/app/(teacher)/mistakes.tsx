@@ -30,12 +30,12 @@ export default function MistakeMapScreen() {
   });
   const summary = useMemo(() => summariseHeatmap(map.data ?? [], rule), [map.data, rule]);
 
-  // From the surface colour at no mistakes to full danger at the hottest ayah.
-  const shade = (count: number) => {
-    if (count === 0) return theme.colors.surfaceAlt;
-    const share = count / Math.max(summary.maxPerAyah, 1);
-    return share > 0.66 ? theme.colors.danger : share > 0.33 ? theme.colors.warning : theme.colors.warningSoft;
-  };
+  // One colour at three strengths, so "more" always reads as "darker red"
+  // in light and dark themes alike. Tokens are #RRGGBB; the suffix is alpha.
+  const LEVELS = ['55', 'AA', ''];
+  const level = (count: number) => Math.min(2, Math.floor((count / Math.max(summary.maxPerAyah, 1)) * 3 - 0.0001));
+  const shade = (count: number) =>
+    count === 0 ? theme.colors.surfaceAlt : `${theme.colors.danger}${LEVELS[Math.max(0, level(count))]}`;
 
   return (
     <Screen>
@@ -97,6 +97,26 @@ export default function MistakeMapScreen() {
                 </AppText>
               </View>
             </Card>
+
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+              <AppText variant="caption" color="textMuted">
+                {t('heatmap.fewer')}
+              </AppText>
+              {[0, ...LEVELS.map((_, i) => i + 1)].map((i) => (
+                <View
+                  key={i}
+                  style={{
+                    width: 16,
+                    height: 16,
+                    borderRadius: 4,
+                    backgroundColor: i === 0 ? theme.colors.surfaceAlt : `${theme.colors.danger}${LEVELS[i - 1]}`,
+                  }}
+                />
+              ))}
+              <AppText variant="caption" color="textMuted">
+                {t('heatmap.more')}
+              </AppText>
+            </View>
 
             {summary.surahs.slice(0, 12).map((s) => (
               <Card key={s.surahNo}>

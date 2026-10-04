@@ -900,7 +900,9 @@
     "pupils_one": "{{count}} arday",
     "pupils_other": "{{count}} arday",
     "emptyTitle": "Weli khalad lama diiwaangelin",
-    "emptyBody": "Marka akhrisyada la qiimeeyo, aayadaha ardayda ugu adag halkan ayay ka muuqan doonaan."
+    "emptyBody": "Marka akhrisyada la qiimeeyo, aayadaha ardayda ugu adag halkan ayay ka muuqan doonaan.",
+    "fewer": "yar",
+    "more": "badan"
   },
   "insights": {
     "title": "Kaaliye: toddobaadkan",
