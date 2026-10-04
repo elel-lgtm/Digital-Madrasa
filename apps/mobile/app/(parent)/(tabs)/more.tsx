@@ -2,6 +2,7 @@ import { useRouter } from 'expo-router';
 import {
   BellRinging,
   DownloadSimple,
+  HandHeart,
   Info,
   Question,
   ShieldCheck,
@@ -49,6 +50,13 @@ export default function ParentMore() {
                 title={t('parent.addChild')}
                 left={<UserPlus size={20} color={theme.colors.accent} weight="duotone" />}
                 onPress={() => router.push('/(parent)/link-child')}
+              />
+              <Divider />
+              <ListRow
+                title={t('sponsor.title')}
+                subtitle={t('sponsor.menuSubtitle')}
+                left={<HandHeart size={20} color={theme.colors.accent} weight="duotone" />}
+                onPress={() => router.push('/(parent)/sponsor')}
               />
               <Divider />
               <ListRow

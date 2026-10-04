@@ -1045,6 +1045,17 @@ export function createSeed(): MockDatabase {
       h.nextReviewAt = daysAgo(10);
     });
 
+  // Three pupils whose guardians agreed to sponsorship, for the sponsor screen.
+  const sponsored: [Student, string | null][] = [
+    [students[3]!, 'Lost her father last year; memorising steadily and never misses Fajr class.'],
+    [students[9]!, 'Eldest of six. Wants to finish Juz Amma before Ramadan.'],
+    [students[12]!, null],
+  ];
+  sponsored.forEach(([pupil, note]) => {
+    pupil.sponsorshipOpen = true;
+    pupil.sponsorshipNote = note;
+  });
+
   // -------------------------------------------------------------- grades
   const grades: Grade[] = [];
   let gradeSeq = 0;

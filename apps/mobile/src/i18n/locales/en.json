@@ -924,5 +924,31 @@
     "listen": "Listen",
     "preparing": "Preparing the recording…",
     "stop": "Stop"
+  },
+  "sponsor": {
+    "title": "Sponsor a pupil",
+    "subtitle": "Sadaqah towards a pupil’s madrasa fees",
+    "menuSubtitle": "Pay a pupil’s fees as sadaqah",
+    "intro": "These pupils’ families have agreed to be helped. You will not see their names, and they will not see yours: they are only told a sponsor paid. Your gift pays the pupil’s next unpaid invoice, and you get a receipt.",
+    "girl": "A girl in {{klass}}",
+    "boy": "A boy in {{klass}}",
+    "aClass": "the madrasa",
+    "memorised_one": "{{count}} surah memorised",
+    "memorised_other": "{{count}} surahs memorised",
+    "needs": "Owes {{amount}}",
+    "pay": "Sponsor {{amount}}",
+    "emptyTitle": "No pupil is waiting right now",
+    "emptyBody": "Every listed pupil has been sponsored. May Allah reward the givers.",
+    "thanks": "Jazakallahu khayran",
+    "thanksBody": "Your sadaqah of {{amount}} has paid a pupil’s fees. Receipt {{receipt}}.",
+    "cardTitle": "Sponsorship",
+    "cardHint": "List this pupil for sponsors if the family needs help with fees. Sponsors never see the pupil’s name or photo.",
+    "listed": "Listed",
+    "list": "List for sponsors",
+    "unlist": "Take off the list",
+    "noteLabel": "A short note for sponsors (optional)",
+    "notePlaceholder": "e.g. Wants to finish Juz Amma this year",
+    "noteHint": "No names or details that identify the pupil.",
+    "guardianAgreed": "The guardian has agreed to the pupil being listed"
   }
 }

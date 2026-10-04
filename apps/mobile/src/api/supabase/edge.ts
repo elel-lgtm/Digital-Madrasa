@@ -17,7 +17,7 @@ import type {
   Teacher,
   Student,
 } from '@digital-madrasa/shared';
-import { ApiError, type PaymentIntent, type VoiceReport } from '../types';
+import { ApiError, type PaymentIntent, type SponsorInput, type VoiceReport } from '../types';
 import { invokeFunction } from './functions';
 import { listLinkRequests } from './queries-comms';
 import { getRecitation } from './queries-fees';
@@ -328,6 +328,15 @@ export async function payFees(input: PayFeesInput): Promise<PaymentIntent> {
     body: input.channel === 'card'
       ? { action: 'pay-fees', channel: 'card', invoiceIds: input.invoiceIds }
       : { action: 'pay-fees', channel: 'mpesa', invoiceIds: input.invoiceIds, phone: input.phone },
+  });
+}
+
+/** A sponsor pays a listed pupil's next invoice; the server sets the amount. */
+export async function sponsorStudent(input: SponsorInput): Promise<PaymentIntent> {
+  return invokeFunction<PaymentIntent>('payments', {
+    body: input.channel === 'card'
+      ? { action: 'sponsor', channel: 'card', studentId: input.studentId }
+      : { action: 'sponsor', channel: 'mpesa', studentId: input.studentId, phone: input.phone },
   });
 }
 

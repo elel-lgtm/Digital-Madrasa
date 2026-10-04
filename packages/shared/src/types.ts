@@ -75,7 +75,25 @@ export interface Student {
   guardianNotes: string | null;
   /** Recordings may be sent to the AI service for feedback (migration 0028). */
   aiFeedbackConsent: boolean;
+  /** Listed for sponsors, with the guardian's agreement (migration 0034). */
+  sponsorshipOpen?: boolean;
+  sponsorshipNote?: string | null;
   createdAt: string;
+}
+
+/** A pupil open to sponsorship, as a sponsor sees them: never a name or photo. */
+export interface SponsorablePupil {
+  studentId: ID;
+  madrasaName: string;
+  town: string;
+  className: string | null;
+  gender: 'male' | 'female';
+  memorised: number;
+  /** Everything still owed. */
+  needed: number;
+  /** What a sponsorship pays now: the oldest open invoice's balance. */
+  invoiceOwed: number;
+  note: string | null;
 }
 
 export interface Teacher {

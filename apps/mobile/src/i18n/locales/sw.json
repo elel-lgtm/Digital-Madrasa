@@ -924,5 +924,31 @@
     "listen": "Sikiliza",
     "preparing": "Inaandaa sauti…",
     "stop": "Simamisha"
+  },
+  "sponsor": {
+    "title": "Mfadhili mwanafunzi",
+    "subtitle": "Sadaka kwa ada ya madrasa ya mwanafunzi",
+    "menuSubtitle": "Lipa ada ya mwanafunzi kama sadaka",
+    "intro": "Familia za wanafunzi hawa zimekubali kusaidiwa. Hutaona majina yao, nao hawataona lako: wanaambiwa tu kwamba mfadhili amelipa. Zawadi yako inalipa ankara inayofuata ya mwanafunzi, na unapata risiti.",
+    "girl": "Msichana wa {{klass}}",
+    "boy": "Mvulana wa {{klass}}",
+    "aClass": "madrasa",
+    "memorised_one": "Sura {{count}} imehifadhiwa",
+    "memorised_other": "Sura {{count}} zimehifadhiwa",
+    "needs": "Anadaiwa {{amount}}",
+    "pay": "Fadhili {{amount}}",
+    "emptyTitle": "Hakuna mwanafunzi anayesubiri sasa",
+    "emptyBody": "Kila mwanafunzi aliyeorodheshwa amefadhiliwa. Mwenyezi Mungu awalipe wafadhili.",
+    "thanks": "Jazakallahu khayran",
+    "thanksBody": "Sadaka yako ya {{amount}} imelipa ada ya mwanafunzi. Risiti {{receipt}}.",
+    "cardTitle": "Ufadhili",
+    "cardHint": "Orodhesha mwanafunzi huyu kwa wafadhili ikiwa familia inahitaji msaada wa ada. Wafadhili hawaoni jina wala picha ya mwanafunzi.",
+    "listed": "Ameorodheshwa",
+    "list": "Orodhesha kwa wafadhili",
+    "unlist": "Ondoa kwenye orodha",
+    "noteLabel": "Ujumbe mfupi kwa wafadhili (si lazima)",
+    "notePlaceholder": "mf. Anataka kumaliza Juz Amma mwaka huu",
+    "noteHint": "Bila majina wala maelezo yanayomtambulisha mwanafunzi.",
+    "guardianAgreed": "Mlezi amekubali mwanafunzi aorodheshwe"
   }
 }

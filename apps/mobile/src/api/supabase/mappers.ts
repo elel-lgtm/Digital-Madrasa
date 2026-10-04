@@ -63,6 +63,8 @@ export function mapStudent(row: Row): Student {
     enrollmentStatus: row.enrollment_status,
     guardianNotes: row.guardian_notes ?? null,
     aiFeedbackConsent: row.ai_feedback_consent === true,
+    sponsorshipOpen: row.sponsorship_open === true,
+    sponsorshipNote: row.sponsorship_note ?? null,
     avatarUrl: joined.avatar_url ?? null,
     createdAt: row.created_at,
   };

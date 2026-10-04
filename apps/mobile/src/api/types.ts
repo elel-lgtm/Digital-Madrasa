@@ -70,6 +70,7 @@ import type {
   HeatmapCell,
   PupilSignals,
   VoiceLang,
+  SponsorablePupil,
 } from '@digital-madrasa/shared';
 
 /**
@@ -118,6 +119,10 @@ export class ApiError extends Error {
     if (retryAfter !== undefined) this.retryAfter = retryAfter;
   }
 }
+
+export type SponsorInput =
+  | { studentId: string; channel: 'mpesa'; phone: string }
+  | { studentId: string; channel: 'card' };
 
 export interface VoiceReport {
   text: string;
@@ -318,6 +323,14 @@ export interface ApiClient {
   getChildOverview(studentId: string): Promise<ChildOverview>;
   /** The child's report as spoken sentences, with a recording when the server could make one. */
   getVoiceReport(studentId: string, lang: VoiceLang): Promise<VoiceReport>;
+
+  // -- sponsorship ---------------------------------------------------------
+  /** Pupils open to sponsorship, anonymised. */
+  listSponsorable(): Promise<SponsorablePupil[]>;
+  /** Pays a listed pupil's oldest open invoice; the amount is the server's. */
+  sponsorStudent(input: SponsorInput): Promise<PaymentIntent>;
+  /** Staff: list or unlist a pupil; listing needs the guardian's agreement. */
+  setSponsorship(input: { studentId: string; open: boolean; note: string | null; guardianAgreed: boolean }): Promise<void>;
 
   // -- fees ---------------------------------------------------------------
   listFeeStructures(): Promise<FeeStructure[]>;

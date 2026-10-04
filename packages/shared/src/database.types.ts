@@ -2237,6 +2237,17 @@ export type Database = {
       can_submit_assignment: { Args: { p_assignment_id: string }; Returns: boolean }
       withdraw_certificate: { Args: { p_certificate_id: string }; Returns: undefined }
       set_my_sanad: { Args: { p_chain: string[] }; Returns: string[] }
+      set_sponsorship: {
+        Args: { p_student_id: string; p_open: boolean; p_note: string | null; p_guardian_agreed: boolean }
+        Returns: undefined
+      }
+      sponsorable_students: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          student_id: string; madrasa_name: string; town: string; class_name: string | null; gender: string
+          memorised: number; needed: number; invoice_id: string; invoice_owed: number; note: string | null
+        }[]
+      }
       teacher_signals: {
         Args: Record<PropertyKey, never>
         Returns: {

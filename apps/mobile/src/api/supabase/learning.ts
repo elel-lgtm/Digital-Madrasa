@@ -6,6 +6,7 @@ import {
   type GradeSubmissionInput,
   type HeatmapCell,
   type PupilSignals,
+  type SponsorablePupil,
   type HifzProgress,
   type IssueCertificateInput,
   type Submission,
@@ -299,6 +300,39 @@ export async function getTeacherSignals(): Promise<PupilSignals[]> {
     scoreRecent: num(r.score_recent),
     scorePrev: num(r.score_prev),
   }));
+}
+
+/** Pupils open to sponsorship, anonymised by the database (migration 0034). */
+export async function listSponsorable(): Promise<SponsorablePupil[]> {
+  const { data, error } = await supabase.rpc('sponsorable_students');
+  if (error) fail(error, 'Could not load pupils waiting for a sponsor.');
+  return ((data as Row[] | null) ?? []).map((r) => ({
+    studentId: r.student_id,
+    madrasaName: r.madrasa_name,
+    town: r.town,
+    className: r.class_name ?? null,
+    gender: r.gender === 'female' ? 'female' : 'male',
+    memorised: r.memorised,
+    needed: Number(r.needed),
+    invoiceOwed: Number(r.invoice_owed),
+    note: r.note ?? null,
+  }));
+}
+
+/** Lists or unlists a pupil; the database checks the madrasa and the guardian's agreement. */
+export async function setSponsorship(input: {
+  studentId: string;
+  open: boolean;
+  note: string | null;
+  guardianAgreed: boolean;
+}): Promise<void> {
+  const { error } = await supabase.rpc('set_sponsorship', {
+    p_student_id: input.studentId,
+    p_open: input.open,
+    p_note: input.note,
+    p_guardian_agreed: input.guardianAgreed,
+  });
+  if (error) fail(error, 'Could not update sponsorship.');
 }
 
 /** Saves the teacher's own chain; the database trims and checks it. */

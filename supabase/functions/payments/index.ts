@@ -10,6 +10,7 @@ import { LIMITS, rateLimit } from '../_shared/rate-limit.ts';
  *
  *   { action: 'pay-fees', channel, invoiceIds, phone }   a parent pays invoices
  *   { action: 'pay-subscription', channel, phone }       the owner pays the platform
+ *   { action: 'sponsor', channel, studentId, phone }      a sponsor pays a listed pupil's next invoice
  *   { action: 'status', kind, checkoutRequestId }         the app polls an outcome
  *
  * No request carries an amount. Fees are what the invoices still owe;
@@ -30,9 +31,10 @@ import { LIMITS, rateLimit } from '../_shared/rate-limit.ts';
  */
 
 interface Body {
-  action?: 'pay-fees' | 'pay-subscription' | 'status';
+  action?: 'pay-fees' | 'pay-subscription' | 'sponsor' | 'status';
   channel?: 'mpesa' | 'card';
   invoiceIds?: string[];
+  studentId?: string;
   phone?: string;
   kind?: 'fees' | 'subscription';
   checkoutRequestId?: string;
@@ -230,6 +232,118 @@ async function startCard(
   });
 }
 
+// ------------------------------------------------------------- sponsorship
+
+/**
+ * A sponsor pays a listed pupil's oldest open invoice. Which pupils are
+ * listed, and what they owe, comes from sponsorable_students() (migration
+ * 0034), read as the sponsor; the amount is that invoice's balance, never a
+ * figure from the request. Settlement is the ordinary fee settlement, and a
+ * trigger tells the pupil's family without naming the sponsor.
+ */
+async function sponsor(caller: Caller, body: Body): Promise<Response> {
+  const card = body.channel === 'card';
+  if (caller.role !== 'parent') {
+    throw new PublicError(403, 'forbidden', 'Sign in with a parent account to sponsor a pupil.');
+  }
+  const studentId = typeof body.studentId === 'string' && UUID.test(body.studentId) ? body.studentId : null;
+  if (!studentId) throw new PublicError(400, 'validation', 'Choose a pupil to sponsor.');
+  const msisdn = card ? null : toMsisdn(body.phone ?? '');
+
+  await rateLimit(caller.admin, `payment:${caller.userId}`, LIMITS.payment);
+
+  const { data: listed, error } = await caller.db.rpc('sponsorable_students');
+  if (error) throw error;
+  const pupil = (listed ?? []).find((p: { student_id: string }) => p.student_id === studentId);
+  if (!pupil) throw new PublicError(404, 'not_found', 'That pupil is no longer waiting for a sponsor.');
+
+  const amount = Number(pupil.invoice_owed);
+  if (!(amount > 0)) throw new PublicError(409, 'conflict', 'Nothing is owed right now.');
+  if (!card && !Number.isInteger(amount)) {
+    throw new PublicError(422, 'validation', 'M-Pesa can only take whole shillings. Please pay by card.');
+  }
+
+  const { data: parent } = await caller.admin
+    .from('parents')
+    .select('id')
+    .eq('profile_id', caller.userId)
+    .maybeSingle();
+  if (!parent) throw new PublicError(403, 'forbidden', 'No parent record for this account.');
+
+  const since = new Date(Date.now() - IN_FLIGHT_MS).toISOString();
+  const { data: inFlight } = await caller.admin
+    .from('payment_allocations')
+    .select('invoice_id, payments!inner(status, created_at)')
+    .eq('invoice_id', pupil.invoice_id)
+    .in('payments.status', ['initiated', 'pending'])
+    .gte('payments.created_at', since)
+    .limit(1);
+  if (inFlight && inFlight.length > 0) {
+    throw new PublicError(409, 'payment_in_progress', 'Someone is paying for this pupil right now. Try again in a few minutes.');
+  }
+
+  const { data: invoice } = await caller.admin
+    .from('invoices')
+    .select('madrasa_id')
+    .eq('id', pupil.invoice_id)
+    .single();
+
+  const { data: payment, error: insertError } = await caller.admin
+    .from('payments')
+    .insert({
+      madrasa_id: invoice!.madrasa_id,
+      parent_id: parent.id,
+      amount,
+      currency: 'KES',
+      method: card ? 'card' : 'mpesa',
+      channel: card ? 'card' : 'mpesa',
+      provider: card ? 'paystack' : 'daraja',
+      status: 'initiated',
+      sponsored: true,
+    })
+    .select('id')
+    .single();
+  if (insertError) throw insertError;
+
+  const { error: allocError } = await caller.admin.from('payment_allocations').insert({
+    payment_id: payment.id,
+    invoice_id: pupil.invoice_id,
+    madrasa_id: invoice!.madrasa_id,
+    amount,
+  });
+  if (allocError) throw allocError;
+
+  if (card) {
+    return startCard(caller, 'fees', 'payments', payment.id, amount, 'KES', { payment_id: payment.id, sponsored: true });
+  }
+
+  let push;
+  try {
+    push = await stkPush({ msisdn: msisdn!, amount, accountReference: 'SADAQAH', description: 'Sponsor a pupil' });
+  } catch (err) {
+    await caller.admin
+      .from('payments')
+      .update({ status: 'failed', failure_reason: 'M-Pesa did not accept the request.' })
+      .eq('id', payment.id);
+    throw err;
+  }
+
+  await caller.admin
+    .from('payments')
+    .update({ status: 'pending', checkout_request_id: push.checkoutRequestId })
+    .eq('id', payment.id);
+
+  return json({
+    paymentId: payment.id,
+    checkoutRequestId: push.checkoutRequestId,
+    amount,
+    currency: 'KES',
+    phone: maskMsisdn(msisdn!),
+    channel: 'mpesa',
+    authorisationUrl: null,
+  });
+}
+
 // ------------------------------------------------------------ subscription
 
 async function paySubscription(caller: Caller, body: Body): Promise<Response> {
@@ -422,6 +536,8 @@ Deno.serve(handler(async (req) => {
   switch (body.action) {
     case 'pay-fees':
       return payFees(caller, body);
+    case 'sponsor':
+      return sponsor(caller, body);
     case 'pay-subscription':
       return paySubscription(caller, body);
     case 'status':

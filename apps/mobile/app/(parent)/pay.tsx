@@ -40,7 +40,7 @@ export default function PayScreen() {
   const fieldError = useFieldError();
   const queryClient = useQueryClient();
 
-  const { invoiceIds } = useLocalSearchParams<{ invoiceIds: string }>();
+  const { invoiceIds, sponsor } = useLocalSearchParams<{ invoiceIds: string; sponsor?: string }>();
   const ids = useMemo(
     () => (invoiceIds ?? '').split(',').filter(Boolean),
     [invoiceIds],
@@ -60,14 +60,30 @@ export default function PayScreen() {
     queryFn: () => api.listInvoices({}),
   });
 
-  const selected = (invoices.data ?? []).filter((invoice) => ids.includes(invoice.id));
-  const total = selected.reduce(
-    (sum, invoice) => sum + (invoice.amountDue - invoice.amountPaid),
-    0,
-  );
+  // Sponsoring a pupil: the amount is that pupil's next unpaid invoice, as
+  // the server will charge it. The pupil stays anonymous here too.
+  const sponsorable = useQuery({
+    queryKey: ['sponsorable'],
+    queryFn: () => api.listSponsorable(),
+    enabled: Boolean(sponsor),
+  });
+  const pupil = sponsor ? (sponsorable.data ?? []).find((p) => p.studentId === sponsor) : undefined;
+
+  const selected = sponsor ? [] : (invoices.data ?? []).filter((invoice) => ids.includes(invoice.id));
+  const total = pupil
+    ? pupil.invoiceOwed
+    : selected.reduce((sum, invoice) => sum + (invoice.amountDue - invoice.amountPaid), 0);
+  const leave = () => router.replace(sponsor ? '/(parent)/sponsor' : '/(parent)/fees');
 
   const initiate = useMutation({
-    mutationFn: api.payFees,
+    mutationFn: (input: Parameters<typeof api.payFees>[0]) =>
+      sponsor
+        ? api.sponsorStudent(
+            input.channel === 'mpesa'
+              ? { studentId: sponsor, channel: 'mpesa', phone: input.phone }
+              : { studentId: sponsor, channel: 'card' },
+          )
+        : api.payFees(input),
     onSuccess: (intent) => {
       setCheckoutRequestId(intent.checkoutRequestId);
       setPhase('waiting');
@@ -91,6 +107,10 @@ export default function PayScreen() {
       return;
     }
 
+    if (sponsor) {
+      initiate.mutate({ channel: 'card', invoiceIds: [] });
+      return;
+    }
     const parsed = payFeesSchema.safeParse({ channel: 'card', invoiceIds: ids });
     if (!parsed.success) {
       setError(t(parsed.error.issues[0]?.message ?? 'validation.no_invoices_selected'));
@@ -126,7 +146,7 @@ export default function PayScreen() {
 
   return (
     <Screen>
-      <PageHeader title={t('parent.payFees')} showBack={phase === 'confirm'} />
+      <PageHeader title={sponsor ? t('sponsor.title') : t('parent.payFees')} showBack={phase === 'confirm'} />
 
       <View style={{ marginTop: theme.spacing.lg, gap: theme.spacing.xl }}>
         {phase === 'confirm' ? (
@@ -137,6 +157,14 @@ export default function PayScreen() {
                   {t('parent.amountToPay')}
                 </AppText>
                 <AppText variant="display">{formatMoney(total)}</AppText>
+                {pupil ? (
+                  <AppText variant="caption" color="textMuted">
+                    {t(pupil.gender === 'female' ? 'sponsor.girl' : 'sponsor.boy', {
+                      klass: pupil.className ?? t('sponsor.aClass'),
+                    })}{' '}
+                    · {pupil.madrasaName}
+                  </AppText>
+                ) : null}
                 <View style={{ gap: theme.spacing.sm }}>
                   {selected.map((invoice) => (
                     <View
@@ -212,16 +240,16 @@ export default function PayScreen() {
           <View style={{ alignItems: 'center', gap: theme.spacing.md, paddingTop: theme.spacing.xl }}>
             <CheckCircle size={56} color={theme.colors.success} weight="fill" />
             <AppText variant="title" align="center">
-              {t('parent.paymentSuccess')}
+              {sponsor ? t('sponsor.thanks') : t('parent.paymentSuccess')}
             </AppText>
             <AppText variant="body" color="textMuted" align="center">
-              {t('parent.paymentSuccessBody', {
+              {t(sponsor ? 'sponsor.thanksBody' : 'parent.paymentSuccessBody', {
                 receipt: payment?.receiptNo ?? '—',
                 amount: formatMoney(payment?.amount ?? total),
               })}
             </AppText>
             <View style={{ alignSelf: 'stretch', marginTop: theme.spacing.lg, gap: theme.spacing.md }}>
-              <Button label={t('common.done')} onPress={() => router.replace('/(parent)/fees')} />
+              <Button label={t('common.done')} onPress={leave} />
             </View>
           </View>
         ) : null}
@@ -243,11 +271,7 @@ export default function PayScreen() {
                   setPhase('confirm');
                 }}
               />
-              <Button
-                label={t('common.cancel')}
-                variant="secondary"
-                onPress={() => router.replace('/(parent)/fees')}
-              />
+              <Button label={t('common.cancel')} variant="secondary" onPress={leave} />
             </View>
           </View>
         ) : null}

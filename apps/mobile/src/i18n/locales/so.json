@@ -924,5 +924,31 @@
     "listen": "Dhageyso",
     "preparing": "Codka ayaa la diyaarinayaa…",
     "stop": "Jooji"
+  },
+  "sponsor": {
+    "title": "Kafaala arday",
+    "subtitle": "Sadaqo lagu bixiyo lacagta madrasada ardayga",
+    "menuSubtitle": "Ku bixi lacagta arday sadaqo ahaan",
+    "intro": "Qoysaska ardaydan waxay oggolaadeen in la caawiyo. Ma arki doontid magacyadooda, iyaguna ma arki doonaan kaaga: waxaa keliya loo sheegaa in kafiil bixiyey. Hadiyaddaadu waxay bixisaa biilka xiga ee ardayga, waxaadna helaysaa rasiid.",
+    "girl": "Gabadh ku jirta {{klass}}",
+    "boy": "Wiil ku jira {{klass}}",
+    "aClass": "madrasada",
+    "memorised_one": "{{count}} suurad la xifdiyey",
+    "memorised_other": "{{count}} suuradood la xifdiyey",
+    "needs": "Waxaa lagu leeyahay {{amount}}",
+    "pay": "Kafaal {{amount}}",
+    "emptyTitle": "Hadda arday sugaya ma jiro",
+    "emptyBody": "Arday kasta oo liiska ku jiray waa la kafaalay. Alle ha abaal mariyo bixiyeyaasha.",
+    "thanks": "Jazakallahu khayran",
+    "thanksBody": "Sadaqadaada {{amount}} waxay bixisay lacagta arday. Rasiidka {{receipt}}.",
+    "cardTitle": "Kafaalada",
+    "cardHint": "Ardaygan liiska kafiillada ku dar haddii qoysku u baahan yahay caawimo lacageed. Kafiilladu ma arkaan magaca ama sawirka ardayga.",
+    "listed": "Liiska ku jira",
+    "list": "Ku dar liiska kafiillada",
+    "unlist": "Ka saar liiska",
+    "noteLabel": "Fariin gaaban oo kafiillada loogu talagalay (ikhtiyaari)",
+    "notePlaceholder": "tusaale: Wuxuu doonayaa inuu dhammeeyo Juz Amma sannadkan",
+    "noteHint": "Magacyo ama faahfaahin aqoonsata ardayga ha qorin.",
+    "guardianAgreed": "Waalidku wuu oggolaaday in ardayga liiska lagu daro"
   }
 }

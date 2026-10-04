@@ -11,6 +11,7 @@ import {
   type AuditEntry,
   type HeatmapCell,
   type PupilSignals,
+  type SponsorablePupil,
   type VoiceLang,
   type MadrasaLifecycleInput,
   type MadrasaStatus,
@@ -93,7 +94,7 @@ const MAX_DB_AGE_MS = 3 * 24 * 60 * 60 * 1000;
  * no way to supply it, so we discard it and re-seed rather than hand the app
  * rows with missing properties.
  */
-const SEED_SCHEMA_VERSION = 6;
+const SEED_SCHEMA_VERSION = 7;
 
 interface PersistedDb {
   seededAt: string;
@@ -378,6 +379,15 @@ function attendanceRateFor(studentId: string): number {
   if (rows.length === 0) return 0;
   const present = rows.filter((a) => a.status === 'present' || a.status === 'late').length;
   return Math.round((present / rows.length) * 100);
+}
+
+/** A pupil's unpaid invoices, oldest due first. */
+function openInvoicesFor(studentId: string): Invoice[] {
+  return requireDb()
+    .invoices.filter(
+      (i) => i.studentId === studentId && i.amountDue > i.amountPaid && ['issued', 'partially_paid', 'overdue'].includes(i.status),
+    )
+    .sort((a, b) => a.dueDate.localeCompare(b.dueDate));
 }
 
 function outstandingFor(studentId: string): number {
@@ -1688,6 +1698,99 @@ export const mockApi: ApiClient = {
       ).slice(0, 5),
       certificates: data.certificates.filter((c) => c.studentId === studentId),
     } satisfies ChildOverview;
+  },
+
+  async listSponsorable() {
+    await bootstrap();
+    await delay();
+    requireProfile();
+    const data = requireDb();
+    // As sponsorable_students(): anonymised, oldest open invoice first.
+    return data.students
+      .filter((s) => s.sponsorshipOpen && s.enrollmentStatus === 'active')
+      .map((s): SponsorablePupil => {
+        const open = openInvoicesFor(s.id);
+        const madrasa = data.madrasas.find((m) => m.id === s.madrasaId);
+        return {
+          studentId: s.id,
+          madrasaName: madrasa?.name ?? '',
+          town: madrasa?.town ?? '',
+          className: s.className,
+          gender: s.gender,
+          memorised: data.hifz.filter(
+            (h) => h.studentId === s.id && ['memorised', 'mastered', 'revising'].includes(h.status),
+          ).length,
+          needed: open.reduce((sum, i) => sum + i.amountDue - i.amountPaid, 0),
+          invoiceOwed: open[0] ? open[0].amountDue - open[0].amountPaid : 0,
+          note: s.sponsorshipNote ?? null,
+        };
+      })
+      .filter((p) => p.needed > 0)
+      .sort((a, b) => b.needed - a.needed);
+  },
+
+  async sponsorStudent(input) {
+    await bootstrap();
+    await delay(700, 1300);
+    const data = requireDb();
+    const profile = requireProfile();
+    if (profile.role !== 'parent') {
+      throw new ApiError('forbidden', 'Sign in with a parent account to sponsor a pupil.');
+    }
+    rateLimit(`pay:${profile.id}`, 5, 10 * 60);
+    const student = data.students.find((s) => s.id === input.studentId && s.sponsorshipOpen);
+    const invoice = student ? openInvoicesFor(student.id)[0] : undefined;
+    if (!student || !invoice) throw new ApiError('not_found', 'That pupil is no longer waiting for a sponsor.');
+
+    // The oldest open invoice's balance, never a figure from the client.
+    const amount = invoice.amountDue - invoice.amountPaid;
+    const phone = input.channel === 'mpesa' ? normaliseKenyanPhone(input.phone) : null;
+    const payment: Payment = {
+      id: newId(NS.payment),
+      madrasaId: invoice.madrasaId,
+      invoiceIds: [invoice.id],
+      parentId: profile.id,
+      amount,
+      currency: 'KES',
+      method: input.channel === 'card' ? 'card' : 'mpesa',
+      providerRef: null,
+      checkoutRequestId: `${input.channel === 'card' ? 'chg' : 'ws_CO'}_${Date.now()}`,
+      status: 'pending',
+      createdAt: new Date().toISOString(),
+      settledAt: null,
+      receiptNo: null,
+    };
+    data.payments.push(payment);
+    pendingSettlement.set(payment.checkoutRequestId!, {
+      settleAt: Date.now() + (input.channel === 'card' ? 3000 : 7000),
+      shouldFail: phone?.endsWith('9999') ?? false,
+      failureReason: null,
+    });
+    await persist();
+    return {
+      paymentId: payment.id,
+      checkoutRequestId: payment.checkoutRequestId!,
+      amount,
+      currency: 'KES',
+      phone,
+      channel: input.channel,
+      authorisationUrl: null,
+    } satisfies PaymentIntent;
+  },
+
+  async setSponsorship(input) {
+    await bootstrap();
+    await delay();
+    requireStaff();
+    const madrasaId = requireMadrasaId();
+    const student = requireDb().students.find((s) => s.id === input.studentId && s.madrasaId === madrasaId);
+    if (!student) throw new ApiError('forbidden', "Only this pupil's madrasa can do that.");
+    if (input.open && !input.guardianAgreed) {
+      throw new ApiError('validation', 'The guardian must agree before a pupil is listed.');
+    }
+    student.sponsorshipOpen = input.open;
+    student.sponsorshipNote = input.open ? input.note?.trim() || null : null;
+    await persist();
   },
 
   async getVoiceReport(studentId: string, lang: VoiceLang) {
