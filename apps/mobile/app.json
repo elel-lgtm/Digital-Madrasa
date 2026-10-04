@@ -50,6 +50,17 @@
         {
           "cameraPermission": "The camera is used to scan the attendance QR code shown by your teacher."
         }
+      ],
+      [
+        "expo-speech-recognition",
+        {
+          "microphonePermission": "Digital Madrasa records your recitation so your teacher and the tajweed assistant can give you feedback.",
+          "speechRecognitionPermission": "Recite-along listens while you recite so it can follow your place in the surah.",
+          "androidSpeechServicePackages": [
+            "com.google.android.googlequicksearchbox",
+            "com.google.android.as"
+          ]
+        }
       ]
     ],
     "experiments": {

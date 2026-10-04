@@ -950,5 +950,28 @@
     "notePlaceholder": "tusaale: Wuxuu doonayaa inuu dhammeeyo Juz Amma sannadkan",
     "noteHint": "Magacyo ama faahfaahin aqoonsata ardayga ha qorin.",
     "guardianAgreed": "Waalidku wuu oggolaaday in ardayga liiska lagu daro"
+  },
+  "reciteAlong": {
+    "title": "La akhri",
+    "subtitle": "Meeshaadu way iftiintaa markaad akhrinayso",
+    "entry": "Ku celceli suurad oo arag eray kasta oo iftiimaya markaad akhrido. Waxba lama duubo lamana qiimeeyo.",
+    "ayahs_one": "{{count}} aayad",
+    "ayahs_other": "{{count}} aayadood",
+    "start": "Bilow akhriska",
+    "stop": "Jooji",
+    "again": "Mar kale akhri",
+    "listening": "Waa dhageysanayaa…",
+    "onDevice": "Taleefankan",
+    "online": "Adeegga codka Google",
+    "progress": "{{done}} ka mid ah {{total}} eray",
+    "missed_one": "{{count}} eray ma la booday?",
+    "missed_other": "{{count}} eray ma la booday?",
+    "perfect": "Ma sha Allah! Eray kasta, siday u kala horreeyaan.",
+    "finished_one": "Waad dhammeysay. {{count}} eray waxaa laga yaabaa in la booday: waxaa hoos looga xariiqay casaan.",
+    "finished_other": "Waad dhammeysay. {{count}} eray waxaa laga yaabaa in la booday: waxaa hoos looga xariiqay casaan.",
+    "note": "Waa celcelis oo keliya. Eray la sheegay in la booday waxaa laga yaabaa inaan si fiican loo maqal. Macallinkaaga ayaa qiimeeya akhriska aad duubtay.",
+    "needsConsent": "La akhri waxay u baahan tahay adeegga codka Google ee taleefankan, kaas oo maqla codkaaga. Waalidkaa ka codso inuu marka hore oggolaado faallada AI.",
+    "noPermission": "Oggolow makarafoonka si aad ula akhrido.",
+    "unavailable": "Aqoonsiga codka hadda lama heli karo. Dhowr daqiiqo kadib isku day."
   }
 }

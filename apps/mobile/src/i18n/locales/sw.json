@@ -950,5 +950,28 @@
     "notePlaceholder": "mf. Anataka kumaliza Juz Amma mwaka huu",
     "noteHint": "Bila majina wala maelezo yanayomtambulisha mwanafunzi.",
     "guardianAgreed": "Mlezi amekubali mwanafunzi aorodheshwe"
+  },
+  "reciteAlong": {
+    "title": "Soma pamoja",
+    "subtitle": "Mahali ulipo panang’aa unaposoma",
+    "entry": "Jizoeze sura na uone kila neno likiwaka unapolisoma. Hakuna kinachorekodiwa wala kusahihishwa.",
+    "ayahs_one": "Aya {{count}}",
+    "ayahs_other": "Aya {{count}}",
+    "start": "Anza kusoma",
+    "stop": "Simamisha",
+    "again": "Soma tena",
+    "listening": "Inasikiliza…",
+    "onDevice": "Kwenye simu hii",
+    "online": "Huduma ya sauti ya Google",
+    "progress": "Maneno {{done}} kati ya {{total}}",
+    "missed_one": "Neno {{count}} limerukwa?",
+    "missed_other": "Maneno {{count}} yamerukwa?",
+    "perfect": "Ma sha Allah! Kila neno, kwa mpangilio.",
+    "finished_one": "Umemaliza. Neno {{count}} huenda limerukwa: limepigiwa mstari mwekundu.",
+    "finished_other": "Umemaliza. Maneno {{count}} huenda yamerukwa: yamepigiwa mstari mwekundu.",
+    "note": "Ni mazoezi tu. Neno lililoonyeshwa kurukwa huenda halikusikika vizuri. Mwalimu wako husahihisha kisomo ulichorekodi.",
+    "needsConsent": "Soma pamoja inahitaji huduma ya sauti ya Google kwenye simu hii, ambayo husikia sauti yako. Mwombe mzazi wako aruhusu maoni ya AI kwanza.",
+    "noPermission": "Ruhusu maikrofoni ili usome pamoja.",
+    "unavailable": "Utambuzi wa sauti haupatikani sasa. Jaribu tena baadaye kidogo."
   }
 }

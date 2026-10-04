@@ -152,6 +152,15 @@ export default function Recite() {
       <View style={{ marginTop: theme.spacing.lg, gap: theme.spacing.xl }}>
         {phase === 'setup' ? (
           <>
+            <Card accent="accent" onPress={() => router.push('/(student)/recite-along')}>
+              <View style={{ gap: theme.spacing.xs }}>
+                <AppText variant="bodyStrong">{t('reciteAlong.title')}</AppText>
+                <AppText variant="caption" color="textMuted">
+                  {t('reciteAlong.entry')}
+                </AppText>
+              </View>
+            </Card>
+
             <Card onPress={() => setPickerOpen(true)}>
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: theme.spacing.md }}>
                 <View style={{ flex: 1, gap: 2 }}>

@@ -950,5 +950,28 @@
     "notePlaceholder": "e.g. Wants to finish Juz Amma this year",
     "noteHint": "No names or details that identify the pupil.",
     "guardianAgreed": "The guardian has agreed to the pupil being listed"
+  },
+  "reciteAlong": {
+    "title": "Recite along",
+    "subtitle": "Your place lights up as you recite",
+    "entry": "Practise a surah and watch each word light up as you recite it. Nothing is recorded or marked.",
+    "ayahs_one": "{{count}} ayah",
+    "ayahs_other": "{{count}} ayahs",
+    "start": "Start reciting",
+    "stop": "Stop",
+    "again": "Recite again",
+    "listening": "Listening…",
+    "onDevice": "On this phone",
+    "online": "Google speech service",
+    "progress": "{{done}} of {{total}} words",
+    "missed_one": "{{count}} word missed?",
+    "missed_other": "{{count}} words missed?",
+    "perfect": "Ma sha Allah! Every word, in order.",
+    "finished_one": "Finished. {{count}} word may have been missed: it is underlined in red.",
+    "finished_other": "Finished. {{count}} words may have been missed: they are underlined in red.",
+    "note": "Practice only. A word marked missed may simply not have been heard clearly. Your teacher marks your recorded recitation.",
+    "needsConsent": "Recite-along needs Google’s speech service on this phone, which hears your voice. Ask your parent to allow AI feedback in the app first.",
+    "noPermission": "Allow the microphone to recite along.",
+    "unavailable": "Speech recognition is not available right now. Try again in a moment."
   }
 }
