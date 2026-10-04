@@ -9,6 +9,7 @@ import {
   type AdminOverview,
   type AuditEntry,
   type HeatmapCell,
+  type PupilSignals,
   type MadrasaLifecycleInput,
   type MadrasaStatus,
   type Certificate,
@@ -2904,6 +2905,53 @@ export const mockApi: ApiClient = {
       }
     }
     return [...cells.values()].map(({ pupils: _pupils, ...cell }) => cell);
+  },
+
+  async getTeacherSignals() {
+    await bootstrap();
+    await delay();
+    requireStaff();
+    const madrasaId = requireMadrasaId();
+    const data = requireDb();
+    const now = Date.now();
+    const ago = (iso: string) => (now - new Date(iso).getTime()) / 86_400_000;
+    const avg = (xs: number[]) => (xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : null);
+    // Mirrors migration 0032. Demo hifz rows have no updated_at, so the last
+    // revision stands in for when the current surah last moved.
+    return data.students
+      .filter((s) => s.madrasaId === madrasaId && s.enrollmentStatus === 'active')
+      .map((s): PupilSignals => {
+        const att = data.attendance.filter((a) => a.studentId === s.id && ago(a.sessionDate) < 28);
+        const recentAtt = att.filter((a) => ago(a.sessionDate) < 14);
+        const prevAtt = att.filter((a) => ago(a.sessionDate) >= 14);
+        const came = (xs: typeof att) => xs.filter((a) => a.status === 'present' || a.status === 'late').length;
+        const counted = (xs: typeof att) => xs.filter((a) => a.status !== 'excused').length;
+        const hifz = data.hifz.filter((h) => h.studentId === s.id);
+        const learning = hifz.find((h) => h.status === 'learning');
+        const memorised = hifz.filter((h) => MEMORISED_STATUSES.includes(h.status));
+        const recs = data.recitations.filter((r) => r.studentId === s.id);
+        const score = (r: Recitation) => r.feedback?.teacherOverride?.overallScore ?? r.feedback?.overallScore ?? null;
+        const scores = (from: number, to: number) =>
+          recs.filter((r) => ago(r.createdAt) >= from && ago(r.createdAt) < to).map(score).filter((x): x is number => x !== null);
+        return {
+          studentId: s.id,
+          fullName: s.fullName,
+          className: s.className,
+          presentRecent: came(recentAtt),
+          sessionsRecent: counted(recentAtt),
+          presentPrev: came(prevAtt),
+          sessionsPrev: counted(prevAtt),
+          learningSurah: learning?.surahNo ?? null,
+          learningAyah: learning?.ayahNo ?? null,
+          learningMovedAt: learning?.lastRevisedAt ?? null,
+          overdueReviews: memorised.filter((h) => h.nextReviewAt !== null && ago(h.nextReviewAt) > 3).length,
+          // Demo rows carry no updated_at, so there is no telling when a surah was memorised.
+          memorisedWeek: 0,
+          lastRecitationAt: recs.map((r) => r.createdAt).sort().at(-1) ?? null,
+          scoreRecent: avg(scores(0, 14)),
+          scorePrev: avg(scores(14, 42)),
+        };
+      });
   },
 
   async setMySanad(chain) {

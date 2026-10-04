@@ -901,5 +901,21 @@
     "pupils_other": "{{count}} arday",
     "emptyTitle": "Weli khalad lama diiwaangelin",
     "emptyBody": "Marka akhrisyada la qiimeeyo, aayadaha ardayda ugu adag halkan ayay ka muuqan doonaan."
+  },
+  "insights": {
+    "title": "Kaaliye: toddobaadkan",
+    "allWell": "Wax u baahan dareenkaaga toddobaadkan ma jiraan. Arday kastaa wuu socdaa.",
+    "more_one": "Muuji {{count}} kale",
+    "more_other": "Muuji {{count}} kale",
+    "attendance_drop": "{{name}} wuxuu yimid {{recent}}% fasallada labadan toddobaad, oo ka hooseeya {{prev}}%. La hadalka qoyska ayaa caawin kara.",
+    "attendance_low": "{{name}} wuxuu yimid {{recent}}% oo keliya fasallada labadan toddobaad.",
+    "stuck": "{{name}} wuxuu ku jiray {{surah}} aayadda {{ayah}} {{weeks}} toddobaad. Ka fiir qayb maalinle ah oo gaaban.",
+    "score_drop": "Dhibcaha akhriska {{name}} waxay ka dhaceen {{prev}} ilaa {{recent}}.",
+    "overdue_one": "{{name}} wuxuu leeyahay {{count}} suurad oo dib-u-eegisteedu dib u dhacday.",
+    "overdue_other": "{{name}} wuxuu leeyahay {{count}} suuradood oo dib-u-eegistoodu dib u dhacday.",
+    "quiet": "{{name}} akhris ma soo dirin {{weeks}} toddobaad.",
+    "memorised_one": "{{name}} wuxuu xifdiyey {{count}} suurad toddobaadkan. Hambalyo!",
+    "memorised_other": "{{name}} wuxuu xifdiyey {{count}} suuradood toddobaadkan. Hambalyo!",
+    "improving": "Dhibcaha akhriska {{name}} waxay ka kaceen {{prev}} ilaa {{recent}}."
   }
 }

@@ -32,6 +32,7 @@
     "db:verify:consent": "node scripts/db-run.mjs supabase/tests/verify_ai_consent.sql",
     "db:verify:ijazah": "node scripts/db-run.mjs supabase/tests/verify_ijazah.sql",
     "db:verify:heatmap": "node scripts/db-run.mjs supabase/tests/verify_heatmap.sql",
+    "db:verify:signals": "node scripts/db-run.mjs supabase/tests/verify_teacher_signals.sql",
     "db:seed": "node scripts/seed-remote.mjs",
     "db:check-auth": "node scripts/check-supabase-auth.mjs",
     "db:types": "npx supabase gen types typescript --project-id rblnistltccysizdcnvt > packages/shared/src/database.types.ts",

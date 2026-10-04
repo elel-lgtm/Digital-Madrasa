@@ -877,10 +877,13 @@ export function createSeed(): MockDatabase {
     { surahNo: 108, ayahTo: 3, spots: [[1, 'ghunnah', 2], [2, 'tafkhim', 3], [3, 'ghunnah', 2]] },
     { surahNo: 67, ayahTo: 10, spots: [[1, 'idgham', 3], [2, 'ikhfa', 2], [3, 'madd', 2], [5, 'iqlab', 1], [8, 'ghunnah', 1]] },
   ];
+  // mulberry32: small, deterministic, and evenly spread.
   let seedState = 20260904;
   const next = (n: number) => {
-    seedState = (seedState * 1103515245 + 12345) % 2147483648;
-    return seedState % n;
+    seedState = (seedState + 0x6d2b79f5) | 0;
+    let x = Math.imul(seedState ^ (seedState >>> 15), 1 | seedState);
+    x = (x + Math.imul(x ^ (x >>> 7), 61 | x)) ^ x;
+    return ((x ^ (x >>> 14)) >>> 0) % n;
   };
   const pick = (spots: [number, TajweedRule, number][]) => {
     let roll = next(spots.reduce((sum, [, , w]) => sum + w, 0));
@@ -927,6 +930,66 @@ export function createSeed(): MockDatabase {
     });
   }
 
+  // And one whose recitation has clearly come on: steady seventies last
+  // month, a fine recitation of Al-Mulk this week.
+  const improver = students[7]!;
+  recitations
+    .filter((r) => r.studentId === improver.id && r.feedback?.teacherOverride)
+    .forEach((r) => {
+      r.feedback!.teacherOverride!.overallScore = 72;
+    });
+  recitations.push({
+    id: uid(NS.recitation, 98),
+    studentId: improver.id,
+    studentName: improver.fullName,
+    madrasaId: MADRASA_ID,
+    audioUrl: 'mock://recitation/history/improver-before',
+    durationMs: 95_000,
+    surahNo: 67,
+    surahName: surahName(67),
+    ayahFrom: 1,
+    ayahTo: 10,
+    qiraahStyle: 'hafs',
+    createdAt: daysAgo(20, 16),
+    feedback: {
+      overallScore: 70,
+      errors: [
+        { surahNo: 67, ayahNo: 3, wordIndex: 2, rule: 'madd', severity: 'moderate', note: '' },
+        { surahNo: 67, ayahNo: 1, wordIndex: 1, rule: 'idgham', severity: 'minor', note: '' },
+      ],
+      assessment: 'assessed',
+      modelVersion: 'tajweed-eval-0.4.1',
+      processingMs: 4000,
+      reviewedByTeacherId: uid(NS.teacher, 1),
+      teacherOverride: { overallScore: 72, remarks: 'Hold the madd longer.' },
+    },
+    syncState: 'synced',
+  });
+  recitations.push({
+    id: uid(NS.recitation, 99),
+    studentId: improver.id,
+    studentName: improver.fullName,
+    madrasaId: MADRASA_ID,
+    audioUrl: 'mock://recitation/history/improver',
+    durationMs: 92_000,
+    surahNo: 67,
+    surahName: surahName(67),
+    ayahFrom: 1,
+    ayahTo: 10,
+    qiraahStyle: 'hafs',
+    createdAt: daysAgo(3, 16),
+    feedback: {
+      overallScore: 93,
+      errors: [],
+      assessment: 'assessed',
+      modelVersion: 'tajweed-eval-0.4.2',
+      processingMs: 3900,
+      reviewedByTeacherId: uid(NS.teacher, 1),
+      teacherOverride: { overallScore: 94, remarks: 'Beautiful. Your madd is steady now.' },
+    },
+    syncState: 'synced',
+  });
+
   // ---------------------------------------------------------- attendance
   const attendance: AttendanceRecord[] = [];
   let attSeq = 0;
@@ -952,6 +1015,35 @@ export function createSeed(): MockDatabase {
       });
     });
   }
+
+  // A few pupils with something for the teacher's co-pilot to notice: one
+  // whose attendance has fallen away this fortnight, one stuck on a surah for
+  // three weeks, one whose revision has slipped.
+  const [absentee, stuck, slipping] = [students[4]!, students[5]!, students[6]!];
+  attendance
+    .filter((a) => a.studentId === absentee.id && now.getTime() - new Date(a.sessionDate).getTime() < 14 * 86_400_000)
+    .forEach((a, index) => {
+      a.status = index % 4 === 0 ? 'present' : 'absent';
+    });
+  hifzSeq += 1;
+  hifz.push({
+    id: uid(NS.hifz, hifzSeq),
+    studentId: stuck.id,
+    surahNo: 67,
+    surahName: surahName(67),
+    juzNo: 29,
+    ayahNo: 12,
+    status: 'learning',
+    confidenceScore: 0.4,
+    lastRevisedAt: daysAgo(24),
+    nextReviewAt: null,
+  });
+  hifz
+    .filter((h) => h.studentId === slipping.id && h.status !== 'revising')
+    .slice(0, 3)
+    .forEach((h) => {
+      h.nextReviewAt = daysAgo(10);
+    });
 
   // -------------------------------------------------------------- grades
   const grades: Grade[] = [];

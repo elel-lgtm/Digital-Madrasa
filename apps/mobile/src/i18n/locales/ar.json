@@ -992,5 +992,33 @@
     "days_other": "{{count}} يومًا",
     "mistakes_other": "{{count}} خطأ",
     "pupils_other": "{{count}} طالب"
+  },
+  "insights": {
+    "title": "المساعد: هذا الأسبوع",
+    "allWell": "لا شيء يحتاج انتباهك هذا الأسبوع. كل الطلاب على المسار.",
+    "attendance_drop": "حضر {{name}} ‏{{recent}}% من الحصص في الأسبوعين الأخيرين، بعد أن كان {{prev}}%. قد يفيد الحديث مع الأسرة.",
+    "attendance_low": "حضر {{name}} ‏{{recent}}% فقط من الحصص في الأسبوعين الأخيرين.",
+    "stuck": "بقي {{name}} عند {{surah}} الآية {{ayah}} منذ {{weeks}} أسابيع. فكّر في مقدار يومي أقصر.",
+    "score_drop": "انخفضت درجات تلاوة {{name}} من {{prev}} إلى {{recent}}.",
+    "quiet": "لم يرسل {{name}} تلاوة منذ {{weeks}} أسابيع.",
+    "improving": "ارتفعت درجات تلاوة {{name}} من {{prev}} إلى {{recent}}.",
+    "more_zero": "عرض {{count}} أخرى",
+    "overdue_zero": "لدى {{name}} سور متأخرة المراجعة: {{count}}.",
+    "memorised_zero": "حفظ {{name}} هذا الأسبوع سورًا عددها {{count}}. أحسنت!",
+    "more_one": "عرض {{count}} أخرى",
+    "overdue_one": "لدى {{name}} سور متأخرة المراجعة: {{count}}.",
+    "memorised_one": "حفظ {{name}} هذا الأسبوع سورًا عددها {{count}}. أحسنت!",
+    "more_two": "عرض {{count}} أخرى",
+    "overdue_two": "لدى {{name}} سور متأخرة المراجعة: {{count}}.",
+    "memorised_two": "حفظ {{name}} هذا الأسبوع سورًا عددها {{count}}. أحسنت!",
+    "more_few": "عرض {{count}} أخرى",
+    "overdue_few": "لدى {{name}} سور متأخرة المراجعة: {{count}}.",
+    "memorised_few": "حفظ {{name}} هذا الأسبوع سورًا عددها {{count}}. أحسنت!",
+    "more_many": "عرض {{count}} أخرى",
+    "overdue_many": "لدى {{name}} سور متأخرة المراجعة: {{count}}.",
+    "memorised_many": "حفظ {{name}} هذا الأسبوع سورًا عددها {{count}}. أحسنت!",
+    "more_other": "عرض {{count}} أخرى",
+    "overdue_other": "لدى {{name}} سور متأخرة المراجعة: {{count}}.",
+    "memorised_other": "حفظ {{name}} هذا الأسبوع سورًا عددها {{count}}. أحسنت!"
   }
 }

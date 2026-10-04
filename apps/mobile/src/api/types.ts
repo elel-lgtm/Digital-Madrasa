@@ -68,6 +68,7 @@ import type {
   UpdateHifzProgressInput,
   VerifiedCertificate,
   HeatmapCell,
+  PupilSignals,
 } from '@digital-madrasa/shared';
 
 /**
@@ -383,6 +384,8 @@ export interface ApiClient {
   getMySanad(): Promise<string[]>;
   /** Staff: tajweed findings per ayah and rule across the madrasa, over the last `days`. */
   getTajweedHeatmap(days: number): Promise<HeatmapCell[]>;
+  /** Staff: per-pupil signals behind the weekly co-pilot insights. */
+  getTeacherSignals(): Promise<PupilSignals[]>;
   setMySanad(chain: string[]): Promise<string[]>;
   /** Public check of a certificate code; works without signing in. */
   verifyCertificate(code: string): Promise<VerifiedCertificate | null>;

@@ -5,6 +5,7 @@ import {
   type Certificate,
   type GradeSubmissionInput,
   type HeatmapCell,
+  type PupilSignals,
   type HifzProgress,
   type IssueCertificateInput,
   type Submission,
@@ -273,6 +274,30 @@ export async function getTajweedHeatmap(days: number): Promise<HeatmapCell[]> {
     rule: r.rule,
     mistakes: r.mistakes,
     students: r.students,
+  }));
+}
+
+/** Per-pupil signals for the co-pilot, read through RLS (migration 0032). */
+export async function getTeacherSignals(): Promise<PupilSignals[]> {
+  const { data, error } = await supabase.rpc('teacher_signals');
+  if (error) fail(error, 'Could not load this week’s insights.');
+  const num = (v: unknown) => (v === null || v === undefined ? null : Number(v));
+  return ((data as Row[] | null) ?? []).map((r) => ({
+    studentId: r.student_id,
+    fullName: r.full_name,
+    className: r.class_name ?? null,
+    presentRecent: r.present_recent,
+    sessionsRecent: r.sessions_recent,
+    presentPrev: r.present_prev,
+    sessionsPrev: r.sessions_prev,
+    learningSurah: r.learning_surah ?? null,
+    learningAyah: r.learning_ayah ?? null,
+    learningMovedAt: r.learning_moved_at ?? null,
+    overdueReviews: r.overdue_reviews,
+    memorisedWeek: r.memorised_week,
+    lastRecitationAt: r.last_recitation_at ?? null,
+    scoreRecent: num(r.score_recent),
+    scorePrev: num(r.score_prev),
   }));
 }
 

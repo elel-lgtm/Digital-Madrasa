@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 import { api } from '@/api';
 import { qk } from '@/api/keys';
+import { InsightsCard } from '@/components/InsightsCard';
 import { LiveSessionCard } from '@/components/LiveSessionCard';
 import { SubscriptionBanner } from '@/components/SubscriptionBanner';
 import {
@@ -208,6 +209,8 @@ export default function TeacherDashboard() {
             )}
           </Card>
         </View>
+
+        <InsightsCard />
 
         {onboardingIncomplete ? (
           <View>

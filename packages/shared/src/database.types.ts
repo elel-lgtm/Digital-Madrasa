@@ -2237,6 +2237,16 @@ export type Database = {
       can_submit_assignment: { Args: { p_assignment_id: string }; Returns: boolean }
       withdraw_certificate: { Args: { p_certificate_id: string }; Returns: undefined }
       set_my_sanad: { Args: { p_chain: string[] }; Returns: string[] }
+      teacher_signals: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          student_id: string; full_name: string; class_name: string | null
+          present_recent: number; sessions_recent: number; present_prev: number; sessions_prev: number
+          learning_surah: number | null; learning_ayah: number | null; learning_moved_at: string | null
+          overdue_reviews: number; memorised_week: number; last_recitation_at: string | null
+          score_recent: number | null; score_prev: number | null
+        }[]
+      }
       tajweed_heatmap: {
         Args: { p_days?: number }
         Returns: { surah_no: number; ayah_no: number; rule: string; mistakes: number; students: number }[]

@@ -901,5 +901,21 @@
     "pupils_other": "{{count}} pupils",
     "emptyTitle": "No mistakes recorded yet",
     "emptyBody": "Once recitations are assessed, the ayahs pupils find hardest appear here."
+  },
+  "insights": {
+    "title": "Co-pilot: this week",
+    "allWell": "Nothing needs your attention this week. Every pupil is on track.",
+    "more_one": "Show {{count}} more",
+    "more_other": "Show {{count}} more",
+    "attendance_drop": "{{name}} came to {{recent}}% of sessions these two weeks, down from {{prev}}%. A word with the family may help.",
+    "attendance_low": "{{name}} has come to only {{recent}}% of sessions these two weeks.",
+    "stuck": "{{name}} has been on {{surah}} ayah {{ayah}} for {{weeks}} weeks. Consider a shorter daily portion.",
+    "score_drop": "{{name}}’s recitation scores fell from {{prev}} to {{recent}}.",
+    "overdue_one": "{{name}} has {{count}} surah overdue for revision.",
+    "overdue_other": "{{name}} has {{count}} surahs overdue for revision.",
+    "quiet": "{{name}} has not sent a recitation in {{weeks}} weeks.",
+    "memorised_one": "{{name}} memorised {{count}} surah this week. Well done!",
+    "memorised_other": "{{name}} memorised {{count}} surahs this week. Well done!",
+    "improving": "{{name}}’s recitation scores rose from {{prev}} to {{recent}}."
   }
 }

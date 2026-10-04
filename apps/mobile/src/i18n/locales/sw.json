@@ -901,5 +901,21 @@
     "pupils_other": "Wanafunzi {{count}}",
     "emptyTitle": "Hakuna makosa bado",
     "emptyBody": "Visomo vikishatathminiwa, aya ngumu zaidi kwa wanafunzi zitaonekana hapa."
+  },
+  "insights": {
+    "title": "Msaidizi: wiki hii",
+    "allWell": "Hakuna kinachohitaji umakini wako wiki hii. Kila mwanafunzi yuko sawa.",
+    "more_one": "Onyesha {{count}} zaidi",
+    "more_other": "Onyesha {{count}} zaidi",
+    "attendance_drop": "{{name}} amehudhuria {{recent}}% ya vipindi wiki hizi mbili, kutoka {{prev}}%. Kuzungumza na familia kunaweza kusaidia.",
+    "attendance_low": "{{name}} amehudhuria {{recent}}% tu ya vipindi wiki hizi mbili.",
+    "stuck": "{{name}} amekuwa kwenye {{surah}} aya {{ayah}} kwa wiki {{weeks}}. Fikiria sehemu fupi ya kila siku.",
+    "score_drop": "Alama za kisomo za {{name}} zimeshuka kutoka {{prev}} hadi {{recent}}.",
+    "overdue_one": "{{name}} ana sura {{count}} iliyochelewa kurudiwa.",
+    "overdue_other": "{{name}} ana sura {{count}} zilizochelewa kurudiwa.",
+    "quiet": "{{name}} hajatuma kisomo kwa wiki {{weeks}}.",
+    "memorised_one": "{{name}} amehifadhi sura {{count}} wiki hii. Hongera!",
+    "memorised_other": "{{name}} amehifadhi sura {{count}} wiki hii. Hongera!",
+    "improving": "Alama za kisomo za {{name}} zimepanda kutoka {{prev}} hadi {{recent}}."
   }
 }
