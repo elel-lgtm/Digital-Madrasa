@@ -52,3 +52,6 @@ verify_jwt = false
 # Called by pg_net / pg_cron with x-dispatch-key (DISPATCH_SECRET), not a JWT.
 [functions.dispatch-notifications]
 verify_jwt = false
+
+[functions.ussd]
+verify_jwt = false

@@ -25,6 +25,7 @@ export const LIMITS = {
   // Each question is a call to a metered model.
   aiChat: { limit: 10, windowSeconds: 60 },
   voiceReport: { limit: 12, windowSeconds: 3600 },
+  ussd: { limit: 40, windowSeconds: 3600 },
   generic: { limit: 100, windowSeconds: 60 },
 } as const;
 
