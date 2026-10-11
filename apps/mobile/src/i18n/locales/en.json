@@ -1,6 +1,6 @@
 {
   "app": {
-    "name": "Digital Madrasa",
+    "name": "ILMORA",
     "tagline": "Quran learning, attendance and fees — for the whole madrasa."
   },
   "common": {
@@ -116,7 +116,7 @@
     "createAccount": "Create account",
     "creatingAccount": "Creating your account…",
     "acceptTerms": "I agree to the Terms of Service",
-    "acceptDataPolicy": "I consent to Digital Madrasa processing this data under the Kenya Data Protection Act 2019",
+    "acceptDataPolicy": "I consent to ILMORA processing this data under the Kenya Data Protection Act 2019",
     "registerMadrasaTitle": "Register your madrasa",
     "registerMadrasaBody": "You'll become the owner. You can invite teachers and add students right after.",
     "registerParentTitle": "Create a parent account",
@@ -401,7 +401,7 @@
     "staffSuspended": "Suspended",
     "staffOwner": "Owner",
     "inviteAdded": "{{name}} was added",
-    "inviteNoEmail": "No email was sent. Ask them to open Digital Madrasa, choose \"Forgot password\" and enter this address to set their own.",
+    "inviteNoEmail": "No email was sent. Ask them to open ILMORA, choose \"Forgot password\" and enter this address to set their own.",
     "staffInvited": "Not signed in yet"
   },
   "parent": {
@@ -516,7 +516,7 @@
     "about": "About",
     "version": "Version {{version}}",
     "restartRequired": "Restart the app to finish switching direction",
-    "signOutConfirm": "Sign out of Digital Madrasa?"
+    "signOutConfirm": "Sign out of ILMORA?"
   },
   "a11y": {
     "backButton": "Go back",
@@ -602,7 +602,7 @@
       "failed": "Failed",
       "reversed": "Reversed"
     },
-    "cardHostedNote": "You will enter your card on Paystack’s secure payment page. Digital Madrasa never sees or stores your card number."
+    "cardHostedNote": "You will enter your card on Paystack’s secure payment page. ILMORA never sees or stores your card number."
   },
   "ai": {
     "title": "AI Assistant",
@@ -634,7 +634,7 @@
     "intro": "Point your camera at the code your teacher is showing.",
     "frameHint": "Hold the code inside the square",
     "permissionTitle": "Camera needed",
-    "permissionBody": "Digital Madrasa needs your camera to read the attendance code. Nothing is recorded except that you were present.",
+    "permissionBody": "ILMORA needs your camera to read the attendance code. Nothing is recorded except that you were present.",
     "permissionAllow": "Allow camera",
     "permissionDenied": "Camera permission was declined. Turn it on in Settings, then come back.",
     "openSettings": "Open settings",
@@ -715,7 +715,7 @@
     "withdrawConfirm": "Withdraw this certificate? It will verify as withdrawn.",
     "verificationCode": "Verification code",
     "share": "Share",
-    "shareText": "{{title}} — awarded to {{name}} by {{madrasa}}. Verify with code {{code}} in the Digital Madrasa app.",
+    "shareText": "{{title}} — awarded to {{name}} by {{madrasa}}. Verify with code {{code}} in the ILMORA app.",
     "verifyTitle": "Verify a certificate",
     "verifyLink": "Verify a certificate",
     "verifyBody": "Enter the 10-character code printed on the certificate.",
@@ -761,7 +761,7 @@
     "notDownloadedBody": "Go back to the library and download it first.",
     "source": "Quran text: Uthmani script from The Noble Qur'an Encyclopedia (quranenc.com), via quran-json (CC BY 4.0).",
     "phoneOnlyTitle": "The offline library is in the phone app",
-    "phoneOnlyBody": "Downloaded juz are saved on your phone so you can read without data. Open Digital Madrasa on your phone to use it."
+    "phoneOnlyBody": "Downloaded juz are saved on your phone so you can read without data. Open ILMORA on your phone to use it."
   },
   "admin": {
     "consoleTitle": "Platform administration",

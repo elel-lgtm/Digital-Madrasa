@@ -1,12 +1,12 @@
 {
   "expo": {
-    "name": "Digital Madrasa",
+    "name": "ILMORA",
     "slug": "digital-madrasa",
     "version": "0.1.0",
     "orientation": "portrait",
     "scheme": "digitalmadrasa",
     "userInterfaceStyle": "automatic",
-    "backgroundColor": "#12100E",
+    "backgroundColor": "#0E3B3A",
     "primaryColor": "#C9A227",
     "assetBundlePatterns": [
       "**/*"
@@ -15,7 +15,7 @@
       "supportsTablet": true,
       "bundleIdentifier": "app.digitalmadrasa.mobile",
       "infoPlist": {
-        "NSMicrophoneUsageDescription": "Digital Madrasa records your recitation so your teacher and the tajweed assistant can give you feedback.",
+        "NSMicrophoneUsageDescription": "ILMORA records your recitation so your teacher and the tajweed assistant can give you feedback.",
         "NSCameraUsageDescription": "The camera is used to scan the attendance QR code shown by your teacher."
       },
       "buildNumber": "1"
@@ -31,7 +31,12 @@
         "android.permission.MODIFY_AUDIO_SETTINGS",
         "android.permission.CAMERA"
       ],
-      "versionCode": 1
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "monochromeImage": "./assets/images/adaptive-icon-monochrome.png",
+        "backgroundColor": "#0E3B3A"
+      }
     },
     "plugins": [
       "expo-router",
@@ -42,7 +47,7 @@
       [
         "expo-audio",
         {
-          "microphonePermission": "Digital Madrasa records your recitation so your teacher and the tajweed assistant can give you feedback."
+          "microphonePermission": "ILMORA records your recitation so your teacher and the tajweed assistant can give you feedback."
         }
       ],
       [
@@ -54,12 +59,25 @@
       [
         "expo-speech-recognition",
         {
-          "microphonePermission": "Digital Madrasa records your recitation so your teacher and the tajweed assistant can give you feedback.",
+          "microphonePermission": "ILMORA records your recitation so your teacher and the tajweed assistant can give you feedback.",
           "speechRecognitionPermission": "Recite-along listens while you recite so it can follow your place in the surah.",
           "androidSpeechServicePackages": [
             "com.google.android.googlequicksearchbox",
             "com.google.android.as"
           ]
+        }
+      ],
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/splash-icon.png",
+          "imageWidth": 200,
+          "resizeMode": "contain",
+          "backgroundColor": "#0E3B3A",
+          "dark": {
+            "image": "./assets/images/splash-icon.png",
+            "backgroundColor": "#0A2B2A"
+          }
         }
       ]
     ],
@@ -72,6 +90,10 @@
       },
       "router": {}
     },
-    "owner": "el_noury7"
+    "owner": "el_noury7",
+    "icon": "./assets/images/icon.png",
+    "web": {
+      "favicon": "./assets/images/favicon.png"
+    }
   }
 }

@@ -1,3 +1,4 @@
+import { APP_NAME } from '@digital-madrasa/shared';
 import Constants, { ExecutionEnvironment } from 'expo-constants';
 import { Platform } from 'react-native';
 import { api } from '@/api';
@@ -49,7 +50,7 @@ export async function registerDeviceForPush(): Promise<string | null> {
     if (Platform.OS === 'android') {
       // The dispatcher sends on channel "default".
       await Notifications.setNotificationChannelAsync('default', {
-        name: 'Digital Madrasa',
+        name: APP_NAME,
         importance: Notifications.AndroidImportance.DEFAULT,
       });
     }

@@ -1,6 +1,6 @@
 {
   "app": {
-    "name": "Digital Madrasa",
+    "name": "ILMORA",
     "tagline": "Kujifunza Qur'ani, mahudhurio na ada — kwa madrasa nzima."
   },
   "common": {
@@ -116,7 +116,7 @@
     "createAccount": "Fungua akaunti",
     "creatingAccount": "Inafungua akaunti yako…",
     "acceptTerms": "Nakubali Masharti ya Huduma",
-    "acceptDataPolicy": "Naruhusu Digital Madrasa kuchakata data hii chini ya Sheria ya Ulinzi wa Data ya Kenya 2019",
+    "acceptDataPolicy": "Naruhusu ILMORA kuchakata data hii chini ya Sheria ya Ulinzi wa Data ya Kenya 2019",
     "registerMadrasaTitle": "Sajili madrasa yako",
     "registerMadrasaBody": "Utakuwa mmiliki. Unaweza kualika walimu na kuongeza wanafunzi baadaye.",
     "registerParentTitle": "Fungua akaunti ya mzazi",
@@ -401,7 +401,7 @@
     "staffSuspended": "Amesimamishwa",
     "staffOwner": "Mmiliki",
     "inviteAdded": "{{name}} ameongezwa",
-    "inviteNoEmail": "Hakuna barua pepe iliyotumwa. Mwambie afungue Digital Madrasa, achague \"Nimesahau nenosiri\" na aweke anwani hii ili ajiwekee nenosiri lake.",
+    "inviteNoEmail": "Hakuna barua pepe iliyotumwa. Mwambie afungue ILMORA, achague \"Nimesahau nenosiri\" na aweke anwani hii ili ajiwekee nenosiri lake.",
     "staffInvited": "Bado hajaingia"
   },
   "parent": {
@@ -516,7 +516,7 @@
     "about": "Kuhusu",
     "version": "Toleo {{version}}",
     "restartRequired": "Fungua programu upya ili kukamilisha kubadili mwelekeo",
-    "signOutConfirm": "Ondoka kwenye Digital Madrasa?"
+    "signOutConfirm": "Ondoka kwenye ILMORA?"
   },
   "a11y": {
     "backButton": "Rudi nyuma",
@@ -602,7 +602,7 @@
       "failed": "Imeshindikana",
       "reversed": "Imerudishwa"
     },
-    "cardHostedNote": "Utaweka kadi yako kwenye ukurasa salama wa malipo wa Paystack. Digital Madrasa haioni wala haihifadhi nambari ya kadi yako."
+    "cardHostedNote": "Utaweka kadi yako kwenye ukurasa salama wa malipo wa Paystack. ILMORA haioni wala haihifadhi nambari ya kadi yako."
   },
   "ai": {
     "title": "Msaidizi wa AI",
@@ -634,7 +634,7 @@
     "intro": "Elekeza kamera kwenye msimbo anaouonyesha mwalimu wako.",
     "frameHint": "Weka msimbo ndani ya mraba",
     "permissionTitle": "Kamera inahitajika",
-    "permissionBody": "Digital Madrasa inahitaji kamera yako kusoma msimbo wa mahudhurio. Hakuna kinachorekodiwa isipokuwa kwamba ulihudhuria.",
+    "permissionBody": "ILMORA inahitaji kamera yako kusoma msimbo wa mahudhurio. Hakuna kinachorekodiwa isipokuwa kwamba ulihudhuria.",
     "permissionAllow": "Ruhusu kamera",
     "permissionDenied": "Ruhusa ya kamera ilikataliwa. Iwashe kwenye Mipangilio, kisha urudi.",
     "openSettings": "Fungua mipangilio",
@@ -715,7 +715,7 @@
     "withdrawConfirm": "Kufuta cheti hiki? Kitathibitishwa kuwa kimefutwa.",
     "verificationCode": "Msimbo wa uthibitisho",
     "share": "Shiriki",
-    "shareText": "{{title}} — kimetolewa kwa {{name}} na {{madrasa}}. Thibitisha kwa msimbo {{code}} kwenye programu ya Digital Madrasa.",
+    "shareText": "{{title}} — kimetolewa kwa {{name}} na {{madrasa}}. Thibitisha kwa msimbo {{code}} kwenye programu ya ILMORA.",
     "verifyTitle": "Thibitisha cheti",
     "verifyLink": "Thibitisha cheti",
     "verifyBody": "Weka msimbo wa herufi 10 uliochapishwa kwenye cheti.",
@@ -761,7 +761,7 @@
     "notDownloadedBody": "Rudi kwenye maktaba uipakue kwanza.",
     "source": "Maandishi ya Qur'ani: hati ya Uthmani kutoka The Noble Qur'an Encyclopedia (quranenc.com), kupitia quran-json (CC BY 4.0).",
     "phoneOnlyTitle": "Maktaba ya nje ya mtandao iko kwenye programu ya simu",
-    "phoneOnlyBody": "Juzuu zilizopakuliwa huhifadhiwa kwenye simu yako ili usome bila bando. Fungua Digital Madrasa kwenye simu yako kuitumia."
+    "phoneOnlyBody": "Juzuu zilizopakuliwa huhifadhiwa kwenye simu yako ili usome bila bando. Fungua ILMORA kwenye simu yako kuitumia."
   },
   "admin": {
     "consoleTitle": "Usimamizi wa jukwaa",

@@ -1,6 +1,6 @@
 {
   "app": {
-    "name": "المدرسة الرقمية",
+    "name": "ILMORA",
     "tagline": "تعلّم القرآن والحضور والرسوم — للمدرسة كلها."
   },
   "common": {
@@ -561,7 +561,7 @@
     "about": "حول التطبيق",
     "version": "الإصدار {{version}}",
     "restartRequired": "أعد تشغيل التطبيق لإكمال تغيير الاتجاه",
-    "signOutConfirm": "تسجيل الخروج من Digital Madrasa؟"
+    "signOutConfirm": "تسجيل الخروج من ILMORA؟"
   },
   "a11y": {
     "backButton": "رجوع",
@@ -657,7 +657,7 @@
       "failed": "فشلت",
       "reversed": "مُعادة"
     },
-    "cardHostedNote": "ستُدخل بطاقتك في صفحة الدفع الآمنة الخاصة بـ Paystack. لا يرى تطبيق Digital Madrasa رقم بطاقتك ولا يحفظه."
+    "cardHostedNote": "ستُدخل بطاقتك في صفحة الدفع الآمنة الخاصة بـ Paystack. لا يرى تطبيق ILMORA رقم بطاقتك ولا يحفظه."
   },
   "ai": {
     "title": "المساعد الذكي",
@@ -790,7 +790,7 @@
     "withdrawConfirm": "سحب هذه الشهادة؟ ستظهر عند التحقق على أنها مسحوبة.",
     "verificationCode": "رمز التحقق",
     "share": "مشاركة",
-    "shareText": "{{title}} — مُنحت لـ{{name}} من {{madrasa}}. تحقق بالرمز {{code}} في تطبيق Digital Madrasa.",
+    "shareText": "{{title}} — مُنحت لـ{{name}} من {{madrasa}}. تحقق بالرمز {{code}} في تطبيق ILMORA.",
     "verifyTitle": "التحقق من شهادة",
     "verifyLink": "التحقق من شهادة",
     "verifyBody": "أدخل الرمز المكوّن من 10 أحرف المطبوع على الشهادة.",
@@ -836,7 +836,7 @@
     "notDownloadedBody": "ارجع إلى المكتبة ونزّله أولًا.",
     "source": "نص القرآن: بالرسم العثماني من موسوعة القرآن الكريم (quranenc.com)، عبر quran-json (CC BY 4.0).",
     "phoneOnlyTitle": "المكتبة دون اتصال متاحة في تطبيق الهاتف",
-    "phoneOnlyBody": "تُحفظ الأجزاء المنزّلة على هاتفك لتقرأ دون استهلاك البيانات. افتح Digital Madrasa على هاتفك لاستخدامها."
+    "phoneOnlyBody": "تُحفظ الأجزاء المنزّلة على هاتفك لتقرأ دون استهلاك البيانات. افتح ILMORA على هاتفك لاستخدامها."
   },
   "admin": {
     "consoleTitle": "إدارة المنصة",

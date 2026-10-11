@@ -1,6 +1,6 @@
 {
   "app": {
-    "name": "Digital Madrasa",
+    "name": "ILMORA",
     "tagline": "Barashada Quranka, xaadirinta iyo lacagta — madrasada oo dhan."
   },
   "common": {
@@ -116,7 +116,7 @@
     "createAccount": "Samee akoon",
     "creatingAccount": "Akoonkaaga waa la samaynayaa…",
     "acceptTerms": "Waan aqbalay Shuruudaha Adeegga",
-    "acceptDataPolicy": "Waan oggolaaday in Digital Madrasa ay xogtan u isticmaasho sida Sharciga Ilaalinta Xogta Kenya 2019",
+    "acceptDataPolicy": "Waan oggolaaday in ILMORA ay xogtan u isticmaasho sida Sharciga Ilaalinta Xogta Kenya 2019",
     "registerMadrasaTitle": "Diiwaan geli madrasadaada",
     "registerMadrasaBody": "Adiga ayaa noqonaya milkiilaha. Isla markaaba waad casuumi kartaa macallimiin, waadna ku dari kartaa arday.",
     "registerParentTitle": "Samee akoon waalid",
@@ -401,7 +401,7 @@
     "staffSuspended": "La hakiyay",
     "staffOwner": "Milkiilaha",
     "inviteAdded": "{{name}} waa lagu daray",
-    "inviteNoEmail": "Iimayl lama dirin. U sheeg inuu furo Digital Madrasa, doorto \"Erayga sirta ah waan iloobay\" oo geliyo cinwaankan si uu u dejiyo kiisa.",
+    "inviteNoEmail": "Iimayl lama dirin. U sheeg inuu furo ILMORA, doorto \"Erayga sirta ah waan iloobay\" oo geliyo cinwaankan si uu u dejiyo kiisa.",
     "staffInvited": "Weli ma gelin"
   },
   "parent": {
@@ -516,7 +516,7 @@
     "about": "Ku saabsan",
     "version": "Nooca {{version}}",
     "restartRequired": "Dib u bilow app-ka si loo dhammeeyo beddelidda jihada",
-    "signOutConfirm": "Ka bax Digital Madrasa?"
+    "signOutConfirm": "Ka bax ILMORA?"
   },
   "a11y": {
     "backButton": "Dib u noqo",
@@ -602,7 +602,7 @@
       "failed": "Fashilmay",
       "reversed": "La celiyay"
     },
-    "cardHostedNote": "Kaarkaaga waxaad gelin doontaa bogga lacag-bixinta ee ammaan ah ee Paystack. Digital Madrasa ma arkto mana kaydiso lambarka kaarkaaga."
+    "cardHostedNote": "Kaarkaaga waxaad gelin doontaa bogga lacag-bixinta ee ammaan ah ee Paystack. ILMORA ma arkto mana kaydiso lambarka kaarkaaga."
   },
   "ai": {
     "title": "Kaaliyaha AI",
@@ -634,7 +634,7 @@
     "intro": "Kamaradaada u jeedi koodhka macallinkaagu soo bandhigayo.",
     "frameHint": "Koodhka ku hay gudaha afargeesoodka",
     "permissionTitle": "Kamarad ayaa loo baahan yahay",
-    "permissionBody": "Digital Madrasa waxay u baahan tahay kamaraddaada si ay u akhrido koodhka xaadirinta. Waxba lama diiwaan gelinayo marka laga reebo inaad joogtay.",
+    "permissionBody": "ILMORA waxay u baahan tahay kamaraddaada si ay u akhrido koodhka xaadirinta. Waxba lama diiwaan gelinayo marka laga reebo inaad joogtay.",
     "permissionAllow": "Ogolow kamarada",
     "permissionDenied": "Ogolaanshaha kamarada waa la diiday. Ka shid Goobaha, kadibna soo noqo.",
     "openSettings": "Fur goobaha",
@@ -715,7 +715,7 @@
     "withdrawConfirm": "Ka noqo shahaadadan? Waxay u xaqiijin doontaa inay tahay mid laga noqday.",
     "verificationCode": "Koodhka xaqiijinta",
     "share": "La wadaag",
-    "shareText": "{{title}} — waxaa la siiyay {{name}}, waxaa bixisay {{madrasa}}. Ku xaqiiji koodhka {{code}} app-ka Digital Madrasa.",
+    "shareText": "{{title}} — waxaa la siiyay {{name}}, waxaa bixisay {{madrasa}}. Ku xaqiiji koodhka {{code}} app-ka ILMORA.",
     "verifyTitle": "Xaqiiji shahaado",
     "verifyLink": "Xaqiiji shahaado",
     "verifyBody": "Geli koodhka 10-ka xaraf ah ee ku daabacan shahaadada.",
@@ -761,7 +761,7 @@
     "notDownloadedBody": "Ku noqo maktabadda oo marka hore soo deji.",
     "source": "Qoraalka Quraanka: far Cusmaani ah oo laga soo qaatay The Noble Qur'an Encyclopedia (quranenc.com), iyadoo loo marayo quran-json (CC BY 4.0).",
     "phoneOnlyTitle": "Maktabadda offline-ka waxay ku jirtaa app-ka taleefanka",
-    "phoneOnlyBody": "Juz-yada la soo dejiyay waxay ku kaydsamaan taleefankaaga si aad u akhrido adigoo aan xog isticmaalin. Ka fur Digital Madrasa taleefankaaga si aad u isticmaasho."
+    "phoneOnlyBody": "Juz-yada la soo dejiyay waxay ku kaydsamaan taleefankaaga si aad u akhrido adigoo aan xog isticmaalin. Ka fur ILMORA taleefankaaga si aad u isticmaasho."
   },
   "admin": {
     "consoleTitle": "Maamulka madasha",

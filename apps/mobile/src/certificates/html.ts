@@ -87,7 +87,7 @@ export async function certificateHtml(doc: CertificateDocument): Promise<string>
     <div class="sign">Teacher’s signature</div>
     <div class="verify">
       <div>
-        <div class="hint">Scan to check this certificate is genuine, or enter the code in the Digital Madrasa app.</div>
+        <div class="hint">Scan to check this certificate is genuine, or enter the code in the ILMORA app.</div>
         <div class="code">${e(doc.verificationCode)}</div>
       </div>
       <div class="qr">${qr}</div>

@@ -1,4 +1,4 @@
-import type { Certificate } from '@digital-madrasa/shared';
+import { APP_NAME, type Certificate } from '@digital-madrasa/shared';
 import { Certificate as CertificateIcon, FilePdf, ShareNetwork } from 'phosphor-react-native';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -32,7 +32,7 @@ export function CertificateCard({ certificate, madrasaName, onWithdraw, withdraw
       message: `${t('learning.shareText', {
         title: certificate.title,
         name: certificate.studentName,
-        madrasa: madrasaName ?? 'Digital Madrasa',
+        madrasa: madrasaName ?? APP_NAME,
         code: certificate.verificationCode,
       })}
 ${verifyUrlFor(env.supabaseUrl, certificate.verificationCode)}`,
@@ -46,7 +46,7 @@ ${verifyUrlFor(env.supabaseUrl, certificate.verificationCode)}`,
         title: certificate.title,
         kindLabel: t(`learning.kind_${certificate.kind}`),
         studentName: certificate.studentName,
-        madrasaName: madrasaName ?? 'Digital Madrasa',
+        madrasaName: madrasaName ?? APP_NAME,
         issuedAt: certificate.issuedAt,
         verificationCode: certificate.verificationCode,
         sanad: certificate.sanad ?? undefined,

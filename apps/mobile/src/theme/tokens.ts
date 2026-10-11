@@ -177,6 +177,21 @@ export const typography: Record<
   mono: { fontFamily: fonts.bodySemibold, fontSize: 14, lineHeight: 20, letterSpacing: 1.2 },
 };
 
+/**
+ * ILMORA brand colours, for the logo and launch surfaces only. They are the
+ * same in light and dark schemes: a logo does not change with the theme. The
+ * app's own surfaces keep reading from the palettes below.
+ */
+export const brand = {
+  teal: '#0E3B3A',
+  tealDeep: '#0A2B2A',
+  tealStar: '#14514D',
+  gold: '#D4AF37',
+  goldLight: '#E8CB6E',
+  goldDeep: '#A8811C',
+  ivory: '#F7F0E1',
+} as const;
+
 /** WCAG AA needs 44pt; we use it as the floor for every tappable element. */
 export const MIN_TOUCH_TARGET = 44;
 

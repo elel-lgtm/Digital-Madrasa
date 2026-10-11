@@ -2,6 +2,7 @@ import { Slot, usePathname, useRouter } from 'expo-router';
 import { Buildings, ChartBar, ClockCounterClockwise, Desktop, SignOut } from 'phosphor-react-native';
 import { useTranslation } from 'react-i18next';
 import { Platform, Pressable, ScrollView, View, useWindowDimensions } from 'react-native';
+import { BrandLogo } from '@/components/brand/BrandMark';
 import { RoleGate } from '@/components/RoleGate';
 import { AppText, Button, Card, Screen } from '@/components/ui';
 import { useSignOut } from '@/hooks/useSession';
@@ -56,7 +57,7 @@ function AdminShell() {
         }}
       >
         <View style={{ gap: 2 }}>
-          <AppText variant="heading">Digital Madrasa</AppText>
+          <BrandLogo layout="inline" size={32} showDescriptor={false} />
           <AppText variant="caption" color="textMuted">
             {t('admin.consoleTitle')}
           </AppText>

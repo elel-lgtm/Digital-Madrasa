@@ -3,7 +3,19 @@
  * Edge Functions. Anything that must agree across those boundaries lives here.
  */
 
-export const APP_NAME = 'Digital Madrasa';
+/**
+ * The product brand. ILMORA is the branded implementation of the Digital
+ * Madrasa Mobile Application: user-facing surfaces say ILMORA, the academic
+ * project keeps its title. Internal identifiers (package name, link scheme,
+ * admission-number prefix, database names) are unchanged on purpose.
+ */
+export const BRAND = {
+  name: 'ILMORA',
+  descriptor: 'Integrated Qur’an & Madrasa Learning',
+  academicTitle: 'Digital Madrasa Mobile Application',
+} as const;
+
+export const APP_NAME = BRAND.name;
 
 /** Admission numbers are `DM-YYYY-XXXX`, unique platform-wide per year. */
 export const ADMISSION_NO_PREFIX = 'DM';

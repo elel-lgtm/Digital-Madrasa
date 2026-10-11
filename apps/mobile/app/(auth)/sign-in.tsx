@@ -4,6 +4,7 @@ import { ArrowLeft } from 'phosphor-react-native';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { KeyboardAvoidingView, Platform, Pressable, View } from 'react-native';
+import { BrandLogo } from '@/components/brand/BrandMark';
 import { DEMO_ACCOUNTS } from '@/api';
 import { AppText, Button, Card, Screen, TextField } from '@/components/ui';
 import { useApiError, useFieldError } from '@/hooks/useApiError';
@@ -52,6 +53,8 @@ export default function SignIn() {
         >
           <ArrowLeft size={24} color={theme.colors.text} />
         </Pressable>
+
+        <BrandLogo layout="inline" size={40} showDescriptor={false} />
 
         <View style={{ gap: theme.spacing.xs }}>
           <AppText variant="title">{t('auth.signInTitle')}</AppText>

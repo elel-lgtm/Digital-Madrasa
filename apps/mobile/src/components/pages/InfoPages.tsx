@@ -1,4 +1,4 @@
-import { APP_NAME, reportProblemSchema } from '@digital-madrasa/shared';
+import { BRAND, reportProblemSchema } from '@digital-madrasa/shared';
 import Constants from 'expo-constants';
 import { CheckCircle } from 'phosphor-react-native';
 import { useState } from 'react';
@@ -16,6 +16,7 @@ import {
   SectionHeader,
   TextField,
 } from '@/components/ui';
+import { BrandLogo } from '@/components/brand/BrandMark';
 import { useFieldError } from '@/hooks/useApiError';
 import { useTheme } from '@/theme/ThemeProvider';
 
@@ -31,7 +32,10 @@ export function AboutPage() {
       <View style={{ marginTop: theme.spacing.lg, gap: theme.spacing.xl }}>
         <Card>
           <View style={{ gap: theme.spacing.sm }}>
-            <AppText variant="heading">{APP_NAME}</AppText>
+            <BrandLogo size={64} />
+            <AppText variant="caption" color="textMuted">
+              {BRAND.academicTitle}
+            </AppText>
             <AppText variant="body" color="textMuted">
               {t('app.tagline')}
             </AppText>

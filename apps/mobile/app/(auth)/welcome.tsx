@@ -1,8 +1,9 @@
 import { SUPPORTED_LOCALES, type Locale } from '@digital-madrasa/shared';
-import { BookOpen, GraduationCap, Users } from 'phosphor-react-native';
+import { GraduationCap, Users } from 'phosphor-react-native';
 import { useTranslation } from 'react-i18next';
 import { Pressable, View } from 'react-native';
 import { useRouter } from 'expo-router';
+import { BrandLogo } from '@/components/brand/BrandMark';
 import { AppText, Card, Screen } from '@/components/ui';
 import { usePreferences } from '@/store/preferences';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -24,22 +25,9 @@ export default function Welcome() {
   return (
     <Screen contentStyle={{ paddingTop: theme.spacing.xxxl, gap: theme.spacing.xl }}>
       <View style={{ gap: theme.spacing.sm }}>
-        <View
-          style={{
-            width: 56,
-            height: 56,
-            borderRadius: theme.radius.lg,
-            backgroundColor: theme.colors.accentSoft,
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginBottom: theme.spacing.md,
-          }}
-        >
-          <BookOpen size={30} color={theme.colors.accent} weight="duotone" />
+        <View style={{ marginBottom: theme.spacing.lg }}>
+          <BrandLogo size={72} />
         </View>
-        <AppText variant="label" color="accent" uppercase>
-          {t('app.name')}
-        </AppText>
         <AppText variant="display">{t('auth.welcomeTitle')}</AppText>
         <AppText variant="body" color="textMuted">
           {t('auth.welcomeBody')}
