@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 import { api } from '@/api';
 import { qk } from '@/api/keys';
+import { MasterReciterCard } from '@/components/MasterReciter';
 import { RecitationPlayer } from '@/components/RecitationPlayer';
 import { AssessmentNote, praiseAllowed, recitationScore } from '@/components/AiFeedback';
 import { AiDisclaimer, FindingList, ScoreRing } from '@/components/TajweedFeedback';
@@ -101,6 +102,13 @@ export default function ParentRecitation() {
           </View>
         </Card>
 
+        <MasterReciterCard
+          surahNo={data.surahNo}
+          ayahFrom={data.ayahFrom}
+          ayahTo={data.ayahTo}
+          qiraah={data.qiraahStyle}
+        />
+
         {feedback ? (
           <>
             <View style={{ alignItems: 'center', gap: theme.spacing.sm }}>
@@ -138,7 +146,7 @@ export default function ParentRecitation() {
               <SectionHeader
                 title={t('student.findings', { count: feedback.errors.length })}
               />
-              <FindingList findings={feedback.errors} assessed={praiseAllowed(feedback)} />
+              <FindingList findings={feedback.errors} assessed={praiseAllowed(feedback)} qiraah={data.qiraahStyle} />
             </View>
 
             <AiDisclaimer />

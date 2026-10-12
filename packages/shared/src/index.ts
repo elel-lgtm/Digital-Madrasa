@@ -11,6 +11,7 @@ export * from './heatmap';
 export * from './insights';
 export * from './voiceReport';
 export * from './reciteAlong';
+export * from './masterReciter';
 export type { Database, Json } from './database.types';
 export * from './schemas/common';
 export * from './schemas/auth';

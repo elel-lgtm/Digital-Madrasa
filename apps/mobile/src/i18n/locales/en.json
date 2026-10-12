@@ -975,5 +975,14 @@
     "needsConsent": "Recite-along needs Google’s speech service on this phone, which hears your voice. Ask your parent to allow AI feedback in the app first.",
     "noPermission": "Allow the microphone to recite along.",
     "unavailable": "Speech recognition is not available right now. Try again in a moment."
+  },
+  "master": {
+    "title": "Compare with a master reciter",
+    "hint": "Hear {{surah}} {{from}}–{{to}} recited by a master qari, then listen to your own recording again.",
+    "play": "Play the passage",
+    "stop": "Stop",
+    "stopAt": "Stop (ayah {{ayah}})",
+    "hearAyah": "Hear ayah {{ayah}} correctly",
+    "unavailable": "No master recitation is available in this qiraah yet."
   }
 }

@@ -4,6 +4,7 @@ import { CheckCircle } from 'phosphor-react-native';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, View } from 'react-native';
 import { api } from '@/api';
+import { MasterReciterCard } from '@/components/MasterReciter';
 import { RecitationPlayer } from '@/components/RecitationPlayer';
 import { qk } from '@/api/keys';
 import { AssessmentNote, praiseAllowed, recitationScore } from '@/components/AiFeedback';
@@ -107,6 +108,13 @@ export default function RecitationFeedback() {
           />
         </Card>
 
+        <MasterReciterCard
+          surahNo={recitation.surahNo}
+          ayahFrom={recitation.ayahFrom}
+          ayahTo={recitation.ayahTo}
+          qiraah={recitation.qiraahStyle}
+        />
+
         {result.teacherOverride ? (
           <Card accent="success">
             <View style={{ gap: theme.spacing.sm }}>
@@ -132,7 +140,7 @@ export default function RecitationFeedback() {
                   : t('student.findings', { count: result.errors.length })
               }
             />
-            <FindingList findings={result.errors} assessed={praiseAllowed(result)} />
+            <FindingList findings={result.errors} assessed={praiseAllowed(result)} qiraah={recitation.qiraahStyle} />
           </View>
         ) : null}
 

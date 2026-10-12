@@ -975,5 +975,14 @@
     "needsConsent": "La akhri waxay u baahan tahay adeegga codka Google ee taleefankan, kaas oo maqla codkaaga. Waalidkaa ka codso inuu marka hore oggolaado faallada AI.",
     "noPermission": "Oggolow makarafoonka si aad ula akhrido.",
     "unavailable": "Aqoonsiga codka hadda lama heli karo. Dhowr daqiiqo kadib isku day."
+  },
+  "master": {
+    "title": "Is barbardhig akhriste caan ah",
+    "hint": "Maqal {{surah}} {{from}}–{{to}} oo uu akhriyey qaari caan ah, kadibna mar kale dhageyso duubistaada.",
+    "play": "Shid qaybta",
+    "stop": "Jooji",
+    "stopAt": "Jooji (aayadda {{ayah}})",
+    "hearAyah": "Maqal aayadda {{ayah}} si sax ah",
+    "unavailable": "Weli akhris qaari ah lagama hayo qiraa’adan."
   }
 }

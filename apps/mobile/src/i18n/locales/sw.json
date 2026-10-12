@@ -975,5 +975,14 @@
     "needsConsent": "Soma pamoja inahitaji huduma ya sauti ya Google kwenye simu hii, ambayo husikia sauti yako. Mwombe mzazi wako aruhusu maoni ya AI kwanza.",
     "noPermission": "Ruhusu maikrofoni ili usome pamoja.",
     "unavailable": "Utambuzi wa sauti haupatikani sasa. Jaribu tena baadaye kidogo."
+  },
+  "master": {
+    "title": "Linganisha na msomaji bingwa",
+    "hint": "Sikia {{surah}} {{from}}–{{to}} ikisomwa na qari bingwa, kisha sikiliza tena kisomo chako.",
+    "play": "Cheza kifungu",
+    "stop": "Simamisha",
+    "stopAt": "Simamisha (aya {{ayah}})",
+    "hearAyah": "Sikia aya {{ayah}} ikisomwa sawasawa",
+    "unavailable": "Bado hakuna kisomo cha bingwa kwa qiraa hii."
   }
 }

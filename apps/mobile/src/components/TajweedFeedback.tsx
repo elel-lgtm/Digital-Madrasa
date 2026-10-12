@@ -1,8 +1,9 @@
-import type { TajweedFinding } from '@digital-madrasa/shared';
+import type { QiraahStyle, TajweedFinding } from '@digital-madrasa/shared';
 import { Info } from 'phosphor-react-native';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
+import { MasterAyahButton } from '@/components/MasterReciter';
 import { AppText, Badge, Card } from '@/components/ui';
 import { useTheme } from '@/theme/ThemeProvider';
 
@@ -66,9 +67,11 @@ interface FindingListProps {
   onToggleDismiss?: (index: number) => void;
   /** False when the recording was not assessed (no consent, AI unavailable). */
   assessed?: boolean;
+  /** When given, each finding offers that ayah from a master reciter in this qiraah. */
+  qiraah?: QiraahStyle;
 }
 
-export function FindingList({ findings, dismissed = [], onToggleDismiss, assessed = true }: FindingListProps) {
+export function FindingList({ findings, dismissed = [], onToggleDismiss, assessed = true, qiraah }: FindingListProps) {
   const theme = useTheme();
   const { t } = useTranslation();
 
@@ -108,6 +111,7 @@ export function FindingList({ findings, dismissed = [], onToggleDismiss, assesse
               <AppText variant="body" color="textMuted">
                 {finding.note}
               </AppText>
+              {qiraah ? <MasterAyahButton surahNo={finding.surahNo} ayahNo={finding.ayahNo} qiraah={qiraah} /> : null}
             </View>
           </Card>
         );

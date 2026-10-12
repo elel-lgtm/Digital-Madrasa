@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 import { api } from '@/api';
+import { MasterReciterCard } from '@/components/MasterReciter';
 import { RecitationPlayer } from '@/components/RecitationPlayer';
 import { qk } from '@/api/keys';
 import { AssessmentNote, praiseAllowed } from '@/components/AiFeedback';
@@ -156,6 +157,13 @@ export default function ReviewRecitation() {
           </View>
         </Card>
 
+        <MasterReciterCard
+          surahNo={data.surahNo}
+          ayahFrom={data.ayahFrom}
+          ayahTo={data.ayahTo}
+          qiraah={data.qiraahStyle}
+        />
+
         {feedback ? (
           <>
             <View style={{ alignItems: 'center', gap: theme.spacing.sm }}>
@@ -178,6 +186,7 @@ export default function ReviewRecitation() {
               <FindingList
                 findings={feedback.errors}
                 assessed={praiseAllowed(feedback)}
+                qiraah={data.qiraahStyle}
                 dismissed={dismissed}
                 onToggleDismiss={(index) =>
                   setDismissed((current) =>
