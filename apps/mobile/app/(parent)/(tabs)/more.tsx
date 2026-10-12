@@ -8,6 +8,7 @@ import {
   ShieldCheck,
   Sparkle,
   UserPlus,
+  YoutubeLogo,
 } from 'phosphor-react-native';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
@@ -57,6 +58,13 @@ export default function ParentMore() {
                 subtitle={t('sponsor.menuSubtitle')}
                 left={<HandHeart size={20} color={theme.colors.accent} weight="duotone" />}
                 onPress={() => router.push('/(parent)/sponsor')}
+              />
+              <Divider />
+              <ListRow
+                title={t('videos.title')}
+                subtitle={t('videos.menuSubtitle')}
+                left={<YoutubeLogo size={20} color={theme.colors.accent} weight="duotone" />}
+                onPress={() => router.push('/(parent)/videos')}
               />
               <Divider />
               <ListRow

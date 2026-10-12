@@ -1035,5 +1035,25 @@
     "status_failed": "Fashilmay",
     "status_reversed": "Dib loo celiyey",
     "status_initiated": "La bilaabay"
+  },
+  "videos": {
+    "title": "Muuqaallada Qur’aanka",
+    "subtitle": "Casharro tajwiid iyo akhrisyo ay macallimiintaadu doorteen",
+    "menuSubtitle": "Casharro tajwiid iyo akhrisyo macallimiintaada",
+    "play": "Daar {{title}}",
+    "everyone": "Fasallada oo dhan",
+    "emptyTitle": "Weli muuqaal ma jiro",
+    "emptyBody": "Macallinkaagu weli muuqaal kuma darin.",
+    "emptyStaff": "Ku dhaji xiriiriye YouTube kor si aad u darto muuqaalka ugu horreeya.",
+    "addTitle": "Ku dar muuqaal YouTube",
+    "link": "Xiriiriyaha YouTube",
+    "notYouTube": "Taasi ma aha xiriiriye muuqaal YouTube.",
+    "videoTitle": "Cinwaanka",
+    "note": "Fariin ardayda (ikhtiyaari)",
+    "noteHint": "tusaale: Daawo ka hor fasalka Khamiista.",
+    "forClass": "U muuji",
+    "add": "Ku dar muuqaal",
+    "remove": "Ka saar muuqaalka",
+    "removeConfirm": "Ka saar muuqaalkan?"
   }
 }

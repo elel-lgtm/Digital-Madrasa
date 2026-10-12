@@ -8,6 +8,7 @@ import {
   Megaphone,
   SquaresFour,
   TreeStructure,
+  YoutubeLogo,
   Question,
   SignOut,
   Sparkle,
@@ -72,6 +73,11 @@ export default function TeacherMore() {
           icon: SquaresFour,
           label: t('heatmap.title'),
           onPress: () => router.push('/(teacher)/mistakes'),
+        },
+        {
+          icon: YoutubeLogo,
+          label: t('videos.title'),
+          onPress: () => router.push('/(teacher)/videos'),
         },
         {
           icon: TreeStructure,

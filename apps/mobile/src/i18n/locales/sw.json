@@ -1035,5 +1035,25 @@
     "status_failed": "Imeshindwa",
     "status_reversed": "Imerejeshwa",
     "status_initiated": "Imeanzishwa"
+  },
+  "videos": {
+    "title": "Video za Qur’ani",
+    "subtitle": "Masomo ya tajwidi na visomo vilivyochaguliwa na walimu wako",
+    "menuSubtitle": "Masomo ya tajwidi na visomo kutoka kwa walimu wako",
+    "play": "Cheza {{title}}",
+    "everyone": "Madarasa yote",
+    "emptyTitle": "Bado hakuna video",
+    "emptyBody": "Mwalimu wako bado hajaongeza video.",
+    "emptyStaff": "Bandika kiungo cha YouTube hapo juu kuongeza video ya kwanza.",
+    "addTitle": "Ongeza video ya YouTube",
+    "link": "Kiungo cha YouTube",
+    "notYouTube": "Hicho si kiungo cha video ya YouTube.",
+    "videoTitle": "Kichwa",
+    "note": "Ujumbe kwa wanafunzi (si lazima)",
+    "noteHint": "mf. Tazama kabla ya darasa la Alhamisi.",
+    "forClass": "Onyesha kwa",
+    "add": "Ongeza video",
+    "remove": "Ondoa video",
+    "removeConfirm": "Ondoa video hii?"
   }
 }

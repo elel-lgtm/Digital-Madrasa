@@ -82,6 +82,19 @@ export interface Student {
   createdAt: string;
 }
 
+/** A YouTube video a teacher chose for a class, or for the whole madrasa. */
+export interface ClassVideo {
+  id: ID;
+  madrasaId: ID;
+  /** null: for every class. */
+  classId: ID | null;
+  className: string | null;
+  youtubeId: string;
+  title: string;
+  note: string | null;
+  createdAt: string;
+}
+
 /** A pupil open to sponsorship, as a sponsor sees them: never a name or photo. */
 export interface SponsorablePupil {
   studentId: ID;

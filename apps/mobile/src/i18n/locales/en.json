@@ -1035,5 +1035,25 @@
     "status_failed": "Failed",
     "status_reversed": "Reversed",
     "status_initiated": "Started"
+  },
+  "videos": {
+    "title": "Qur’an videos",
+    "subtitle": "Tajweed lessons and recitations chosen by your teachers",
+    "menuSubtitle": "Tajweed lessons and recitations from your teachers",
+    "play": "Play {{title}}",
+    "everyone": "All classes",
+    "emptyTitle": "No videos yet",
+    "emptyBody": "Your teacher has not added any videos yet.",
+    "emptyStaff": "Paste a YouTube link above to add the first video.",
+    "addTitle": "Add a YouTube video",
+    "link": "YouTube link",
+    "notYouTube": "That is not a YouTube video link.",
+    "videoTitle": "Title",
+    "note": "Note for pupils (optional)",
+    "noteHint": "e.g. Watch before Thursday’s class.",
+    "forClass": "Show to",
+    "add": "Add video",
+    "remove": "Remove video",
+    "removeConfirm": "Remove this video?"
   }
 }

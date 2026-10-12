@@ -336,6 +336,50 @@ export type Database = {
           },
         ]
       }
+      class_videos: {
+        Row: {
+          added_by: string | null
+          class_id: string | null
+          created_at: string
+          deleted_at: string | null
+          id: string
+          madrasa_id: string
+          note: string | null
+          title: string
+          youtube_id: string
+        }
+        Insert: {
+          added_by?: string | null
+          class_id?: string | null
+          created_at?: string
+          deleted_at?: string | null
+          id?: string
+          madrasa_id: string
+          note?: string | null
+          title: string
+          youtube_id: string
+        }
+        Update: {
+          added_by?: string | null
+          class_id?: string | null
+          created_at?: string
+          deleted_at?: string | null
+          id?: string
+          madrasa_id?: string
+          note?: string | null
+          title?: string
+          youtube_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "class_videos_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
+            referencedRelation: "classes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       classes: {
         Row: {
           capacity: number

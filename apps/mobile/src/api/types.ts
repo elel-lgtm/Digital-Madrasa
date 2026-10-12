@@ -71,6 +71,7 @@ import type {
   PupilSignals,
   VoiceLang,
   SponsorablePupil,
+  ClassVideo,
 } from '@digital-madrasa/shared';
 
 /**
@@ -323,6 +324,13 @@ export interface ApiClient {
   getChildOverview(studentId: string): Promise<ChildOverview>;
   /** The child's report as spoken sentences, with a recording when the server could make one. */
   getVoiceReport(studentId: string, lang: VoiceLang): Promise<VoiceReport>;
+
+  // -- video library -------------------------------------------------------
+  /** Teacher-chosen YouTube videos for the caller's madrasa. */
+  listVideos(): Promise<ClassVideo[]>;
+  /** Staff: add a video by its link; only the YouTube id is stored. */
+  addVideo(input: { url: string; title: string; note: string | null; classId: string | null }): Promise<ClassVideo>;
+  removeVideo(videoId: string): Promise<void>;
 
   // -- sponsorship ---------------------------------------------------------
   /** Pupils open to sponsorship, anonymised. */

@@ -1,5 +1,5 @@
 import { useRouter } from 'expo-router';
-import { CalendarCheck, DownloadSimple, Info, Microphone, QrCode, Question, ShieldCheck, Sparkle } from 'phosphor-react-native';
+import { CalendarCheck, DownloadSimple, Info, Microphone, QrCode, Question, ShieldCheck, Sparkle, YoutubeLogo } from 'phosphor-react-native';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 import {
@@ -57,6 +57,13 @@ export default function StudentMore() {
                 subtitle={t('student.offlineLibraryBody')}
                 left={<DownloadSimple size={20} color={theme.colors.textMuted} weight="duotone" />}
                 onPress={() => router.push('/(student)/library')}
+              />
+              <Divider />
+              <ListRow
+                title={t('videos.title')}
+                subtitle={t('videos.menuSubtitle')}
+                left={<YoutubeLogo size={20} color={theme.colors.textMuted} weight="duotone" />}
+                onPress={() => router.push('/(student)/videos')}
               />
             </View>
           </Card>

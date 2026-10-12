@@ -7,6 +7,8 @@ import {
   type HeatmapCell,
   type PupilSignals,
   type SponsorablePupil,
+  type ClassVideo,
+  youtubeId,
   type HifzProgress,
   type IssueCertificateInput,
   type Submission,
@@ -300,6 +302,64 @@ export async function getTeacherSignals(): Promise<PupilSignals[]> {
     scoreRecent: num(r.score_recent),
     scorePrev: num(r.score_prev),
   }));
+}
+
+function mapVideo(r: Row): ClassVideo {
+  return {
+    id: r.id,
+    madrasaId: r.madrasa_id,
+    classId: r.class_id ?? null,
+    className: r.classes?.name ?? null,
+    youtubeId: r.youtube_id,
+    title: r.title,
+    note: r.note ?? null,
+    createdAt: r.created_at,
+  };
+}
+
+/** The madrasa's video library; RLS bounds it to the caller's madrasa (0036). */
+export async function listVideos(): Promise<ClassVideo[]> {
+  const { data, error } = await supabase
+    .from('class_videos')
+    .select('*, classes(name)')
+    .order('created_at', { ascending: false });
+  if (error) fail(error, 'Could not load the videos.');
+  return ((data as Row[] | null) ?? []).map(mapVideo);
+}
+
+export async function addVideo(input: {
+  url: string;
+  title: string;
+  note: string | null;
+  classId: string | null;
+}): Promise<ClassVideo> {
+  const id = youtubeId(input.url);
+  if (!id) throw new ApiError('validation', 'That is not a YouTube video link.');
+  const { data: auth } = await supabase.auth.getUser();
+  const { data: me } = await supabase.from('profiles').select('madrasa_id').eq('id', auth.user?.id ?? '').single();
+  if (!me?.madrasa_id) throw new ApiError('forbidden', 'Only madrasa staff can add videos.');
+  const { data, error } = await supabase
+    .from('class_videos')
+    .insert({
+      madrasa_id: me.madrasa_id,
+      class_id: input.classId,
+      youtube_id: id,
+      title: input.title.trim(),
+      note: input.note?.trim() || null,
+      added_by: auth.user?.id,
+    })
+    .select('*, classes(name)')
+    .single();
+  if (error) fail(error, 'Could not add the video.');
+  return mapVideo(data as Row);
+}
+
+export async function removeVideo(videoId: string): Promise<void> {
+  const { error } = await supabase
+    .from('class_videos')
+    .update({ deleted_at: new Date().toISOString() })
+    .eq('id', videoId);
+  if (error) fail(error, 'Could not remove the video.');
 }
 
 /** Pupils open to sponsorship, anonymised by the database (migration 0034). */

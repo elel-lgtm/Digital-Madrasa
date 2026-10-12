@@ -1,3 +1,4 @@
+import { YoutubeLogo } from 'phosphor-react-native';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
 import { BookOpen, ClipboardText } from 'phosphor-react-native';
@@ -44,6 +45,18 @@ export default function Learn() {
       <PageHeader title={t('nav.learn')} />
 
       <View style={{ marginTop: theme.spacing.lg, gap: theme.spacing.lg }}>
+        <Card accent="accent" onPress={() => router.push('/(student)/videos')}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: theme.spacing.md }}>
+            <YoutubeLogo size={28} color={theme.colors.accent} weight="duotone" />
+            <View style={{ flex: 1, gap: 2 }}>
+              <AppText variant="bodyStrong">{t('videos.title')}</AppText>
+              <AppText variant="caption" color="textMuted">
+                {t('videos.menuSubtitle')}
+              </AppText>
+            </View>
+          </View>
+        </Card>
+
         <Segmented
           options={[
             { value: 'assignments', label: t('student.assignments') },

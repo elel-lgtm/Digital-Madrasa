@@ -7,6 +7,7 @@ import {
   surahName,
   type SavedCard,
   type TajweedFinding,
+  type ClassVideo,
   type TajweedRule,
   type Subscription,
   type SubscriptionInvoice,
@@ -56,6 +57,7 @@ export interface MockDatabase {
   classes: Klass[];
   links: ParentLink[];
   lessons: Lesson[];
+  videos: ClassVideo[];
   assignments: Assignment[];
   submissions: Submission[];
   hifz: HifzProgress[];
@@ -1056,6 +1058,25 @@ export function createSeed(): MockDatabase {
     pupil.sponsorshipNote = note;
   });
 
+  // Real, embeddable YouTube videos (checked with YouTube's oEmbed), chosen
+  // as a teacher would: tajweed lessons and Juz 'Amma recitations for children.
+  const videos: ClassVideo[] = [
+    ['wNEMJeXmM_U', 'Ikhfa of noon sakinah and tanween', null],
+    ['t0Z7KvotYkc', 'Tajweed for children: noon sakinah and tanween', 'Watch before Thursday’s class.'],
+    ['I5tPZonSBZ8', 'Noon sakinah and tanween (with pictures)', null],
+    ['3BsstSq0dvA', 'An-Nas, Al-Falaq, Al-Ikhlas: recitation for children', 'Recite along with the qari.'],
+    ['LF6szHGNNgQ', 'Juz ’Amma recitation for children', null],
+  ].map(([id, title, note], index) => ({
+    id: uid(NS.lesson, 900 + index),
+    madrasaId: MADRASA_ID,
+    classId: null,
+    className: null,
+    youtubeId: id as string,
+    title: title as string,
+    note: note as string | null,
+    createdAt: daysAgo(index * 3 + 1),
+  }));
+
   // -------------------------------------------------------------- grades
   const grades: Grade[] = [];
   let gradeSeq = 0;
@@ -1491,6 +1512,7 @@ export function createSeed(): MockDatabase {
     classes,
     links,
     lessons,
+    videos,
     assignments,
     submissions,
     hifz,

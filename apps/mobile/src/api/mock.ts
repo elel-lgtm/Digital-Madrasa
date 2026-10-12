@@ -9,6 +9,7 @@ import {
   mpesaFailureCode,
   mpesaStyleCode,
   simulatedResultCode,
+  youtubeId,
   voiceReportText,
   madrasaLifecycleSchema,
   type AdminMadrasa,
@@ -17,6 +18,7 @@ import {
   type HeatmapCell,
   type PupilSignals,
   type SponsorablePupil,
+  type ClassVideo,
   type VoiceLang,
   type MadrasaLifecycleInput,
   type MadrasaStatus,
@@ -99,7 +101,7 @@ const MAX_DB_AGE_MS = 3 * 24 * 60 * 60 * 1000;
  * no way to supply it, so we discard it and re-seed rather than hand the app
  * rows with missing properties.
  */
-const SEED_SCHEMA_VERSION = 7;
+const SEED_SCHEMA_VERSION = 8;
 
 interface PersistedDb {
   seededAt: string;
@@ -1709,6 +1711,47 @@ export const mockApi: ApiClient = {
       ).slice(0, 5),
       certificates: data.certificates.filter((c) => c.studentId === studentId),
     } satisfies ChildOverview;
+  },
+
+  async listVideos() {
+    await bootstrap();
+    await delay();
+    const madrasaId = requireMadrasaId();
+    return [...(requireDb().videos ?? [])]
+      .filter((v) => v.madrasaId === madrasaId)
+      .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+  },
+
+  async addVideo(input) {
+    await bootstrap();
+    await delay();
+    requireStaff();
+    const id = youtubeId(input.url);
+    if (!id) throw new ApiError('validation', 'That is not a YouTube video link.');
+    const data = requireDb();
+    const klass = input.classId ? data.classes.find((c) => c.id === input.classId) : null;
+    const video: ClassVideo = {
+      id: newId(NS.lesson),
+      madrasaId: requireMadrasaId(),
+      classId: klass?.id ?? null,
+      className: klass?.name ?? null,
+      youtubeId: id,
+      title: input.title.trim(),
+      note: input.note?.trim() || null,
+      createdAt: new Date().toISOString(),
+    };
+    data.videos = [video, ...(data.videos ?? [])];
+    await persist();
+    return video;
+  },
+
+  async removeVideo(videoId) {
+    await bootstrap();
+    await delay();
+    requireStaff();
+    const data = requireDb();
+    data.videos = (data.videos ?? []).filter((v) => v.id !== videoId);
+    await persist();
   },
 
   async listSponsorable() {
