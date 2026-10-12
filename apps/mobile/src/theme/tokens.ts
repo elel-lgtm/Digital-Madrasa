@@ -192,6 +192,14 @@ export const brand = {
   ivory: '#F7F0E1',
 } as const;
 
+/**
+ * Partner colours, used only where the partner is named: the M-Pesa prompt
+ * and receipts. Not Safaricom's logo, just its familiar green.
+ */
+export const partner = {
+  mpesa: '#2E9E3E',
+} as const;
+
 /** WCAG AA needs 44pt; we use it as the floor for every tappable element. */
 export const MIN_TOUCH_TARGET = 44;
 

@@ -2,7 +2,8 @@ import { authenticate, requireOwner, type Caller } from '../_shared/auth.ts';
 import { handler, json, PublicError, readJson } from '../_shared/http.ts';
 import { cardReference, startCardCheckout, verifyCardCheckout } from '../_shared/card.ts';
 import { settleCardOutcome } from '../_shared/card-settle.ts';
-import { maskMsisdn, reconcilePending, stkPush, toMsisdn } from '../_shared/mpesa.ts';
+import { maskMsisdn, mpesaEnv, reconcilePending, stkPush, toMsisdn } from '../_shared/mpesa.ts';
+import { mpesaFailureCode } from '../../../packages/shared/src/mpesa.ts';
 import { LIMITS, rateLimit } from '../_shared/rate-limit.ts';
 
 /**
@@ -46,6 +47,12 @@ const OPEN_INVOICE = ['issued', 'partially_paid', 'overdue'];
 const IN_FLIGHT_MS = 2 * 60 * 1000;
 
 const PAYSTACK_KEY = () => Deno.env.get('PAYSTACK_SECRET_KEY') || undefined;
+
+/** True unless real money moves: live M-Pesa, or a live Paystack key. */
+function isTest(card: boolean): boolean {
+  if (card) return !PAYSTACK_KEY()?.startsWith('sk_live_');
+  return mpesaEnv() !== 'production';
+}
 
 /** Where Paystack sends the browser after the card step. */
 const CARD_RETURN_URL = () => `${Deno.env.get('SUPABASE_URL')}/functions/v1/card-callback`;
@@ -133,6 +140,8 @@ async function payFees(caller: Caller, body: Body): Promise<Response> {
       channel: card ? 'card' : 'mpesa',
       provider: card ? 'paystack' : 'daraja',
       status: 'initiated',
+      payer_phone: msisdn ? maskMsisdn(msisdn) : null,
+      is_test: isTest(card),
     })
     .select('id')
     .single();
@@ -300,6 +309,8 @@ async function sponsor(caller: Caller, body: Body): Promise<Response> {
       provider: card ? 'paystack' : 'daraja',
       status: 'initiated',
       sponsored: true,
+      payer_phone: msisdn ? maskMsisdn(msisdn) : null,
+      is_test: isTest(card),
     })
     .select('id')
     .single();
@@ -430,7 +441,8 @@ async function paySubscription(caller: Caller, body: Body): Promise<Response> {
 
 const FEE_COLUMNS =
   'id, madrasa_id, parent_id, amount, currency, method, provider_ref, checkout_request_id, status, ' +
-  'created_at, settled_at, payment_allocations(invoice_id), receipts(receipt_no)';
+  'created_at, settled_at, failure_reason, payer_phone, is_test, card_last4, ' +
+  'payment_allocations(invoice_id), receipts(receipt_no)';
 const SUB_COLUMNS =
   'id, madrasa_id, subscription_invoice_id, amount, currency, channel, provider, provider_ref, ' +
   'checkout_request_id, status, card_last4, card_brand, failure_reason, created_at, settled_at';
@@ -454,6 +466,11 @@ function toFeePayment(row: Row) {
     createdAt: row.created_at,
     settledAt: row.settled_at ?? null,
     receiptNo: receipt?.receipt_no ?? null,
+    failureReason: row.failure_reason ?? null,
+    failureCode: mpesaFailureCode(row.failure_reason),
+    payerPhone: row.payer_phone ?? null,
+    isTest: row.is_test !== false,
+    cardLast4: row.card_last4 ?? null,
   };
 }
 

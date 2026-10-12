@@ -8,6 +8,7 @@ import { View } from 'react-native';
 import { api } from '@/api';
 import { qk } from '@/api/keys';
 import { InvoiceStatusChip } from '@/components/InvoiceStatusChip';
+import { PaymentStatusBadge } from '@/components/payments/PaymentStatusBadge';
 import {
   AppText,
   Button,
@@ -25,6 +26,7 @@ import {
 } from '@/components/ui';
 import { useApiError } from '@/hooks/useApiError';
 import { useTheme } from '@/theme/ThemeProvider';
+import { shortDate } from '@/utils/dates';
 
 type Filter = 'all' | 'overdue' | 'issued' | 'paid';
 
@@ -41,6 +43,12 @@ export default function FeesTab() {
     queryFn: () => api.listInvoices({}),
   });
 
+  const payments = useQuery({
+    queryKey: qk.payments({ scope: 'madrasa' }),
+    queryFn: () => api.listPayments({}),
+  });
+  const studentOf = new Map((invoices.data ?? []).map((i) => [i.id, i.studentName]));
+
   const filtered: Invoice[] = (invoices.data ?? []).filter((invoice) => {
     if (filter === 'all') return true;
     if (filter === 'issued') return invoice.status === 'issued' || invoice.status === 'partially_paid';
@@ -53,6 +61,7 @@ export default function FeesTab() {
       onRefresh={() => {
         void invoices.refetch();
         void summary.refetch();
+        void payments.refetch();
       }}
     >
       <PageHeader title={t('nav.fees')} />
@@ -141,6 +150,31 @@ export default function FeesTab() {
             )}
           </View>
         </View>
+
+        {(payments.data ?? []).length > 0 ? (
+          <View>
+            <SectionHeader title={t('receipt.recentPayments')} />
+            <Card padded={false}>
+              {(payments.data ?? []).slice(0, 10).map((payment, index) => (
+                <View key={payment.id} style={{ paddingHorizontal: theme.spacing.lg }}>
+                  {index > 0 ? <Divider /> : null}
+                  <ListRow
+                    title={`${formatMoney(payment.amount, payment.currency)} · ${
+                      payment.invoiceIds.map((id) => studentOf.get(id)).filter(Boolean)[0] ?? ''
+                    }`}
+                    subtitle={[t(`fees.method_${payment.method}`), payment.providerRef, shortDate(payment.createdAt)]
+                      .filter(Boolean)
+                      .join(' · ')}
+                    right={<PaymentStatusBadge status={payment.status} />}
+                    onPress={() =>
+                      router.push({ pathname: '/(teacher)/receipt/[id]', params: { id: payment.id } })
+                    }
+                  />
+                </View>
+              ))}
+            </Card>
+          </View>
+        ) : null}
       </View>
     </Screen>
   );

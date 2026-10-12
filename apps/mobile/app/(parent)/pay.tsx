@@ -1,5 +1,6 @@
 import {
   formatMoney,
+  maskKenyanPhone,
   normaliseKenyanPhone,
   payFeesSchema,
   phoneSchema,
@@ -7,7 +8,7 @@ import {
 } from '@digital-madrasa/shared';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { CheckCircle, DeviceMobile, XCircle } from 'phosphor-react-native';
+import { DeviceMobile, XCircle } from 'phosphor-react-native';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, View } from 'react-native';
@@ -15,6 +16,8 @@ import { api } from '@/api';
 import { qk } from '@/api/keys';
 import { HostedCardNote, openCardCheckout } from '@/components/CardCheckout';
 import { PaymentMethodPicker } from '@/components/PaymentMethodPicker';
+import { MpesaPrompt } from '@/components/payments/MpesaPrompt';
+import { PaymentReceipt } from '@/components/payments/PaymentReceipt';
 import { PhoneField } from '@/components/PhoneField';
 import { AppText, Button, Card, PageHeader, Screen } from '@/components/ui';
 import { useApiError, useFieldError } from '@/hooks/useApiError';
@@ -52,6 +55,8 @@ export default function PayScreen() {
   const [phoneError, setPhoneError] = useState<string | undefined>();
   const [error, setError] = useState<string | null>(null);
   const [checkoutRequestId, setCheckoutRequestId] = useState<string | null>(null);
+  const [startedAt, setStartedAt] = useState(0);
+  const [maskedPhone, setMaskedPhone] = useState<string | null>(null);
 
   const savedCards = useQuery({ queryKey: qk.savedCards(), queryFn: () => api.listSavedCards() });
 
@@ -86,6 +91,8 @@ export default function PayScreen() {
         : api.payFees(input),
     onSuccess: (intent) => {
       setCheckoutRequestId(intent.checkoutRequestId);
+      setStartedAt(Date.now());
+      setMaskedPhone(intent.phone ? maskKenyanPhone(intent.phone) : null);
       setPhase('waiting');
       // Card: the gateway's page opens over the app; polling carries on.
       void openCardCheckout(intent.authorisationUrl);
@@ -218,16 +225,23 @@ export default function PayScreen() {
           </>
         ) : null}
 
-        {phase === 'waiting' ? (
+        {phase === 'waiting' && channel === 'mpesa' ? (
+          <MpesaPrompt
+            amount={total}
+            phone={maskedPhone ?? maskKenyanPhone(normaliseKenyanPhone(phone))}
+            payee={session.madrasa?.name ?? pupil?.madrasaName ?? ''}
+            startedAt={startedAt}
+          />
+        ) : null}
+
+        {phase === 'waiting' && channel !== 'mpesa' ? (
           <View style={{ alignItems: 'center', gap: theme.spacing.lg, paddingTop: theme.spacing.xl }}>
             <DeviceMobile size={48} color={theme.colors.accent} weight="duotone" />
             <AppText variant="title" align="center">
-              {channel === 'mpesa' ? t('parent.mpesaPrompt') : t('billing.authorising')}
+              {t('billing.authorising')}
             </AppText>
             <AppText variant="body" color="textMuted" align="center">
-              {channel === 'mpesa'
-                ? t('parent.mpesaPromptBody', { phone: normaliseKenyanPhone(phone) })
-                : t('billing.cardProcessing')}
+              {t('billing.cardProcessing')}
             </AppText>
             <ActivityIndicator color={theme.colors.accent} />
             <AppText variant="caption" color="textSubtle">
@@ -236,21 +250,17 @@ export default function PayScreen() {
           </View>
         ) : null}
 
-        {phase === 'success' ? (
-          <View style={{ alignItems: 'center', gap: theme.spacing.md, paddingTop: theme.spacing.xl }}>
-            <CheckCircle size={56} color={theme.colors.success} weight="fill" />
+        {phase === 'success' && payment ? (
+          <View style={{ gap: theme.spacing.lg }}>
             <AppText variant="title" align="center">
               {sponsor ? t('sponsor.thanks') : t('parent.paymentSuccess')}
             </AppText>
-            <AppText variant="body" color="textMuted" align="center">
-              {t(sponsor ? 'sponsor.thanksBody' : 'parent.paymentSuccessBody', {
-                receipt: payment?.receiptNo ?? '—',
-                amount: formatMoney(payment?.amount ?? total),
-              })}
-            </AppText>
-            <View style={{ alignSelf: 'stretch', marginTop: theme.spacing.lg, gap: theme.spacing.md }}>
-              <Button label={t('common.done')} onPress={leave} />
-            </View>
+            <PaymentReceipt
+              payment={payment}
+              invoices={selected}
+              madrasaName={session.madrasa?.name ?? pupil?.madrasaName ?? ''}
+            />
+            <Button label={t('common.done')} onPress={leave} />
           </View>
         ) : null}
 
@@ -258,10 +268,10 @@ export default function PayScreen() {
           <View style={{ alignItems: 'center', gap: theme.spacing.md, paddingTop: theme.spacing.xl }}>
             <XCircle size={56} color={theme.colors.danger} weight="fill" />
             <AppText variant="title" align="center">
-              {t('parent.paymentFailed')}
+              {payment?.failureCode ? t(`mpesa.fail_${payment.failureCode}`) : t('parent.paymentFailed')}
             </AppText>
             <AppText variant="body" color="textMuted" align="center">
-              {t('parent.paymentFailedBody')}
+              {payment?.failureCode ? t(`mpesa.hint_${payment.failureCode}`) : t('parent.paymentFailedBody')}
             </AppText>
             <View style={{ alignSelf: 'stretch', marginTop: theme.spacing.lg, gap: theme.spacing.md }}>
               <Button

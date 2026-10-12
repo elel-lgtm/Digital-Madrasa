@@ -4,6 +4,11 @@ import {
   getSurah,
   juzForAyah,
   summariseHifzRows,
+  MPESA_FAILURES,
+  maskKenyanPhone,
+  mpesaFailureCode,
+  mpesaStyleCode,
+  simulatedResultCode,
   voiceReportText,
   madrasaLifecycleSchema,
   type AdminMadrasa,
@@ -106,6 +111,12 @@ let db: MockDatabase | null = null;
 let currentProfileId: string | null = null;
 
 /** Charges awaiting their callback, keyed by checkout request id. */
+/** As the server's simulator: the number's last digits choose an outcome. */
+function simulateMpesa(phone: string | null): { shouldFail: boolean; failureReason: string | null } {
+  const code = phone ? simulatedResultCode(phone.replace(/\D/g, '')) : 0;
+  return { shouldFail: code !== 0, failureReason: code ? MPESA_FAILURES[code]?.reason ?? null : null };
+}
+
 const pendingSettlement = new Map<
   string,
   { settleAt: number; shouldFail: boolean; failureReason?: string | null }
@@ -1759,12 +1770,13 @@ export const mockApi: ApiClient = {
       createdAt: new Date().toISOString(),
       settledAt: null,
       receiptNo: null,
+      payerPhone: phone ? maskKenyanPhone(phone) : null,
+      isTest: true,
     };
     data.payments.push(payment);
     pendingSettlement.set(payment.checkoutRequestId!, {
       settleAt: Date.now() + (input.channel === 'card' ? 3000 : 7000),
-      shouldFail: phone?.endsWith('9999') ?? false,
-      failureReason: null,
+      ...simulateMpesa(phone),
     });
     await persist();
     return {
@@ -2049,12 +2061,14 @@ export const mockApi: ApiClient = {
       createdAt: new Date().toISOString(),
       settledAt: null,
       receiptNo: null,
+      payerPhone: phone ? maskKenyanPhone(phone) : null,
+      isTest: true,
     };
     data.payments.push(payment);
     pendingSettlement.set(payment.checkoutRequestId!, {
       settleAt: Date.now() + 7000,
-      // A number ending 9999 always fails, so the failure path is demoable.
-      shouldFail: phone.endsWith('9999'),
+      // Test endings (9999 cancelled, 8888 no balance, ...) fail on purpose.
+      ...simulateMpesa(phone),
     });
 
     await persist();
@@ -2091,7 +2105,7 @@ export const mockApi: ApiClient = {
 
     if (input.channel === 'mpesa') {
       phone = normaliseKenyanPhone(input.phone);
-      shouldFail = phone.endsWith('9999');
+      ({ shouldFail, failureReason } = simulateMpesa(phone));
     }
     // A card is paid on the gateway's hosted page, which the mock does not
     // show: it settles as a successful test card a few seconds later.
@@ -2110,6 +2124,8 @@ export const mockApi: ApiClient = {
       createdAt: new Date().toISOString(),
       settledAt: null,
       receiptNo: null,
+      payerPhone: phone ? maskKenyanPhone(phone) : null,
+      isTest: true,
     };
     data.payments.push(payment);
 
@@ -2148,6 +2164,8 @@ export const mockApi: ApiClient = {
 
     if (pending.shouldFail) {
       payment.status = 'failed';
+      payment.failureReason = pending.failureReason ?? MPESA_FAILURES[1032]!.reason;
+      payment.failureCode = mpesaFailureCode(payment.failureReason);
       pendingSettlement.delete(checkoutRequestId);
       await persist();
       return { ...payment };
@@ -2157,7 +2175,7 @@ export const mockApi: ApiClient = {
     // the invoices are updated inside the same operation.
     payment.status = 'success';
     payment.settledAt = new Date().toISOString();
-    payment.providerRef = `S${Math.random().toString(36).slice(2, 10).toUpperCase()}`;
+    payment.providerRef = mpesaStyleCode(new Date());
     payment.receiptNo = `RCP-${new Date().getFullYear()}-${String(data.payments.length).padStart(4, '0')}`;
 
     let remaining = payment.amount;

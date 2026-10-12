@@ -158,7 +158,7 @@ try {
   const paid = await poll(parent, 'fees', checkout, (p) => p.status !== 'pending');
   check('outcome: success', paid.body.status === 'success', paid.body.status);
   check('receipt issued', /^RCP-\d{4}-\d{6}$/.test(paid.body.receiptNo ?? ''), paid.body.receiptNo);
-  check('M-Pesa reference recorded', /^MK[A-Z0-9]{6}$/.test(paid.body.providerRef ?? ''), paid.body.providerRef);
+  check('M-Pesa reference recorded', /^[A-Z]{2}[A-Z0-9]{8}$/.test(paid.body.providerRef ?? ''), paid.body.providerRef);
 
   const { data: seen } = await parent.db.from('invoices').select('amount_paid, status').eq('id', invoiceBefore.id).single();
   check('parent sees the invoice paid', seen?.status === 'paid' && Number(seen.amount_paid) === 4500,

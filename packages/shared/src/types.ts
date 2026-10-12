@@ -1,3 +1,4 @@
+import type { MpesaFailureCode } from './mpesa';
 import type {
   BillingInterval,
   CardBrand,
@@ -354,6 +355,15 @@ export interface Payment {
   createdAt: string;
   settledAt: string | null;
   receiptNo: string | null;
+  /** Why it failed, in plain words, when it did. */
+  failureReason?: string | null;
+  /** The same, as a code the app can explain in any language. */
+  failureCode?: MpesaFailureCode | null;
+  /** The number the M-Pesa prompt went to, masked: 07*****678. */
+  payerPhone?: string | null;
+  /** True when no real money moved (simulator, sandbox, test key). */
+  isTest?: boolean;
+  cardLast4?: string | null;
 }
 
 // ============================================================ subscriptions

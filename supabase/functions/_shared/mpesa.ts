@@ -1,5 +1,8 @@
 import type { SupabaseClient } from 'jsr:@supabase/supabase-js@2';
 import { PublicError } from './http.ts';
+import {
+  MPESA_FAILURES, mpesaStyleCode, simulatedResultCode,
+} from '../../../packages/shared/src/mpesa.ts';
 
 /**
  * M-Pesa (Safaricom Daraja) STK Push, behind one small interface.
@@ -109,8 +112,10 @@ export async function stkPush(input: StkPushInput): Promise<StkPushResult> {
 
   if (mpesaEnv() === 'mock') {
     // The outcome is fixed now and carried in the id, so the poll that
-    // settles it later needs nothing else: F fails, S succeeds.
-    const outcome = input.msisdn.endsWith('9999') ? 'F' : 'S';
+    // settles it later needs nothing else. The test endings in
+    // packages/shared/src/mpesa.ts choose a failure; anything else succeeds.
+    const result = simulatedResultCode(input.msisdn);
+    const outcome = result === 0 ? 'S' : `F${result}x`;
     const id = crypto.randomUUID().replace(/-/g, '');
     return { checkoutRequestId: `${MOCK_PREFIX}${outcome}${id}`, merchantRequestId: `mock-${id.slice(0, 12)}` };
   }
@@ -162,18 +167,8 @@ export interface StkCallback {
 
 /** What a customer sees when a push does not complete, by Daraja result code. */
 function failureReason(code: number, desc: string | undefined): string {
-  switch (code) {
-    case 1032:
-      return 'The request was cancelled on the phone.';
-    case 1037:
-      return 'The phone could not be reached, or the prompt timed out.';
-    case 1:
-      return 'The M-Pesa balance was not enough.';
-    case 2001:
-      return 'The M-Pesa PIN entered was wrong.';
-    default:
-      return desc ? `M-Pesa: ${desc}` : 'The payment did not go through.';
-  }
+  // One table for the server and the app, so the app can advise in any language.
+  return MPESA_FAILURES[code]?.reason ?? (desc ? `M-Pesa: ${desc}` : 'The payment did not go through.');
 }
 
 /**
@@ -247,10 +242,11 @@ const MOCK_SETTLE_MS = 6000;
 /** Before this, a live push is still with the customer; asking is pointless. */
 const QUERY_AFTER_MS = 30_000;
 
+/** Shaped like a Safaricom transaction code; the payment is flagged is_test regardless. */
 function mockReceipt(): string {
-  const alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZ0123456789';
-  const bytes = crypto.getRandomValues(new Uint8Array(6));
-  return `MK${Array.from(bytes, (b) => alphabet[b % alphabet.length]).join('')}`;
+  const bytes = crypto.getRandomValues(new Uint8Array(8));
+  let i = 0;
+  return mpesaStyleCode(new Date(), () => bytes[i++ % bytes.length]! / 256);
 }
 
 /**
@@ -268,15 +264,16 @@ export async function reconcilePending(
   if (payment.checkoutRequestId.startsWith(MOCK_PREFIX)) {
     if (age < MOCK_SETTLE_MS) return;
     const ok = payment.checkoutRequestId.charAt(MOCK_PREFIX.length) === 'S';
+    const failCode = ok ? 0 : Number(/^F(\d+)x/.exec(payment.checkoutRequestId.slice(MOCK_PREFIX.length))?.[1] ?? 1032);
     await processStkCallback(admin, {
       Body: {
         stkCallback: {
           MerchantRequestID: 'mock',
           CheckoutRequestID: payment.checkoutRequestId,
-          ResultCode: ok ? 0 : 1032,
+          ResultCode: failCode,
           ResultDesc: ok
             ? 'The service request is processed successfully. (simulated)'
-            : 'Request cancelled by user (simulated)',
+            : `${MPESA_FAILURES[failCode]?.reason ?? 'Failed'} (simulated)`,
           CallbackMetadata: ok
             ? {
                 Item: [

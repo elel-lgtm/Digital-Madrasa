@@ -1,4 +1,6 @@
-import { surahName, type Certificate, type FeeStructure, type Invoice, type Payment, type Recitation, type TajweedFinding } from '@digital-madrasa/shared';
+import { surahName, type Certificate, type FeeStructure, type Invoice, type Payment, type Recitation, type TajweedFinding,
+  mpesaFailureCode,
+} from '@digital-madrasa/shared';
 import { ApiError, type FeesSummary } from '../types';
 import { supabase } from './client';
 
@@ -128,6 +130,11 @@ export async function listPayments(params: { studentId?: string }): Promise<Paym
       createdAt: row.created_at,
       settledAt: row.settled_at ?? null,
       receiptNo: receiptOf(row),
+      failureReason: row.failure_reason ?? null,
+      failureCode: mpesaFailureCode(row.failure_reason),
+      payerPhone: row.payer_phone ?? null,
+      isTest: row.is_test !== false,
+      cardLast4: row.card_last4 ?? null,
     }));
 }
 

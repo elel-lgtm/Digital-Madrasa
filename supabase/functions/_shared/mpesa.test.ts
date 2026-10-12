@@ -132,7 +132,7 @@ describe('reconciling a pending mock payment', () => {
     const earlier = new Date(Date.now() - 10_000).toISOString();
     await reconcilePending(admin, { checkoutRequestId: 'ws_CO_MOCK_Sabc', amount: 4500, createdAt: earlier });
     expect(calls[0].args).toMatchObject({ p_success: true, p_amount: 4500 });
-    expect(String(calls[0].args.p_provider_ref)).toMatch(/^MK[A-Z0-9]{6}$/);
+    expect(String(calls[0].args.p_provider_ref)).toMatch(/^[A-Z]{2}[A-Z0-9]{8}$/); // shaped like a Safaricom code
   });
 
   it('fails the 9999 demo number', async () => {
@@ -140,5 +140,13 @@ describe('reconciling a pending mock payment', () => {
     const earlier = new Date(Date.now() - 10_000).toISOString();
     await reconcilePending(admin, { checkoutRequestId: 'ws_CO_MOCK_Fabc', amount: 4500, createdAt: earlier });
     expect(calls[0].args).toMatchObject({ p_success: false });
+  });
+
+  it('records the reason a simulated number was set up to fail with', async () => {
+    const id = 'ws_CO_MOCK_F1xabc'; // as stkPush makes it for a number ending 8888
+    const { admin, calls } = fakeAdmin({ payments: [id] });
+    const earlier = new Date(Date.now() - 10_000).toISOString();
+    await reconcilePending(admin, { checkoutRequestId: id, amount: 4500, createdAt: earlier });
+    expect(calls[0].args).toMatchObject({ p_success: false, p_failure_reason: 'The M-Pesa balance was not enough.' });
   });
 });

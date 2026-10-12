@@ -7,9 +7,9 @@ import { View } from 'react-native';
 import { api } from '@/api';
 import { qk } from '@/api/keys';
 import { InvoiceStatusChip } from '@/components/InvoiceStatusChip';
+import { PaymentStatusBadge } from '@/components/payments/PaymentStatusBadge';
 import {
   AppText,
-  Badge,
   Button,
   Card,
   Divider,
@@ -22,6 +22,7 @@ import {
   SkeletonList,
 } from '@/components/ui';
 import { useApiError } from '@/hooks/useApiError';
+import { partner } from '@/theme/tokens';
 import { useTheme } from '@/theme/ThemeProvider';
 import { longDate, shortDate } from '@/utils/dates';
 
@@ -47,6 +48,13 @@ export default function ParentFees() {
   const totalOutstanding = (balances.data ?? []).reduce((sum, b) => sum + b.outstanding, 0);
   const unpaid = (invoices.data ?? []).filter(
     (invoice) => invoice.status !== 'paid' && invoice.status !== 'void',
+  );
+
+  // Invoices settled (in part or full) by a successful M-Pesa payment.
+  const paidByMpesa = new Set(
+    (payments.data ?? [])
+      .filter((p) => p.method === 'mpesa' && p.status === 'success')
+      .flatMap((p) => p.invoiceIds),
   );
 
   const refresh = () => {
@@ -157,6 +165,11 @@ export default function ParentFees() {
                             <AppText variant="caption" color="textMuted">
                               {invoice.studentName} · {invoice.invoiceNo}
                             </AppText>
+                            {paidByMpesa.has(invoice.id) ? (
+                              <AppText variant="caption" style={{ color: partner.mpesa }}>
+                                {t('mpesa.paidVia')}
+                              </AppText>
+                            ) : null}
                           </View>
                           <InvoiceStatusChip status={invoice.status} />
                         </View>
@@ -201,11 +214,17 @@ export default function ParentFees() {
                     {index > 0 ? <Divider /> : null}
                     <ListRow
                       title={formatMoney(payment.amount, payment.currency)}
-                      subtitle={`${t(`fees.method_${payment.method}`)} · ${shortDate(payment.createdAt)}`}
-                      right={
-                        payment.receiptNo ? <Badge label={payment.receiptNo} tone="success" /> : null
+                      subtitle={[
+                        t(`fees.method_${payment.method}`),
+                        payment.providerRef,
+                        shortDate(payment.createdAt),
+                      ]
+                        .filter(Boolean)
+                        .join(' · ')}
+                      right={<PaymentStatusBadge status={payment.status} />}
+                      onPress={() =>
+                        router.push({ pathname: '/(parent)/receipt/[id]', params: { id: payment.id } })
                       }
-                      showChevron={false}
                     />
                   </View>
                 ))}
