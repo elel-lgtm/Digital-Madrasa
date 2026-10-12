@@ -1204,7 +1204,6 @@
     "surah": "السورة",
     "openRoom": "ادخل غرفة القراءة المباشرة",
     "openRoomHost": "افتح غرفة القراءة المباشرة",
-    "videoSoon": "سيظهر الفيديو والصوت هنا. حتى ذلك الحين، استخدم غرفة القراءة مع مكالمة Meet أو Zoom.",
     "notFound": "الدرس غير موجود",
     "notFoundBody": "هذا الدرس لم يعد متاحًا.",
     "present_zero": "في الغرفة: {{count}}",
@@ -1224,6 +1223,11 @@
     "pupilsHere_many": "طلاب حاضرون: {{count}}",
     "present_other": "في الغرفة: {{count}}",
     "hands_other": "أيدٍ مرفوعة: {{count}}",
-    "pupilsHere_other": "طلاب حاضرون: {{count}}"
+    "pupilsHere_other": "طلاب حاضرون: {{count}}",
+    "videoTitle": "الصوت والصورة",
+    "joinVideo": "انضم بالفيديو",
+    "leaveVideo": "مغادرة الفيديو",
+    "videoNotSetUp": "لم يُفعَّل الفيديو لهذه المدرسة بعد. غرفة القراءة تعمل بدونه.",
+    "videoUnavailable": "تعذر بدء الفيديو. تحقق من الاتصال وحاول مجددًا."
   }
 }

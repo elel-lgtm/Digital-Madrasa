@@ -338,6 +338,9 @@ export interface ApiClient {
     note?: string | null;
   }): Promise<void>;
 
+  /** The lesson's private video room, or null when video is not set up. */
+  getLiveRoom(lessonId: string): Promise<{ url: string; token: string } | null>;
+
   // -- video library -------------------------------------------------------
   /** Teacher-chosen YouTube videos for the caller's madrasa. */
   listVideos(): Promise<ClassVideo[]>;

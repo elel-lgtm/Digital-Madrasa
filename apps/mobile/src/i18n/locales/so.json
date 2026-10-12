@@ -1087,8 +1087,12 @@
     "surah": "Suuradda",
     "openRoom": "Gal qolka akhriska tooska ah",
     "openRoomHost": "Fur qolka akhriska tooska ah",
-    "videoSoon": "Muuqaalka iyo codku halkan ayay ka muuqan doonaan. Ilaa intaas, isticmaal qolka akhriska iyo wicitaankaaga Meet ama Zoom.",
     "notFound": "Casharka lama helin",
-    "notFoundBody": "Casharkan hadda lama heli karo."
+    "notFoundBody": "Casharkan hadda lama heli karo.",
+    "videoTitle": "Muuqaal iyo cod",
+    "joinVideo": "Ku biir muuqaal",
+    "leaveVideo": "Ka bax muuqaalka",
+    "videoNotSetUp": "Muuqaalka weli looma diyaarin madrasadan. Qolka akhrisku wuu shaqeeyaa la’aantiis.",
+    "videoUnavailable": "Muuqaalku ma bilaabmin. Hubi internetka oo mar kale isku day."
   }
 }

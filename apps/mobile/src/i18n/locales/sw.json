@@ -1087,8 +1087,12 @@
     "surah": "Sura",
     "openRoom": "Ingia chumba cha kusoma moja kwa moja",
     "openRoomHost": "Fungua chumba cha kusoma moja kwa moja",
-    "videoSoon": "Video na sauti zitaonekana hapa. Kwa sasa, tumia chumba cha kusoma pamoja na simu yako ya Meet au Zoom.",
     "notFound": "Somo halikupatikana",
-    "notFoundBody": "Somo hili halipatikani tena."
+    "notFoundBody": "Somo hili halipatikani tena.",
+    "videoTitle": "Video na sauti",
+    "joinVideo": "Jiunge na video",
+    "leaveVideo": "Toka kwenye video",
+    "videoNotSetUp": "Video bado haijawekwa kwa madrasa hii. Chumba cha kusoma kinafanya kazi bila video.",
+    "videoUnavailable": "Video haikuanza. Angalia mtandao ujaribu tena."
   }
 }

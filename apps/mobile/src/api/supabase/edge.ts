@@ -331,6 +331,17 @@ export async function payFees(input: PayFeesInput): Promise<PaymentIntent> {
   });
 }
 
+/** live-room: a short-lived token for the lesson's private Daily room. */
+export async function getLiveRoom(lessonId: string): Promise<{ url: string; token: string } | null> {
+  try {
+    return await invokeFunction<{ url: string; token: string }>('live-room', { body: { lessonId } });
+  } catch (err) {
+    // 503 video_not_configured: the reading room still works without video.
+    if (err instanceof ApiError && /not set up/i.test(err.message)) return null;
+    throw err;
+  }
+}
+
 /** A sponsor pays a listed pupil's next invoice; the server sets the amount. */
 export async function sponsorStudent(input: SponsorInput): Promise<PaymentIntent> {
   return invokeFunction<PaymentIntent>('payments', {

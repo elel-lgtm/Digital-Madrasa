@@ -1087,8 +1087,12 @@
     "surah": "Surah",
     "openRoom": "Join the live reading room",
     "openRoomHost": "Open the live reading room",
-    "videoSoon": "Video and sound will appear here. Until then, use the reading room alongside your Meet or Zoom call.",
     "notFound": "Lesson not found",
-    "notFoundBody": "This lesson is no longer available."
+    "notFoundBody": "This lesson is no longer available.",
+    "videoTitle": "Video and sound",
+    "joinVideo": "Join with video",
+    "leaveVideo": "Leave video",
+    "videoNotSetUp": "Video is not set up for this madrasa yet. The reading room works without it.",
+    "videoUnavailable": "Video could not start. Check the connection and try again."
   }
 }

@@ -1713,6 +1713,12 @@ export const mockApi: ApiClient = {
     } satisfies ChildOverview;
   },
 
+  async getLiveRoom() {
+    // Demo mode has no video service.
+    await delay(300, 500);
+    return null;
+  },
+
   async markHalaqaReading(input) {
     await bootstrap();
     await delay(200, 400);
