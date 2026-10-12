@@ -14,6 +14,7 @@ export * from './reciteAlong';
 export * from './masterReciter';
 export * from './mpesa';
 export * from './youtube';
+export * from './halaqa';
 export type { Database, Json } from './database.types';
 export * from './schemas/common';
 export * from './schemas/auth';

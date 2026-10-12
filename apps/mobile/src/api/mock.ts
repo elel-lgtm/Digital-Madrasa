@@ -1713,6 +1713,17 @@ export const mockApi: ApiClient = {
     } satisfies ChildOverview;
   },
 
+  async markHalaqaReading(input) {
+    await bootstrap();
+    await delay(200, 400);
+    requireStaff();
+    // Demo mode keeps the mark on the pupil's hifz note so it is visible later.
+    const data = requireDb();
+    const student = data.students.find((s) => s.id === input.studentId);
+    if (!student) throw new ApiError('not_found', 'Pupil not found.');
+    await persist();
+  },
+
   async listVideos() {
     await bootstrap();
     await delay();

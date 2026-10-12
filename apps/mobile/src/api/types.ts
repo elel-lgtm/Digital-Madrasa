@@ -72,6 +72,7 @@ import type {
   VoiceLang,
   SponsorablePupil,
   ClassVideo,
+  HalaqaMark,
 } from '@digital-madrasa/shared';
 
 /**
@@ -324,6 +325,18 @@ export interface ApiClient {
   getChildOverview(studentId: string): Promise<ChildOverview>;
   /** The child's report as spoken sentences, with a recording when the server could make one. */
   getVoiceReport(studentId: string, lang: VoiceLang): Promise<VoiceReport>;
+
+  // -- live halaqa ---------------------------------------------------------
+  /** Teacher: keep a mark for a pupil's reading in the live room. */
+  markHalaqaReading(input: {
+    lessonId: string;
+    studentId: string;
+    surahNo: number;
+    ayahFrom: number;
+    ayahTo: number;
+    mark: HalaqaMark;
+    note?: string | null;
+  }): Promise<void>;
 
   // -- video library -------------------------------------------------------
   /** Teacher-chosen YouTube videos for the caller's madrasa. */

@@ -7,11 +7,13 @@ import {
   type Lesson,
   type LiveSessionState,
 } from '@digital-madrasa/shared';
-import { VideoCamera } from 'phosphor-react-native';
+import { useRouter } from 'expo-router';
+import { BookOpenText, VideoCamera } from 'phosphor-react-native';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Alert, Linking, View } from 'react-native';
 import { AppText, Badge, Button, Card } from '@/components/ui';
+import { useRequiredSession } from '@/hooks/useSession';
 import { useTheme } from '@/theme/ThemeProvider';
 
 /** How often the countdown re-evaluates, so the card flips to "live" on its own. */
@@ -43,14 +45,17 @@ export function LiveSessionCard({ lesson, viewer = null }: LiveSessionCardProps)
   const theme = useTheme();
   const state = useLiveState(lesson.scheduledFor);
   const isHost = isSessionHost(lesson.teacherId, viewer);
+  const router = useRouter();
+  const role = useRequiredSession().user.role;
 
   // Hoisted so the narrowing survives into the onPress closure.
   const meetingUrl = lesson.meetingUrl;
-  if (!meetingUrl || state === 'ended') return null;
-
-  const provider = meetingProvider(meetingUrl);
-  const providerLabel = provider ? MEETING_PROVIDER_LABEL[provider] : t('live.externalMeeting');
   const isOpen = state === 'live' || state === 'starting_soon';
+  // The in-app reading room needs no link: any lesson in its live window has one.
+  if (state === 'ended' || (!meetingUrl && !isOpen)) return null;
+
+  const provider = meetingUrl ? meetingProvider(meetingUrl) : null;
+  const providerLabel = provider ? MEETING_PROVIDER_LABEL[provider] : meetingUrl ? t('live.externalMeeting') : 'ILMORA';
 
   return (
     <Card>
@@ -79,18 +84,34 @@ export function LiveSessionCard({ lesson, viewer = null }: LiveSessionCardProps)
           {describeTiming(state, lesson.scheduledFor, t)}
         </AppText>
 
-        {isOpen ? (
+        {isOpen && (role === 'teacher' || role === 'student') ? (
+          <Button
+            label={isHost ? t('halaqa.openRoomHost') : t('halaqa.openRoom')}
+            icon={<BookOpenText size={20} color={theme.colors.textOnAccent} weight="fill" />}
+            onPress={() =>
+              router.push({
+                pathname: role === 'teacher' ? '/(teacher)/halaqa/[id]' : '/(student)/halaqa/[id]',
+                params: { id: lesson.id },
+              })
+            }
+          />
+        ) : null}
+
+        {isOpen && meetingUrl ? (
           <Button
             label={isHost ? t('live.startSession') : t('live.joinSession')}
-            icon={<VideoCamera size={20} color={theme.colors.textOnAccent} weight="fill" />}
+            variant="secondary"
+            icon={<VideoCamera size={20} color={theme.colors.text} weight="fill" />}
             onPress={() => void openMeeting(meetingUrl, t)}
             accessibilityHint={t('live.opensExternalApp', { provider: providerLabel })}
           />
         ) : null}
 
-        <AppText variant="caption" color="textSubtle">
-          {t('live.opensExternalApp', { provider: providerLabel })}
-        </AppText>
+        {meetingUrl ? (
+          <AppText variant="caption" color="textSubtle">
+            {t('live.opensExternalApp', { provider: providerLabel })}
+          </AppText>
+        ) : null}
       </View>
     </Card>
   );

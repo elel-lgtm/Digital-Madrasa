@@ -8,6 +8,7 @@ import {
   type PupilSignals,
   type SponsorablePupil,
   type ClassVideo,
+  type HalaqaMark,
   youtubeId,
   type HifzProgress,
   type IssueCertificateInput,
@@ -315,6 +316,35 @@ function mapVideo(r: Row): ClassVideo {
     note: r.note ?? null,
     createdAt: r.created_at,
   };
+}
+
+/** A teacher's mark for a reading in the live room (migration 0037). */
+export async function markHalaqaReading(input: {
+  lessonId: string;
+  studentId: string;
+  surahNo: number;
+  ayahFrom: number;
+  ayahTo: number;
+  mark: HalaqaMark;
+  note?: string | null;
+}): Promise<void> {
+  const { data: auth } = await supabase.auth.getUser();
+  const { data: lesson } = await supabase.from('lessons').select('madrasa_id').eq('id', input.lessonId).single();
+  if (!lesson) throw new ApiError('not_found', 'That lesson was not found.');
+  const { error } = await (supabase as unknown as { from: (t: string) => { insert: (r: object) => Promise<{ error: unknown }> } })
+    .from('halaqa_readings')
+    .insert({
+      madrasa_id: lesson.madrasa_id,
+      lesson_id: input.lessonId,
+      student_id: input.studentId,
+      surah_no: input.surahNo,
+      ayah_from: input.ayahFrom,
+      ayah_to: input.ayahTo,
+      mark: input.mark,
+      note: input.note ?? null,
+      marked_by: auth.user?.id,
+    });
+  if (error) fail(error as { message: string; code?: string }, 'Could not save the mark.');
 }
 
 /** The madrasa's video library; RLS bounds it to the caller's madrasa (0036). */
