@@ -5,7 +5,9 @@ import { View } from 'react-native';
 import { api } from '@/api';
 import { EmptyState, PageHeader, Screen, SkeletonList } from '@/components/ui';
 import { HalaqaRoom } from '@/halaqa/HalaqaRoom';
+import { env } from '@/config/env';
 import { LiveVideo } from '@/halaqa/LiveVideo';
+import { MeetingLinkCard } from '@/components/LiveSessionCard';
 import { useTheme } from '@/theme/ThemeProvider';
 
 /** Route wrapper: finds the lesson, then opens its live room. */
@@ -26,5 +28,6 @@ export function HalaqaScreen() {
       </Screen>
     );
   }
-  return <HalaqaRoom lesson={lesson} video={<LiveVideo lessonId={lesson.id} />} />;
+  // In-app video only when switched on; otherwise the lesson's own Meet/Zoom link.
+  return <HalaqaRoom lesson={lesson} video={env.inAppVideo ? <LiveVideo lessonId={lesson.id} /> : <MeetingLinkCard lesson={lesson} />} />;
 }

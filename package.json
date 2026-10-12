@@ -37,6 +37,8 @@
     "db:verify:sponsorship": "node scripts/db-run.mjs supabase/tests/verify_sponsorship.sql",
     "db:verify:videos": "node scripts/db-run.mjs supabase/tests/verify_class_videos.sql",
     "db:verify:halaqa": "node scripts/db-run.mjs supabase/tests/verify_halaqa.sql",
+    "db:verify:sessions": "node scripts/db-run.mjs supabase/tests/verify_session_access.sql",
+    "db:verify:messaging": "node scripts/db-run.mjs supabase/tests/verify_messaging.sql",
     "db:seed": "node scripts/seed-remote.mjs",
     "db:check-auth": "node scripts/check-supabase-auth.mjs",
     "db:types": "npx supabase gen types typescript --project-id rblnistltccysizdcnvt > packages/shared/src/database.types.ts",

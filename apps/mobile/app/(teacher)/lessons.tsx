@@ -1,5 +1,6 @@
+import { useRouter } from 'expo-router';
 import { useQuery } from '@tanstack/react-query';
-import { BookOpen } from 'phosphor-react-native';
+import { BookOpen, VideoCamera } from 'phosphor-react-native';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 import { api } from '@/api';
@@ -15,6 +16,7 @@ import {
   PageHeader,
   Screen,
   SkeletonList,
+  Button,
 } from '@/components/ui';
 import { useApiError } from '@/hooks/useApiError';
 import { useRequiredSession } from '@/hooks/useSession';
@@ -22,6 +24,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { shortDate } from '@/utils/dates';
 
 export default function Lessons() {
+  const router = useRouter();
   const { t } = useTranslation();
   const theme = useTheme();
   const describeError = useApiError();
@@ -34,6 +37,11 @@ export default function Lessons() {
       <PageHeader title={t('teacher.lessons')} showBack />
 
       <View style={{ marginTop: theme.spacing.lg, gap: theme.spacing.md }}>
+        <Button
+          label={t('session.newTitle')}
+          icon={<VideoCamera size={20} color={theme.colors.textOnAccent} weight="fill" />}
+          onPress={() => router.push('/(teacher)/session-new')}
+        />
         {lessons.isPending ? (
           <SkeletonList count={4} />
         ) : lessons.isError ? (

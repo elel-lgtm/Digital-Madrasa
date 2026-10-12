@@ -34,7 +34,8 @@ Deno.serve(handler(async (req) => {
   const { data: lesson } = await caller.db.from('lessons').select('id, title').eq('id', lessonId).maybeSingle();
   if (!lesson) throw new PublicError(404, 'not_found', 'That lesson was not found.');
 
-  const key = Deno.env.get('DAILY_API_KEY');
+  // Off unless deliberately switched on: no paid service is called otherwise.
+  const key = Deno.env.get('LIVE_VIDEO_ENABLED') === 'true' ? Deno.env.get('DAILY_API_KEY') : undefined;
   if (!key) throw new PublicError(503, 'video_not_configured', 'Video is not set up for this madrasa yet.');
   const headers = { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' };
 

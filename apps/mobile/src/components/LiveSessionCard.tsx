@@ -118,6 +118,38 @@ export function LiveSessionCard({ lesson, viewer = null }: LiveSessionCardProps)
 }
 
 /**
+ * Inside the live reading room: the session's Google Meet / Zoom link, for
+ * video and sound beside the room. Says so plainly when there is none.
+ */
+export function MeetingLinkCard({ lesson }: { lesson: Lesson }) {
+  const { t } = useTranslation();
+  const theme = useTheme();
+  const url = lesson.meetingUrl;
+  const provider = url ? meetingProvider(url) : null;
+  const label = provider ? MEETING_PROVIDER_LABEL[provider] : t('live.externalMeeting');
+  return (
+    <Card>
+      <View style={{ gap: theme.spacing.sm }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: theme.spacing.sm }}>
+          <VideoCamera size={22} color={theme.colors.accent} weight="duotone" />
+          <AppText variant="bodyStrong" style={{ flex: 1 }}>
+            {url ? t('session.videoOn', { provider: label }) : t('session.noVideoLink')}
+          </AppText>
+        </View>
+        {url ? (
+          <Button
+            label={t('session.joinOn', { provider: label })}
+            variant="secondary"
+            icon={<VideoCamera size={18} color={theme.colors.text} weight="fill" />}
+            onPress={() => void openMeeting(url, t)}
+          />
+        ) : null}
+      </View>
+    </Card>
+  );
+}
+
+/**
  * Compact row for lesson lists — same rules, no card chrome.
  */
 export function LiveSessionRow({ lesson, viewer = null }: LiveSessionCardProps) {

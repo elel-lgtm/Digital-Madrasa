@@ -153,6 +153,8 @@ begin
   else raise notice 'PASS  announcement reached exactly the approved parent and the other teacher'; end if;
 
   -- ------------------------------------------------------------ messages
+  -- Fixture rows, written by the server: no signed-in user (0039's check trusts that path).
+  perform set_config('request.jwt.claims', '', true);
   insert into public.message_threads (id, madrasa_id, participant_a, participant_b) values (v_thread, v_ma, v_teach, v_mum);
   insert into public.messages (madrasa_id, thread_id, sender_id, recipient_id, body)
   values (v_ma, v_thread, v_teach, v_mum, 'Private: about the fees');

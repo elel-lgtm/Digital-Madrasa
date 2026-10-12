@@ -6,6 +6,7 @@ import type {
   ParentLink,
   Submission,
   Thread,
+  MessageContact,
 } from '@digital-madrasa/shared';
 import { ApiError, type SearchResults } from '../types';
 import { supabase } from './client';
@@ -216,41 +217,33 @@ export async function markNotificationRead(notificationId: string): Promise<void
 }
 
 export async function listThreads(): Promise<Thread[]> {
-  const { data, error } = await supabase
-    .from('message_threads')
-    .select('*')
-    .order('last_message_at', { ascending: false });
-
+  // my_threads() (0039) works out who the other person is for whoever asks,
+  // with the pupil, the last message and the unread count, in one call.
+  const { data, error } = await (supabase.rpc as unknown as (fn: string) => Promise<{ data: Row[] | null; error: { message: string } | null }>)('my_threads');
   if (error) fail(error, 'Could not load conversations.');
-
-  // The conversation list shows an unread badge that was fed a hardcoded
-  // zero, so it never appeared. Unread means addressed to me and not yet
-  // read; `messages.read_at` already records that. One query for all threads
-  // rather than one per thread, and RLS limits it to messages I may read.
-  const { data: auth } = await supabase.auth.getUser();
-  const { data: unread } = auth.user
-    ? await supabase
-        .from('messages')
-        .select('thread_id')
-        .eq('recipient_id', auth.user.id)
-        .is('read_at', null)
-        .is('deleted_at', null)
-    : { data: [] };
-
-  const unreadByThread = new Map<string, number>();
-  for (const m of (unread ?? []) as Row[]) {
-    unreadByThread.set(m.thread_id, (unreadByThread.get(m.thread_id) ?? 0) + 1);
-  }
-
   return (data ?? []).map((row: Row) => ({
     id: row.id,
-    subjectName: row.subject_name ?? 'Conversation',
-    counterpartId: row.counterpart_id ?? '',
+    subjectName: row.student_name ?? row.counterpart_name ?? 'Conversation',
+    counterpartId: row.counterpart_id,
     counterpartName: row.counterpart_name ?? '',
     counterpartRole: row.counterpart_role ?? 'teacher',
     lastMessage: row.last_message ?? '',
-    lastMessageAt: row.last_message_at ?? row.created_at,
-    unreadCount: unreadByThread.get(row.id) ?? 0,
+    lastMessageAt: row.last_message_at,
+    unreadCount: row.unread ?? 0,
+    studentName: row.student_name ?? null,
+  }));
+}
+
+/** People the caller may message: their children's teachers, or their pupils' parents. */
+export async function listContacts(): Promise<MessageContact[]> {
+  const { data, error } = await (supabase.rpc as unknown as (fn: string) => Promise<{ data: Row[] | null; error: { message: string } | null }>)('message_contacts');
+  if (error) fail(error, 'Could not load contacts.');
+  return (data ?? []).map((r: Row) => ({
+    profileId: r.profile_id,
+    fullName: r.full_name,
+    role: r.role === 'parent' ? 'parent' : 'teacher',
+    studentId: r.student_id,
+    studentName: r.student_name ?? '',
   }));
 }
 

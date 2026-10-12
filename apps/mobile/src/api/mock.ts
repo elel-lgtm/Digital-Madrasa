@@ -19,6 +19,7 @@ import {
   type PupilSignals,
   type SponsorablePupil,
   type ClassVideo,
+  type MessageContact,
   type VoiceLang,
   type MadrasaLifecycleInput,
   type MadrasaStatus,
@@ -2750,7 +2751,51 @@ export const mockApi: ApiClient = {
         .filter((m) => m.senderId === profile.id || m.recipientId === profile.id)
         .map((m) => m.threadId),
     );
-    return data.threads.filter((t) => threadIds.has(t.id));
+    // As my_threads() (0039): the counterpart is whoever is not me.
+    return data.threads
+      .filter((t) => threadIds.has(t.id))
+      .map((t) => {
+        const msgs = data.messages.filter((m) => m.threadId === t.id);
+        const last = msgs.reduce((x, m) => (!x || m.createdAt > x.createdAt ? m : x), msgs[0]);
+        const otherId = msgs.map((m) => (m.senderId === profile.id ? m.recipientId : m.senderId)).find(Boolean) ?? t.counterpartId;
+        const other = data.profiles.find((pr) => pr.id === otherId);
+        return {
+          ...t,
+          counterpartId: otherId,
+          counterpartName: other?.fullName ?? t.counterpartName,
+          counterpartRole: other?.role ?? t.counterpartRole,
+          lastMessage: last?.body ?? t.lastMessage,
+          lastMessageAt: last?.createdAt ?? t.lastMessageAt,
+          unreadCount: msgs.filter((m) => m.recipientId === profile.id && !m.readAt).length,
+        };
+      })
+      .sort((x, y) => y.lastMessageAt.localeCompare(x.lastMessageAt));
+  },
+
+  async listContacts() {
+    await bootstrap();
+    await delay();
+    const profile = requireProfile();
+    const data = requireDb();
+    const out: MessageContact[] = [];
+    if (profile.role === 'parent') {
+      for (const studentId of approvedChildIds(profile.id)) {
+        const s = data.students.find((x) => x.id === studentId);
+        if (!s) continue;
+        const klass = data.classes.find((c) => c.id === s.classId);
+        for (const t of data.teachers.filter((t) => t.madrasaId === s.madrasaId && (t.isOwner || t.id === klass?.teacherId))) {
+          const tp = data.profiles.find((x) => x.id === t.profileId);
+          if (tp) out.push({ profileId: tp.id, fullName: tp.fullName, role: 'teacher', studentId: s.id, studentName: s.fullName });
+        }
+      }
+    } else if (profile.role === 'teacher') {
+      const madrasaId = requireMadrasaId();
+      for (const l of data.links.filter((l) => l.status === 'approved' && l.madrasaId === madrasaId)) {
+        const pp = data.profiles.find((x) => x.id === l.parentId);
+        if (pp) out.push({ profileId: pp.id, fullName: pp.fullName, role: 'parent', studentId: l.studentId, studentName: l.studentName });
+      }
+    }
+    return out;
   },
 
   async listMessages(threadId) {
@@ -2779,7 +2824,13 @@ export const mockApi: ApiClient = {
     rateLimit(`msg:${profile.id}`, 60, 60 * 60);
     const data = requireDb();
 
-    const threadId = input.threadId ?? newId(NS.thread);
+    // One conversation per pair, as on the server.
+    const existing = data.messages.find(
+      (m) =>
+        (m.senderId === profile.id && m.recipientId === input.recipientId) ||
+        (m.recipientId === profile.id && m.senderId === input.recipientId),
+    );
+    const threadId = input.threadId ?? existing?.threadId ?? newId(NS.thread);
     if (!data.threads.some((t) => t.id === threadId)) {
       const counterpart = data.profiles.find((p) => p.id === input.recipientId);
       data.threads.push({

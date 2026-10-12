@@ -1,6 +1,7 @@
 import { useRouter } from 'expo-router';
 import {
   BookOpen,
+  ChatCircleDots,
   ClipboardText,
   CreditCard,
   Gear,
@@ -73,6 +74,11 @@ export default function TeacherMore() {
           icon: SquaresFour,
           label: t('heatmap.title'),
           onPress: () => router.push('/(teacher)/mistakes'),
+        },
+        {
+          icon: ChatCircleDots,
+          label: t('nav.messages'),
+          onPress: () => router.push('/(teacher)/messages'),
         },
         {
           icon: YoutubeLogo,

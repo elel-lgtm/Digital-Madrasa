@@ -119,6 +119,7 @@ const implemented: Partial<ApiClient> = {
   markMailRead: c.markMailRead,
   markAllMailRead: c.markAllMailRead,
   listThreads: c.listThreads,
+  listContacts: c.listContacts,
   listMessages: c.listMessages,
   listNotifications: c.listNotifications,
   getNotificationPreferences: c.getNotificationPreferences,

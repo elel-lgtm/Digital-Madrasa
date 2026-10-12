@@ -28,6 +28,13 @@ export const env = {
     ? rawEnvironment
     : 'development') as AppEnvironment,
 
+  /**
+   * In-app video for live lessons (Daily.co). Off unless a funded video
+   * account is set up; while off, live sessions use the teacher's Google Meet
+   * or Zoom link and nothing calls a paid service. See halaqa/LiveVideo.tsx.
+   */
+  inAppVideo: optional(process.env.EXPO_PUBLIC_IN_APP_VIDEO) === 'true',
+
   supabaseUrl: optional(process.env.EXPO_PUBLIC_SUPABASE_URL),
   supabaseAnonKey: optional(process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY),
 

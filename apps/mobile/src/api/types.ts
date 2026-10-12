@@ -72,6 +72,7 @@ import type {
   VoiceLang,
   SponsorablePupil,
   ClassVideo,
+  MessageContact,
   HalaqaMark,
 } from '@digital-madrasa/shared';
 
@@ -411,6 +412,8 @@ export interface ApiClient {
   markMailRead(mailId: string): Promise<void>;
   markAllMailRead(): Promise<void>;
   listThreads(): Promise<Thread[]>;
+  /** Who the caller may write to (migration 0039). */
+  listContacts(): Promise<MessageContact[]>;
   listMessages(threadId: string): Promise<Message[]>;
   sendMessage(input: SendMessageInput): Promise<Message>;
   listNotifications(): Promise<Notification[]>;

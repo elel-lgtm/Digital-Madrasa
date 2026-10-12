@@ -483,6 +483,17 @@ export interface Thread {
   lastMessage: string;
   lastMessageAt: string;
   unreadCount: number;
+  /** The pupil the conversation is about, when known. */
+  studentName?: string | null;
+}
+
+/** Someone the caller may message, and the pupil they share. */
+export interface MessageContact {
+  profileId: ID;
+  fullName: string;
+  role: 'teacher' | 'parent';
+  studentId: ID;
+  studentName: string;
 }
 
 export interface Announcement {
@@ -507,6 +518,7 @@ export type MailKind =
   | 'announcement'
   | 'message'
   | 'progress_summary'
+  | 'live_session'
   // Written by Edge Functions: issue-invoices, link-child, decide-link,
   // madrasa-lifecycle. The inbox must render every one of them.
   | 'fee_due'

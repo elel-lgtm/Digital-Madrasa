@@ -170,9 +170,10 @@ function AddVideo({ classes }: { classes: { value: string; label: string }[] }) 
             setUrl(value);
             setError(null);
             const found = youtubeId(value);
-            if (found && !title) {
+            if (found) {
               const fetched = await fetchTitle(found);
-              if (fetched) setTitle(fetched);
+              // Only fill an empty title: never overwrite what the teacher typed meanwhile.
+              if (fetched) setTitle((current) => current || fetched);
             }
           }}
           placeholder="https://youtu.be/…"

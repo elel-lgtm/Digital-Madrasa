@@ -14,6 +14,7 @@ import {
   UserCircleCheck,
   Buildings,
   Certificate,
+  VideoCamera,
 } from 'phosphor-react-native';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -46,6 +47,7 @@ const KIND_ICON: Record<MailKind, Icon> = {
   announcement: Megaphone,
   message: ChatCircleDots,
   progress_summary: TrendUp,
+  live_session: VideoCamera,
   fee_due: Receipt,
   link_request: UserPlus,
   link_approved: UserCircleCheck,

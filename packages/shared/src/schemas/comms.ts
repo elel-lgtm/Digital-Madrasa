@@ -4,6 +4,8 @@ import { plainTextSchema, uuidSchema } from './common';
 export const sendMessageSchema = z.object({
   threadId: uuidSchema.nullish(),
   recipientId: uuidSchema,
+  /** The pupil a new conversation is about. */
+  studentId: uuidSchema.nullish(),
   body: plainTextSchema(2000).pipe(z.string().min(1, 'validation.message_empty')),
   attachmentUrl: z.string().url().nullish(),
 });

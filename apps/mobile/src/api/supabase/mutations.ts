@@ -335,18 +335,39 @@ export async function createAnnouncement(
 }
 
 export async function sendMessage(input: SendMessageInput): Promise<Message> {
-  const madrasaId = await currentMadrasaId();
   const senderId = await currentUserId();
+  // A parent's profile has no madrasa: the conversation takes the pupil's.
+  const madrasaId = await (async () => {
+    if (input.threadId) {
+      const { data } = await supabase.from('message_threads').select('madrasa_id').eq('id', input.threadId).maybeSingle();
+      if (data?.madrasa_id) return data.madrasa_id as string;
+    }
+    if (input.studentId) {
+      const { data } = await supabase.from('students').select('madrasa_id').eq('id', input.studentId).maybeSingle();
+      if (data?.madrasa_id) return data.madrasa_id as string;
+    }
+    return currentMadrasaId();
+  })();
 
   // A message must belong to a thread, so the first message to someone opens
   // one. Doing it here rather than making the caller do it keeps "send" a
   // single action from the screen's point of view.
   let threadId = input.threadId ?? null;
   if (!threadId) {
+    // One conversation per pair: reuse it rather than opening another.
+    const { data: existing } = await supabase
+      .from('message_threads')
+      .select('id')
+      .or(`and(participant_a.eq.${senderId},participant_b.eq.${input.recipientId}),and(participant_a.eq.${input.recipientId},participant_b.eq.${senderId})`)
+      .limit(1);
+    threadId = existing?.[0]?.id ?? null;
+  }
+  if (!threadId) {
     const { data: thread, error: threadError } = await supabase
       .from('message_threads')
       .insert({
         madrasa_id: madrasaId,
+        student_id: input.studentId ?? null,
         participant_a: senderId,
         participant_b: input.recipientId,
       })
