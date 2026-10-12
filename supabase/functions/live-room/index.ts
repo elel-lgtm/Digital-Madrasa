@@ -52,7 +52,6 @@ Deno.serve(handler(async (req) => {
         properties: {
           exp: now + 12 * 3600,
           eject_at_room_exp: true,
-          max_participants: 50,
           enable_chat: false,
           enable_knocking: false,
           enable_prejoin_ui: false,
@@ -62,7 +61,7 @@ Deno.serve(handler(async (req) => {
     });
   }
   if (!room.ok) {
-    console.error('[live-room] room', room.status);
+    console.error('[live-room] room', room.status, (await room.text()).slice(0, 200));
     throw new PublicError(502, 'video_unavailable', 'The video service did not answer. Please try again.');
   }
   const { url } = await room.json() as { url: string };
@@ -85,7 +84,7 @@ Deno.serve(handler(async (req) => {
     }),
   });
   if (!token.ok) {
-    console.error('[live-room] token', token.status);
+    console.error('[live-room] token', token.status, (await token.text()).slice(0, 200));
     throw new PublicError(502, 'video_unavailable', 'The video service did not answer. Please try again.');
   }
   const { token: meetingToken } = await token.json() as { token: string };
