@@ -1,29 +1,57 @@
-# Demo run sheet: the ten new features
+# ILMORA demo run sheet
 
-All accounts use the password `Madrasa2026!`. The APK talks to the live Supabase project.
+ILMORA is the branded implementation of the Digital Madrasa Mobile Application. This sheet is for the person running the panel demo.
 
-| # | Feature | Sign in as | Where |
-|---|---------|------------|-------|
-| 1 | Certificate PDF with a QR code anyone can scan | `owner@annur.example` | Students → a pupil → Award certificate → open it → **Certificate PDF**. Scan the QR with any phone camera: it opens the public verify page. |
-| 2 | Sabaq · Sabqi · Manzil daily plan | any role | Student dashboard, parent's child page, teacher's pupil page: **Today's hifz plan**. |
-| 3 | Tajweed mistake map | `owner@annur.example` | More → **Mistake map**. Tap a rule to filter; tap a square for the rules behind it. |
-| 4 | Hijri date and Ramadan greeting | any role | The dashboard subtitle (e.g. *21 Rabi al-Thani 1448 AH*). |
-| 5 | USSD for feature phones | (none) | Africa's Talking simulator; see `docs/ussd-setup.md`. Use the demo parent number `+254712000103`. |
-| 6 | Spoken report in four languages | `parent@example.com` | A child → Progress → **Listen to the report**. Pick Kiswahili or Soomaali. It takes about 15 seconds to prepare. |
-| 7 | Sponsor a pupil (sadaqah) | `owner@annur.example`, then `parent@example.com` | Teacher: a pupil → **Sponsorship** → tick guardian agreement → List. Parent: More → **Sponsor a pupil**. Use M-Pesa number `0712349999` to show a declined payment without moving money. |
-| 8 | Ijazah with the teacher's sanad | `owner@annur.example` | More → **My chain of transmission** → save a chain, then award an *Ijazah*. The verify page prints the chain. |
-| 9 | Co-pilot insights | `owner@annur.example` | Teacher dashboard → **Co-pilot: this week**. Tap a line to open the pupil. |
-| 10 | Recite along | a student account | Recite tab → **Recite along** → Al-Ikhlas → Start reciting. Words turn green as they are heard. |
+All demo accounts use the password `Madrasa2026!`. The APK talks to the live server.
 
-## Before the demo
+| Role | Email |
+|------|-------|
+| Owner / teacher | `owner@annur.example` |
+| Class teacher | `fatuma@annur.example` |
+| Parent | `parent@example.com` |
+| Pupil | `aisha.hassan@annur.example` |
 
-- **Mistake map (3)**: it counts assessed recitations only. On the live project there is just one recitation, and it is unassessed, so the map is empty until a few pupils (with AI consent on) submit recitations. The web demo (mock mode) has a full map.
-- **Sponsorship (7)**: nobody is listed on the live project. List one pupil from the teacher account first, then switch to the parent.
-- **Recite along (10)**: use a real phone or the emulator with a microphone. It works on the phone (no internet) on Android 13+ with the Arabic offline speech pack. Otherwise it uses Google's speech service, which it only offers when the parent has turned on AI feedback.
-- **Voice report (6)** and **recite along (10)**: the room needs to hear the phone; turn the volume up.
+## Before the day
+
+1. **Install the latest APK** on the demo phone (and a second phone for the live reading room).
+2. **M-Pesa is on Safaricom's sandbox.** Bring a Safaricom phone with signal; the real PIN prompt pops up on it. Test money only.
+3. **Record 3 or 4 real recitations** as pupils with AI consent on, so the mistake map and tajweed feedback have something to show. The live server has none yet, and none are faked.
+4. **Schedule the live session** a few minutes before you present: Owner → More → Lessons → **Schedule a live session**, class *Hifz Level 1*, today, a time 5–10 minutes ahead, and a Google Meet link you created. The class and parents get an inbox notice.
+5. Run `npm run security:report` the day before and keep `docs/security-report.html` open in a browser tab.
+6. Turn the phone volume up (voice report, master reciter, recite-along).
+
+## Suggested order (about 15 minutes)
+
+| # | What to show | Account | Where |
+|---|--------------|---------|-------|
+| 1 | **Brand and languages:** splash, ILMORA logo, switch to Kiswahili, Somali, Arabic (right-to-left) | — | Welcome screen, language chips |
+| 2 | **Hijri date** in every dashboard header | any | Dashboard |
+| 3 | **Co-pilot insights:** who is stuck, falling behind or improving | Owner | Dashboard → *Co-pilot: this week* |
+| 4 | **Live session + live reading room:** pupils raise hands, teacher picks a reader, ayah lights up on every phone, teacher marks the reading | Owner + Pupil (two phones) | Dashboard → *Open the live reading room* (both phones). Video and sound: *Join on Google Meet* |
+| 5 | **Recitation, AI tajweed feedback, master reciter:** play the pupil, then the qari, ayah by ayah | Owner | Recitations to review → a recitation → *Compare with a master reciter*; *Hear ayah N correctly* on a mistake |
+| 6 | **Mistake map** across the class | Owner | More → *Mistake map* |
+| 7 | **Daily hifz plan:** sabaq, sabqi, manzil | Pupil | Dashboard |
+| 8 | **Recite along:** words light up as the pupil recites | Pupil | Recite tab → *Recite along* → Al-Ikhlas |
+| 9 | **Qur'an video library:** teacher-chosen YouTube videos | Pupil | Learn tab → *Qur'an videos* |
+| 10 | **Offline attendance:** airplane mode, mark the register, back online, it syncs | Owner | Classes → Hifz Level 1 → *Mark attendance* |
+| 11 | **Real M-Pesa payment:** PIN prompt on the Safaricom phone, receipt with Safaricom's code, shareable PDF | Parent | Fees → *Pay now* (enter the Safaricom number) |
+| 12 | **Sponsor a pupil (sadaqah):** anonymous both ways | Parent | More → *Sponsor a pupil* |
+| 13 | **Spoken report** in Kiswahili or Somali | Parent | A child → Progress → *Listen to the report* |
+| 14 | **Parent ↔ teacher messaging** | Parent, then Fatuma | Messages → *New message* |
+| 15 | **Certificates with QR, ijazah with sanad:** scan the QR with any phone | Owner | A pupil → Award certificate → *Certificate PDF* |
+| 16 | **Impact dashboard** | Owner | More → *Impact* |
+| 17 | **Security proof:** 21 suites, 145 guarantees | — | `docs/security-report.html` |
+| 18 | **USSD for feature phones** | — | Africa's Talking simulator; see `docs/ussd-setup.md` |
+
+## If something goes wrong
+
+- **No internet in the room:** M-Pesa sandbox, voice report, master reciter, videos and messaging need a connection. Everything already opened keeps showing (offline banner), and attendance still works. As a fallback for payments, switch the server to the simulator: `npx supabase secrets set MPESA_ENV=mock --project-ref rblnistltccysizdcnvt` (numbers ending 9999, 8888, 7777 and 6666 show each failure). Switch back with `MPESA_ENV=sandbox`.
+- **Recite-along does not hear the pupil:** it uses the phone's Arabic speech recogniser; on the phone it needs the Arabic offline pack, otherwise Google's service (only if AI consent is on). Say plainly that it is practice, not marking.
+- **A screen looks stuck:** pull down to refresh.
 
 ## What to say when asked "is it real?"
 
-- Every insight, plan and spoken sentence is built from the pupil's records with rules that are unit-tested. The only AI-generated part of the voice report is the voice itself.
-- Recite-along is practice: nothing is recorded or scored, and a "missed" word may simply not have been heard.
-- Sponsors never see a pupil's name or photo, and the family is never told who paid. The database enforces both, and `npm run db:verify:sponsorship` checks them.
+- **M-Pesa** is Safaricom's own sandbox: the prompt, the PIN and the transaction code are Safaricom's. Going live needs a registered Paybill or Till; no code changes.
+- **Live video** runs in Google Meet or Zoom beside the in-app reading room. In-app video is built but switched off until a funded video account is set up.
+- **AI** is used where it helps (tajweed assessment, the assistant, the spoken voice) and never decides a mark: the teacher's review is final, and no child's recording is assessed without a parent's consent.
+- **Security** is enforced in the database for every user, and checked by 21 test suites against the live system.
