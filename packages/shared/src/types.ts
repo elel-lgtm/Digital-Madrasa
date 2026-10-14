@@ -629,6 +629,30 @@ export interface AdminOverview {
   generatedAt: string;
 }
 
+/** Totals only, never names (migration 0040). */
+export interface ImpactSummary {
+  scope: 'platform' | 'madrasa';
+  madrasas: number;
+  pupils: number;
+  teachers: number;
+  surahsMemorised: number;
+  pupilsMemorising: number;
+  attendanceRate30d: number | null;
+  recitationsAssessed: number;
+  certificates: number;
+  ijazahs: number;
+  feesCollected: number;
+  feesViaMpesa: number;
+  paymentsCount: number;
+  sponsoredAmount: number;
+  pupilsSponsored: number;
+  liveSessions: number;
+  halaqaReadings: number;
+  messages: number;
+  monthly: { month: string; surahsMemorised: number; attendanceRate: number | null; feesCollected: number }[];
+  generatedAt: string;
+}
+
 export interface AdminMadrasa {
   id: ID;
   name: string;

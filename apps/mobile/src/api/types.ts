@@ -73,6 +73,7 @@ import type {
   SponsorablePupil,
   ClassVideo,
   MessageContact,
+  ImpactSummary,
   HalaqaMark,
 } from '@digital-madrasa/shared';
 
@@ -394,6 +395,8 @@ export interface ApiClient {
   // -- platform admin (web console) ---------------------------------------
   /** Platform admins only. Counts and totals; no pupil records. */
   getAdminOverview(): Promise<AdminOverview>;
+  /** Learning impact: all madrasas for the platform admin, own madrasa for staff. */
+  getImpact(): Promise<ImpactSummary>;
   listAdminMadrasas(): Promise<AdminMadrasa[]>;
   listAdminAudit(params: { madrasaId?: string }): Promise<AdminAuditEntry[]>;
   /** Suspend, schedule deletion, reinstate or purge. Audited server-side. */

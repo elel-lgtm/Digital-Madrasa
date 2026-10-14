@@ -8,6 +8,7 @@ import {
   type PupilSignals,
   type SponsorablePupil,
   type ClassVideo,
+  type ImpactSummary,
   type HalaqaMark,
   youtubeId,
   type HifzProgress,
@@ -345,6 +346,31 @@ export async function markHalaqaReading(input: {
       marked_by: auth.user?.id,
     });
   if (error) fail(error as { message: string; code?: string }, 'Could not save the mark.');
+}
+
+/** impact_summary() (0040): totals only, scoped by the database to who asks. */
+export async function getImpact(): Promise<ImpactSummary> {
+  const { data, error } = await (supabase.rpc as unknown as (fn: string) => Promise<{ data: unknown; error: { message: string; code?: string } | null }>)('impact_summary');
+  if (error) fail(error, 'Could not load the impact figures.');
+  const d = data as Record<string, unknown>;
+  const num = (k: string) => Number(d[k] ?? 0);
+  return {
+    scope: d.scope === 'platform' ? 'platform' : 'madrasa',
+    madrasas: num('madrasas'), pupils: num('pupils'), teachers: num('teachers'),
+    surahsMemorised: num('surahsMemorised'), pupilsMemorising: num('pupilsMemorising'),
+    attendanceRate30d: d.attendanceRate30d === null || d.attendanceRate30d === undefined ? null : Number(d.attendanceRate30d),
+    recitationsAssessed: num('recitationsAssessed'), certificates: num('certificates'), ijazahs: num('ijazahs'),
+    feesCollected: num('feesCollected'), feesViaMpesa: num('feesViaMpesa'), paymentsCount: num('paymentsCount'),
+    sponsoredAmount: num('sponsoredAmount'), pupilsSponsored: num('pupilsSponsored'),
+    liveSessions: num('liveSessions'), halaqaReadings: num('halaqaReadings'), messages: num('messages'),
+    monthly: ((d.monthly as Record<string, unknown>[] | null) ?? []).map((m) => ({
+      month: String(m.month),
+      surahsMemorised: Number(m.surahsMemorised ?? 0),
+      attendanceRate: m.attendanceRate === null || m.attendanceRate === undefined ? null : Number(m.attendanceRate),
+      feesCollected: Number(m.feesCollected ?? 0),
+    })),
+    generatedAt: String(d.generatedAt ?? new Date().toISOString()),
+  };
 }
 
 /** The madrasa's video library; RLS bounds it to the caller's madrasa (0036). */

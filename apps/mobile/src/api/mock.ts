@@ -20,6 +20,7 @@ import {
   type SponsorablePupil,
   type ClassVideo,
   type MessageContact,
+  type ImpactSummary,
   type VoiceLang,
   type MadrasaLifecycleInput,
   type MadrasaStatus,
@@ -1729,6 +1730,60 @@ export const mockApi: ApiClient = {
     const student = data.students.find((s) => s.id === input.studentId);
     if (!student) throw new ApiError('not_found', 'Pupil not found.');
     await persist();
+  },
+
+  async getImpact() {
+    await bootstrap();
+    await delay();
+    const profile = requireProfile();
+    const all = profile.role === 'admin';
+    if (!all && profile.role !== 'teacher') throw new ApiError('forbidden', 'Only madrasa staff and the platform admin can see impact.');
+    const data = requireDb();
+    const inScope = (madrasaId: string) => all || madrasaId === requireMadrasaId();
+    const pupils = data.students.filter((s) => s.enrollmentStatus === 'active' && inScope(s.madrasaId));
+    const ids = new Set(pupils.map((s) => s.id));
+    const memorised = data.hifz.filter((h) => ids.has(h.studentId) && ['memorised', 'mastered', 'revising'].includes(h.status));
+    const att = data.attendance.filter((a) => ids.has(a.studentId));
+    const rate = (rows: typeof att) => {
+      const counted = rows.filter((a) => a.status !== 'excused');
+      return counted.length ? Math.round((100 * counted.filter((a) => a.status === 'present' || a.status === 'late').length) / counted.length) : null;
+    };
+    const since30 = Date.now() - 30 * 86_400_000;
+    const paid = data.payments.filter((p) => p.status === 'success' && inScope(p.madrasaId));
+    const monthKey = (iso: string) => iso.slice(0, 7);
+    const months = Array.from({ length: 6 }, (_, i) => {
+      const d = new Date();
+      d.setDate(1);
+      d.setMonth(d.getMonth() - (5 - i));
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+    });
+    return {
+      scope: all ? 'platform' : 'madrasa',
+      madrasas: all ? data.madrasas.length : 1,
+      pupils: pupils.length,
+      teachers: data.teachers.filter((t) => inScope(t.madrasaId)).length,
+      surahsMemorised: memorised.length,
+      pupilsMemorising: new Set(memorised.map((h) => h.studentId)).size,
+      attendanceRate30d: rate(att.filter((a) => new Date(a.sessionDate).getTime() > since30)),
+      recitationsAssessed: data.recitations.filter((r) => ids.has(r.studentId) && r.feedback?.assessment === 'assessed').length,
+      certificates: data.certificates.filter((c) => ids.has(c.studentId) && c.kind !== 'ijazah').length,
+      ijazahs: data.certificates.filter((c) => ids.has(c.studentId) && c.kind === 'ijazah').length,
+      feesCollected: paid.reduce((s, p) => s + p.amount, 0),
+      feesViaMpesa: paid.filter((p) => p.method === 'mpesa').reduce((s, p) => s + p.amount, 0),
+      paymentsCount: paid.length,
+      sponsoredAmount: 0,
+      pupilsSponsored: 0,
+      liveSessions: data.lessons.filter((l) => inScope(l.madrasaId) && l.scheduledFor && new Date(l.scheduledFor).getTime() < Date.now()).length,
+      halaqaReadings: 0,
+      messages: data.messages.length,
+      monthly: months.map((m) => ({
+        month: m,
+        surahsMemorised: memorised.filter((h) => h.lastRevisedAt && monthKey(h.lastRevisedAt) === m).length,
+        attendanceRate: rate(att.filter((a) => monthKey(a.sessionDate) === m)),
+        feesCollected: paid.filter((p) => p.settledAt && monthKey(p.settledAt) === m).reduce((s, p) => s + p.amount, 0),
+      })),
+      generatedAt: new Date().toISOString(),
+    } satisfies ImpactSummary;
   },
 
   async listVideos() {

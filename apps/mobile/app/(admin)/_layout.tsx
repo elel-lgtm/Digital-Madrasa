@@ -1,5 +1,5 @@
 import { Slot, usePathname, useRouter } from 'expo-router';
-import { Buildings, ChartBar, ClockCounterClockwise, Desktop, SignOut } from 'phosphor-react-native';
+import { Buildings, ChartBar, ClockCounterClockwise, Desktop, SignOut, Plant } from 'phosphor-react-native';
 import { useTranslation } from 'react-i18next';
 import { Platform, Pressable, ScrollView, View, useWindowDimensions } from 'react-native';
 import { BrandLogo } from '@/components/brand/BrandMark';
@@ -30,6 +30,7 @@ export default function AdminLayout() {
 
 const NAV = [
   { href: '/(admin)/overview', match: '/overview', icon: ChartBar, key: 'admin.nav.overview' },
+  { href: '/(admin)/impact', match: '/impact', icon: Plant, key: 'impact.title' },
   { href: '/(admin)/madrasas', match: '/madrasa', icon: Buildings, key: 'admin.nav.madrasas' },
   { href: '/(admin)/audit', match: '/audit', icon: ClockCounterClockwise, key: 'admin.nav.audit' },
 ] as const;

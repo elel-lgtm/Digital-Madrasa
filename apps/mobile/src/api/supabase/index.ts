@@ -57,6 +57,7 @@ const implemented: Partial<ApiClient> = {
   getLiveRoom: edge.getLiveRoom,
   listSponsorable: learning.listSponsorable,
   listVideos: learning.listVideos,
+  getImpact: learning.getImpact,
   markHalaqaReading: learning.markHalaqaReading,
   addVideo: learning.addVideo,
   removeVideo: learning.removeVideo,
