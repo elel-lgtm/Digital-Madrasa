@@ -37,7 +37,7 @@ const T: Record<Lang, {
   attendance: (c: Child) => string; hifz: (c: Child) => string; fees: (c: Child) => string; remark: (c: Child) => string;
 }> = {
   en: {
-    welcome: 'Digital Madrasa', pick: 'Choose a child:',
+    welcome: 'ILMORA', pick: 'Choose a child:',
     menu: ['Attendance', 'Hifz progress', 'Fees balance', 'Teacher\'s remark'],
     unknown: 'This number is not linked to any child. Ask the madrasa to add it to your parent account.',
     invalid: 'Invalid choice. Please dial again.', busy: 'Too many requests. Please try again later.',
@@ -47,7 +47,7 @@ const T: Record<Lang, {
     remark: (c) => c.remark ? `Teacher on ${c.first_name}'s last recitation${score(c)}: "${c.remark}"` : `No teacher's remark yet for ${c.first_name}.`,
   },
   sw: {
-    welcome: 'Digital Madrasa', pick: 'Chagua mtoto:',
+    welcome: 'ILMORA', pick: 'Chagua mtoto:',
     menu: ['Mahudhurio', 'Maendeleo ya hifdhi', 'Salio la ada', 'Maoni ya mwalimu'],
     unknown: 'Nambari hii haijaunganishwa na mtoto yeyote. Omba madrasa iiongeze kwenye akaunti yako.',
     invalid: 'Chaguo si sahihi. Tafadhali piga tena.', busy: 'Maombi mengi mno. Jaribu tena baadaye.',
@@ -57,7 +57,7 @@ const T: Record<Lang, {
     remark: (c) => c.remark ? `Mwalimu kuhusu kisomo cha mwisho cha ${c.first_name}${score(c)}: "${c.remark}"` : `Bado hakuna maoni ya mwalimu kwa ${c.first_name}.`,
   },
   so: {
-    welcome: 'Digital Madrasa', pick: 'Dooro ilmaha:',
+    welcome: 'ILMORA', pick: 'Dooro ilmaha:',
     menu: ['Imaanshaha', 'Horumarka xifdiga', 'Lacagta hadhay', 'Faallada macallinka'],
     unknown: 'Lambarkan kuma xidhna ilmo. Madrasada ka codso inay ku darto koontadaada.',
     invalid: 'Doorasho khaldan. Fadlan mar kale garaac.', busy: 'Codsiyo badan. Fadlan mar dambe isku day.',
@@ -99,7 +99,7 @@ Deno.serve(async (req) => {
 
   // Step 1: language.
   if (answers.length === 0) {
-    return reply('CON Digital Madrasa\n1. English\n2. Kiswahili\n3. Soomaali');
+    return reply('CON ILMORA\n1. English\n2. Kiswahili\n3. Soomaali');
   }
   const lang = LANGS[Number(answers[0]) - 1];
   if (!lang) return reply(`END ${T.en.invalid}`);

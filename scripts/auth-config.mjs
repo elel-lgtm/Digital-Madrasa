@@ -41,7 +41,7 @@ const RECOVERY_EMAIL = `<!doctype html>
     <div style="max-width:480px;margin:0 auto;background:#fffdf9;border-radius:12px;padding:32px;">
       <h1 style="margin:0 0 8px;font-size:20px;">Reset your password</h1>
       <p style="margin:0 0 24px;color:#6b5d50;font-size:14px;">
-        Enter this code in the Digital Madrasa app to choose a new password.
+        Enter this code in the ILMORA app to choose a new password.
       </p>
       <div style="font-size:32px;font-weight:700;letter-spacing:8px;text-align:center;
                   padding:16px;background:#f2ece3;border-radius:8px;margin-bottom:24px;">
@@ -130,9 +130,9 @@ const CONFIG = {
   // link. The app's reset flow asks for a typed code, so it needs
   // {{ .Token }} instead. This is the change that makes OTP work at all.
   mailer_templates_recovery_content: RECOVERY_EMAIL,
-  mailer_templates_recovery_subject: 'Your Digital Madrasa password reset code',
+  mailer_templates_recovery_subject: 'Your ILMORA password reset code',
   mailer_templates_confirmation_content: CONFIRM_EMAIL,
-  mailer_templates_confirmation_subject: 'Confirm your Digital Madrasa email',
+  mailer_templates_confirmation_subject: 'Confirm your ILMORA email',
 };
 
 // SMTP is only sent if credentials exist, so running this without them
@@ -145,7 +145,7 @@ if (env.SMTP_GMAIL_ADDRESS && env.SMTP_GMAIL_APP_PASSWORD) {
     smtp_user: env.SMTP_GMAIL_ADDRESS,
     smtp_pass: env.SMTP_GMAIL_APP_PASSWORD,
     smtp_admin_email: env.SMTP_GMAIL_ADDRESS,
-    smtp_sender_name: 'Digital Madrasa',
+    smtp_sender_name: 'ILMORA',
   });
 }
 

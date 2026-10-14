@@ -69,7 +69,7 @@ Deno.serve(async (req) => {
           await settleCardOutcome(admin, kind, reference, outcome);
         }
       }
-      return text('Thank you. Your card payment has been submitted.\n\nYou can close this page and return to Digital Madrasa.');
+      return text('Thank you. Your card payment has been submitted.\n\nYou can close this page and return to ILMORA.');
     }
 
     return text('Method not allowed.', 405);

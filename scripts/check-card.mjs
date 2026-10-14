@@ -140,7 +140,7 @@ try {
   check('unsigned webhook refused', (await hook({})).status === 401);
   check('wrongly signed webhook refused', (await hook({ 'x-paystack-signature': 'ab'.repeat(64) })).status === 401);
   const back = await fetch(`${URL}/functions/v1/card-callback?reference=${encodeURIComponent(start.body.checkoutRequestId ?? '')}`);
-  check('browser return page answers', back.status === 200 && (await back.text()).includes('return to Digital Madrasa'), `HTTP ${back.status}`);
+  check('browser return page answers', back.status === 200 && (await back.text()).includes('return to ILMORA'), `HTTP ${back.status}`);
 } finally {
   console.log('\ncleanup');
   try {

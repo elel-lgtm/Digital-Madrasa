@@ -33,7 +33,7 @@ import { channelsFor, toE164, type Prefs } from './rules.ts';
 // deno-lint-ignore no-explicit-any
 type Row = Record<string, any>;
 
-const FOOTER = '\n\n— Digital Madrasa\nYou can choose which messages you receive in the app, under Settings → Notifications.';
+const FOOTER = '\n\n— ILMORA\nYou can choose which messages you receive in the app, under Settings → Notifications.';
 
 // ---------------------------------------------------------------- providers
 
@@ -123,7 +123,7 @@ async function drainMail(admin: SupabaseClient) {
   let failed = 0;
   for (const row of (rows ?? []) as Row[]) {
     try {
-      const id = await sendEmail(row.to_email, row.payload?.subject ?? 'Digital Madrasa', row.payload?.text ?? '');
+      const id = await sendEmail(row.to_email, row.payload?.subject ?? 'ILMORA', row.payload?.text ?? '');
       await admin.from('mail_outbox')
         .update({ status: 'sent', sent_at: new Date().toISOString(), provider_id: id, error: null })
         .eq('id', row.id);
