@@ -61,3 +61,6 @@ docs/final-year-documentation/previous/
 docs/Digital_Madrasa_Project_Documentation.pdf
 docs/Digital_Madrasa_Project_Report.docx
 docs/Digital_Madrasa_Project_Report.pdf
+
+# The report generator lives in a folder named build/ but is source.
+!docs/final-year-documentation/source/build/

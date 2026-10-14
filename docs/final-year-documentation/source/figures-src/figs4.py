@@ -7,7 +7,7 @@ OUT = sys.argv[1]
 
 # ------------------------------------------------ Database schema overview
 fig, ax = canvas(9.2, 7.8)
-title(ax, 'Database Schema Overview — 40 Tables by Functional Area')
+title(ax, 'Database Schema Overview — 42 Tables by Functional Area')
 
 groups = [
     ('TENANCY AND IDENTITY', 5, 90, 27, ACCENT_FILL,
@@ -15,10 +15,11 @@ groups = [
     ('ACCESS CONTROL', 36, 90, 27, RED_FILL,
      ['parent_student_links', 'feature_flags', 'audit_log']),
     ('LEARNING', 67, 90, 28, BLUE_FILL,
-     ['classes', 'lessons', 'assignments', 'submissions', 'grades', 'hifz_progress']),
+     ['classes', 'lessons', 'assignments', 'submissions', 'grades', 'hifz_progress',
+      'class_videos']),
     ('ATTENDANCE', 5, 60, 27, GREEN_FILL, ['attendance']),
     ('RECITATION', 36, 60, 27, GREEN_FILL,
-     ['recitations', 'tajweed_feedback', 'certificates']),
+     ['recitations', 'tajweed_feedback', 'certificates', 'halaqa_readings']),
     ('FINANCE', 67, 60, 28, FILL,
      ['fee_structures', 'invoices', 'invoice_counters', 'payments',
       'payment_allocations', 'receipts']),
@@ -45,7 +46,7 @@ for label, x, ytop, w, fill, tables in groups:
 
 ax.text(50, -1.5,
         'Every tenant-owned table carries madrasa_id.  Row Level Security is ENABLED and '
-        'FORCED on all 40 tables, governed by 84 policies.',
+        'FORCED on all 42 tables, governed by 89 policies.',
         ha='center', fontsize=7.0, color=MUTED, style='italic')
 save(fig, f'{OUT}/fig5-11-schema.png')
 

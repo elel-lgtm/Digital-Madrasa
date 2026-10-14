@@ -2,7 +2,7 @@
 
 | File | What it is |
 |---|---|
-| `Digital_Madrasa_Project_Documentation.pdf` | The final report (71 pages, portrait, US Letter), structured one-for-one on the table of contents of the reference report "Livestock Market and VetCare" |
+| `Digital_Madrasa_Project_Documentation.pdf` | The final report (72 pages, portrait, US Letter), structured one-for-one on the table of contents of the reference report "Livestock Market and VetCare" |
 | `Digital_Madrasa_Project_Documentation.docx` | Editable version of the same report (open in Word; press F9 after edits to refresh the contents and lists) |
 | `figures/diagrams/` | Architecture, class, use case, sequence, activity, DFD level 0/1, context, workflow, schema, wireframes, Agile, conceptual framework |
 | `figures/erd/` | Complete ERD and seven module ERDs, generated from the live schema |
@@ -11,7 +11,7 @@
 | `figures/charts/` | Charts built from measured data only (database, test runs, perf:api, perf:db, check:i18n, git history) |
 | `placeholders/PLACEHOLDERS_TO_COMPLETE.md` | Every piece of evidence you still need to insert |
 | `source/` | Scripts that generate the report and figures |
-| `figures/mobile/` | Phone screenshots used in Chapter 6 (sign-up and the four dashboards) |
+| `figures/mobile/` | Phone screenshots used in Chapter 6 (sign-up, the four dashboards and two feature panels) |
 | `previous/` | Earlier versions (v2; v3 = the 170-page version) |
 
 ## Rebuilding
