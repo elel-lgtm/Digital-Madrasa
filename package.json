@@ -71,7 +71,8 @@
     "quran:build": "node scripts/build-quran-juz.mjs",
     "quran:publish": "node scripts/publish-quran.mjs",
     "check:storage": "node scripts/check-storage.mjs",
-    "check:build-config": "node scripts/check-build-config.mjs"
+    "check:build-config": "node scripts/check-build-config.mjs",
+    "security:report": "node scripts/security-report.mjs"
   },
   "engines": {
     "node": ">=20.19.4"

@@ -1,0 +1,113 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ILMORA security proof</title>
+<style>
+  body { font-family: -apple-system, Roboto, 'Segoe UI', sans-serif; margin: 0; background: #FAF5EE; color: #1d1a16; }
+  header { background: #0E3B3A; color: #F7F0E1; padding: 28px 24px; }
+  header h1 { margin: 0; font-size: 26px; letter-spacing: 3px; }
+  header p { margin: 6px 0 0; color: #D4AF37; }
+  main { max-width: 860px; margin: 0 auto; padding: 20px 16px 40px; }
+  .summary { display: flex; gap: 12px; flex-wrap: wrap; margin: 8px 0 20px; }
+  .stat { background: #fff; border: 1px solid #e6dccb; border-radius: 12px; padding: 14px 18px; flex: 1; min-width: 150px; }
+  .stat b { display: block; font-size: 28px; }
+  .suite { background: #fff; border: 1px solid #e6dccb; border-radius: 12px; padding: 16px 18px; margin-bottom: 12px; }
+  .suite h2 { font-size: 17px; margin: 0 0 6px; display: flex; gap: 10px; align-items: center; }
+  .badge { font-size: 12px; padding: 2px 10px; border-radius: 999px; font-weight: 600; }
+  .ok { background: #e3f3e3; color: #1f6b2a; } .bad { background: #fde2dd; color: #9a2c16; }
+  .suite p { margin: 0 0 8px; color: #5c5145; font-size: 14px; }
+  ul { margin: 0; padding-left: 20px; font-size: 14px; } li { margin: 3px 0; }
+  footer { color: #7c705f; font-size: 12px; margin-top: 18px; }
+</style></head><body>
+<header><h1>ILMORA</h1><p>Security proof: database guarantees, checked against the live system</p></header>
+<main>
+<div class="summary">
+  <div class="stat"><b>21 / 21</b>suites passed</div>
+  <div class="stat"><b>145</b>individual guarantees checked</div>
+  <div class="stat"><b>15 October 2026 at 01:50</b>run on the live database</div>
+</div>
+<p>Each suite builds its own test madrasas, users and children inside a database transaction, signs in as each kind of user (pupil, parent, teacher, owner, another madrasa, platform admin), tries what that user should and should not be able to do, and then rolls everything back. Nothing is left behind. A suite stops at the first guarantee that does not hold.</p>
+<section class="suite"><h2>Platform admin console <span class="badge ok">PASSED</span></h2>
+<p>Verifies migration 0026: the admin console's read functions refuse anyone who is not a platform admin (owners included), give an admin correct per-school figures, and never carry a pupil's name. Runs inside a transaction that rolls back.</p>
+<ul><li>Owner refused: overview</li><li>Owner refused: madrasa summaries</li><li>Owner refused: audit log</li><li>Admin overview: n active madrasa(s), n student(s)</li><li>School summary: 1 pupil, 1 teacher, 1 parent, KES 2000 outstanding, n</li><li>No pupil name in console output</li><li>Audit feed filtered to the chosen school</li><li>Audit feed capped at 500</li><li>Status changes still go only through the lifecycle function</li></ul>
+</section>
+<section class="suite"><h2>AI feedback only with a parent’s consent <span class="badge ok">PASSED</span></h2>
+<p>Verifies migration 0028 against the live schema: who may turn AI feedback on or off for a pupil, that the database records who did it and when, and that a feedback row has a score exactly when it was assessed from the audio. Runs inside a transaction that rolls back.</p>
+<ul><li>Pupil cannot consent</li><li>Pending parent cannot consent</li><li>Another madrasa cannot consent</li><li>Approved parent consented; recorded as the parent</li><li>Consent attribution cannot be rewritten</li><li>Madrasa staff withdrew consent; recorded as staff</li><li>Consent change audited</li><li>No score without an assessment</li><li>No assessment without a score</li><li>Unassessed recitation stored with no score</li></ul>
+</section>
+<section class="suite"><h2>Video library: teacher-chosen, YouTube only <span class="badge ok">PASSED</span></h2>
+<p>Verifies migration 0036: teachers add videos to their own madrasa only, pupils read but cannot add, other madrasas see nothing, and only a bare YouTube id is accepted. Runs inside a transaction that rolls back.</p>
+<ul><li>Teacher adds a video</li><li>Only a YouTube id is accepted</li><li>Pupil sees the class video</li><li>Pupil cannot add</li><li>Other madrasa sees nothing</li><li>Other madrasa cannot add</li></ul>
+</section>
+<section class="suite"><h2>Core guarantees: tenants, roles and children <span class="badge ok">PASSED</span></h2>
+<p>Verifies the two guarantees the spec marks NON-NEGOTIABLE, against the live schema. Everything happens inside a transaction that rolls back, so running this leaves no rows behind and is safe against a real database.</p>
+<ul><li>Admission number generated: n</li><li>Client-supplied admission_no rejected: n</li><li>Is_platform_admin defaults to false</li><li>Self-escalation blocked (no row updated)</li><li>Self-escalation blocked by policy: n</li></ul>
+</section>
+<section class="suite"><h2>Live reading room and marks <span class="badge ok">PASSED</span></h2>
+<p>Verifies migration 0037: only the madrasa's teachers mark readings; a pupil reads their own marks and not another pupil's; the live room admits only the lesson's own madrasa. Runs inside a transaction that rolls back.</p>
+<ul><li>Teacher marks a reading</li><li>Pupil cannot mark</li><li>Pupils see only their own marks</li><li>Pupil may join the room</li><li>Pupil sees their mark</li><li>Other madrasa kept out of the room</li></ul>
+</section>
+<section class="suite"><h2>Mistake map: own madrasa only <span class="badge ok">PASSED</span></h2>
+<p>Verifies migration 0031: the mistake map counts assessed findings in the teacher's own madrasa only, leaves out dismissed findings and unassessed recordings, and is refused to pupils. Runs inside a transaction that rolls back.</p>
+<ul><li>Pupil refused</li><li>Findings counted across pupils, other madrasa left out</li><li>Dismissed and unassessed findings left out</li><li>Exactly the expected cells</li></ul>
+</section>
+<section class="suite"><h2>Ijazah chains cannot be forged <span class="badge ok">PASSED</span></h2>
+<p>Verifies migration 0030: a teacher records their own chain of transmission, an ijazah carries a snapshot of it that the client cannot forge or change, and the public check shows it. Runs inside a transaction that rolls back.</p>
+<ul><li>Pupil cannot record a chain</li><li>Teacher chain saved, trimmed, blanks dropped</li><li>Over-long chain refused</li><li>Ijazah carries awarding teacher then their chain</li><li>Other certificates carry no chain</li><li>Issued chain frozen</li><li>Public check shows the chain</li></ul>
+</section>
+<section class="suite"><h2>Impact dashboard: totals only, scoped <span class="badge ok">PASSED</span></h2>
+<p>Verifies migration 0040: staff see their own madrasa's impact, the platform admin sees every madrasa, parents and pupils are refused, and no names are returned. Runs inside a transaction that rolls back.</p>
+<ul><li>Owner sees their madrasa</li><li>Other madrasa sees only its own</li><li>Platform admin sees every madrasa</li><li>Pupil refused</li><li>Parent refused</li></ul>
+</section>
+<section class="suite"><h2>Invoice numbers are unique and server-made <span class="badge ok">PASSED</span></h2>
+<p>Proves invoice numbering allocates correctly against the live schema, in a transaction that rolls back. Covers the cases that produced the production failure: a madrasa with invoices but no counter row, and a counter that has drifted from the invoices actually present.</p>
+
+</section>
+<section class="suite"><h2>Pupils cannot mark their own work <span class="badge ok">PASSED</span></h2>
+<p>Verifies migration 0023 against the live schema: who may hand in work, what a student can and cannot change on it, and that certificates get an unforgeable code, notify the family and verify publicly. Runs inside a transaction that rolls back, so it leaves nothing behind.</p>
+<ul><li>Submission accepted; status forced pending, score ignored</li><li>Submission to another class refused</li><li>Submission to another madrasa refused</li><li>Pending submission revised; smuggled score dropped</li><li>Student cannot issue a certificate</li><li>Graded; student text preserved</li><li>Certificate code generated: n</li><li>Certificate cannot be edited after issue</li><li>Student and parent notified</li><li>Graded submission locked for the student</li><li>Returned work revised; status back to pending, mark untouched</li><li>Certificate verifies publicly (n for n)</li><li>Unknown code returns nothing</li><li>Student cannot withdraw a certificate</li><li>Staff withdrew the certificate</li><li>Withdrawn certificate reported invalid</li></ul>
+</section>
+<section class="suite"><h2>Messaging: only parents and their children’s teachers <span class="badge ok">PASSED</span></h2>
+<p>Verifies migration 0039: a parent can message their child's teacher and the teacher can answer; each sees the other as the counterpart; nobody can message a stranger. Runs inside a transaction that rolls back.</p>
+<ul><li>Parent writes to their child</li><li>Teacher sees the parent and the unread message</li><li>Teacher replies</li><li>Strangers cannot message</li><li>Messages stay in their own thread</li></ul>
+</section>
+<section class="suite"><h2>Notifications reach only the right people <span class="badge ok">PASSED</span></h2>
+<p>Verifies migration 0025 against the live schema: push tokens can only be attached to your own account; the delivery queues are closed to clients; claims never hand the same row out twice and skip stale notifications; announcements reach exactly their audience; and a direct message notifies its recipient without putting the message text in the notification. Runs inside a transaction that rolls back (pg_net's queued requests included), so it leaves nothing behind and sends nothing.</p>
+<ul><li>A user registers their own device</li><li>Push_tokens cannot be written directly</li><li>Malformed token refused</li><li>A client cannot claim notifications</li><li>Sms_outbox unreadable to clients</li><li>A client cannot kick the dispatcher</li><li>Tokens are private to their account</li><li>Token moved to the new account; old account cannot remove it</li><li>Staff post to parents only and read it back</li><li>Staff-only announcement stays hidden from parents</li><li>Announcement reached exactly the approved parent and the other teacher</li><li>Message recipient notified by push, without the message text</li><li>Claims are disjoint and skip in-app-only and stale rows</li><li>An outbox claim counts the attempt and backs off</li></ul>
+</section>
+<section class="suite"><h2>Payments: no amount from the client, no double crediting <span class="badge ok">PASSED</span></h2>
+<p>Verifies migration 0024 against the live schema: only the service role can settle money; a settlement credits invoices once, issues one receipt and tells the parent; replays and wrong amounts change nothing; a subscription payment buys exactly one period; only the owner can cancel or resume; and a card can be managed only by whoever saved it. Runs inside a transaction that rolls back, so it leaves nothing behind.</p>
+<ul><li>A parent cannot call settle_fee_payment</li><li>A parent cannot call settle_subscription_payment</li><li>A parent cannot call open_subscription_invoice</li><li>A parent cannot update a payment</li><li>A saved card cannot be updated directly</li><li>Settled: receipt n</li><li>Both invoices paid in full</li><li>Parent notified once</li><li>Replayed callback is a no-op</li><li>Wrong amount held for review, nothing credited</li><li>Unknown checkout rejected</li><li>Subscription invoice n at plan price, reused</li><li>Subscription active until n</li><li>Owner notified once</li><li>Replay does not extend the period</li><li>Next invoice starts at the end of the paid period</li><li>A teacher who is not the owner cannot cancel</li><li>Owner cancelled; still active until period end</li><li>Owner resumed</li><li>Cancelling touches only the caller</li><li>Another parent cannot remove the card</li><li>Staff cannot manage a parent</li><li>Owner set the madrasa renewal card</li><li>A teacher who is not the owner cannot remove the madrasa card</li><li>Exactly one default card</li><li>Removed card disappears for its owner</li></ul>
+</section>
+<section class="suite"><h2>Recordings of children are private to their madrasa <span class="badge ok">PASSED</span></h2>
+<p>Proves the recitation Storage read policy asks the same question the recitation row does, against the live schema, in a transaction that rolls back.</p>
+
+</section>
+<section class="suite"><h2>Row-level security: every reader sees exactly what they should <span class="badge ok">PASSED</span></h2>
+<p>Proves migration 0027 changed how the child-scoped read rule is evaluated, not what it allows.</p>
+<ul><li>N: n student(s) readable, identical under both</li></ul>
+</section>
+<section class="suite"><h2>Live sessions and links: own class only <span class="badge ok">PASSED</span></h2>
+<p>Verifies migration 0038: a live session (and its meeting link) is visible to its own class, their parents and staff only; the reading room admits the same people; scheduling notifies the class and its parents. Runs inside a transaction that rolls back.</p>
+<ul><li>Class pupil sees the session and may join the room</li><li>Another class sees nothing</li><li>Parent sees their child</li><li>Class and parents notified, nobody else</li><li>Only Meet/Zoom/Teams/Jitsi links accepted</li></ul>
+</section>
+<section class="suite"><h2>Sponsorship: anonymous both ways <span class="badge ok">PASSED</span></h2>
+<p>Verifies migration 0034: only the pupil's own madrasa can list them, and only with the guardian's agreement; sponsors see no name; a settled sponsorship pays the invoice and tells the family. Runs inside a transaction that rolls back.</p>
+<ul><li>Other madrasa refused</li><li>Guardian agreement required</li><li>Direct update without agreement refused</li><li>Listed anonymously with what is owed</li><li>Anon refused</li><li>Invoice paid</li><li>Family told</li><li>Donor receipted</li><li>Paid pupil no longer listed</li><li>One students -&gt; profiles key</li></ul>
+</section>
+<section class="suite"><h2>Subscriptions and billing <span class="badge ok">PASSED</span></h2>
+<p>Proves the subscription lifecycle behaves as designed, against the live schema, inside a transaction that rolls back.</p>
+<ul><li>Trial auto-created, ends n</li><li>Plan is KES 3,000 monthly with a 30-day trial</li><li>Admin features available during trial</li><li>Admin features survive the grace window</li><li>Admin features locked once restricted</li><li>RLS blocked enrolment while restricted: n</li></ul>
+</section>
+<section class="suite"><h2>Teachers and owners stay inside their own madrasa <span class="badge ok">PASSED</span></h2>
+<p>Proves that managing staff is confined to the madrasa the caller owns.</p>
+
+</section>
+<section class="suite"><h2>Co-pilot insights: own madrasa only <span class="badge ok">PASSED</span></h2>
+<p>Verifies migration 0032: a teacher gets one row per active pupil of their own madrasa with the right numbers, and a pupil is refused. Runs inside a transaction that rolls back.</p>
+<ul><li>Pupil refused</li><li>Own madrasa only</li><li>Attendance fortnights</li><li>Surah being learned</li><li>Overdue revision</li><li>Teacher</li></ul>
+</section>
+<section class="suite"><h2>USSD: a phone reaches only its own children <span class="badge ok">PASSED</span></h2>
+<p>Verifies migration 0033: a phone number reaches only the approved children of the one parent registered with it, in any of its spellings; a pending link, an unknown number and a shared number reach nothing; and no signed-in user can call it. Runs inside a transaction that rolls back.</p>
+<ul><li>Closed to signed-in users</li><li>Approved child only, pending link hidden</li><li>0799… matches +254799…</li><li>Unknown and shared numbers reach nothing</li></ul>
+</section>
+<footer>Generated by <code>npm run security:report</code> from supabase/tests. Source: Digital Madrasa Mobile Application (ILMORA).</footer>
+</main></body></html>
