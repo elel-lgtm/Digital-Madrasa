@@ -1164,5 +1164,15 @@
     "trendHint": "Miezi sita iliyopita.",
     "monthLine": "mahudhurio {{attendance}}, ada {{fees}}",
     "privacy": "Jumla tu. Hakuna mwanafunzi, mzazi wala mwalimu anayetajwa."
+  },
+  "offline": {
+    "offline": "Huko nje ya mtandao. Ulichofungua mwisho bado kinaonyeshwa.",
+    "offlineWaiting_one": "Huko nje ya mtandao. Kitu {{count}} kilichohifadhiwa kitatumwa ukiunganishwa.",
+    "offlineWaiting_other": "Huko nje ya mtandao. Vitu {{count}} vilivyohifadhiwa vitatumwa ukiunganishwa.",
+    "syncing_one": "Mtandao umerudi: inatuma kitu {{count}}…",
+    "syncing_other": "Mtandao umerudi: inatuma vitu {{count}}…",
+    "synced_one": "Mtandao umerudi: kitu {{count}} kimetumwa.",
+    "synced_other": "Mtandao umerudi: vitu {{count}} vimetumwa.",
+    "attendanceQueued": "Hakuna mtandao, kwa hiyo orodha hii imehifadhiwa kwenye simu. Itatumwa yenyewe mtandao ukirudi."
   }
 }

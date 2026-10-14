@@ -27,6 +27,10 @@ export const queryClient = new QueryClient({
       retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 8000),
     },
     mutations: {
+      // Fail at once when offline ("no connection") rather than pausing and
+      // firing later: a payment must never start minutes after the tap.
+      // Attendance has its own offline queue (offline/outbox.ts).
+      networkMode: 'always',
       retry: 0,
     },
   },

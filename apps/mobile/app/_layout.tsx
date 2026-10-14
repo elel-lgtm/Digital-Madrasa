@@ -18,6 +18,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useSession } from '@/hooks/useSession';
 import { applyDirection, initI18n, resolveDeviceLocale } from '@/i18n';
 import { registerDeviceForPush } from '@/notifications/push';
+import { OfflineBanner } from '@/offline/OfflineBanner';
 import { queryClient, queryPersister } from '@/providers/queryClient';
 import { usePreferences } from '@/store/preferences';
 import { ThemeProvider, useTheme } from '@/theme/ThemeProvider';
@@ -66,6 +67,7 @@ export default function RootLayout() {
           persistOptions={{ persister: queryPersister, maxAge: 24 * 60 * 60 * 1000 }}
         >
           <ThemeProvider>
+            <OfflineBanner />
             <ThemedNavigator />
           </ThemeProvider>
         </PersistQueryClientProvider>

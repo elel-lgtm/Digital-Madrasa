@@ -1164,5 +1164,15 @@
     "trendHint": "Lixdii bilood ee u dambeeyey.",
     "monthLine": "imaansho {{attendance}}, lacag {{fees}}",
     "privacy": "Wadarta oo keliya. Arday, waalid ama macallin lama magacaabo."
+  },
+  "offline": {
+    "offline": "Internet kuma xidhnid. Wixii aad u dambeysay ayaa weli muuqda.",
+    "offlineWaiting_one": "Internet kuma xidhnid. {{count}} shay oo kaydsan ayaa la diri doonaa markaad ku xidhanto.",
+    "offlineWaiting_other": "Internet kuma xidhnid. {{count}} shay oo kaydsan ayaa la diri doonaa markaad ku xidhanto.",
+    "syncing_one": "Internet waa soo laabtay: waxaa la dirayaa {{count}} shay…",
+    "syncing_other": "Internet waa soo laabtay: waxaa la dirayaa {{count}} shay…",
+    "synced_one": "Internet waa soo laabtay: {{count}} shay waa la diray.",
+    "synced_other": "Internet waa soo laabtay: {{count}} shay waa la diray.",
+    "attendanceQueued": "Internet ma jiro, sidaa darteed diiwaankan waxaa lagu kaydiyey taleefanka. Si toos ah ayaa loo diri doonaa marka internetku soo laabto."
   }
 }

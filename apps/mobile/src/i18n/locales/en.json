@@ -1164,5 +1164,15 @@
     "trendHint": "The last six months.",
     "monthLine": "attendance {{attendance}}, fees {{fees}}",
     "privacy": "Totals only. No pupil, parent or teacher is named."
+  },
+  "offline": {
+    "offline": "You are offline. What you last opened is still shown.",
+    "offlineWaiting_one": "You are offline. {{count}} saved item will be sent when you reconnect.",
+    "offlineWaiting_other": "You are offline. {{count}} saved items will be sent when you reconnect.",
+    "syncing_one": "Back online: sending {{count}} saved item…",
+    "syncing_other": "Back online: sending {{count}} saved items…",
+    "synced_one": "Back online: {{count}} saved item sent.",
+    "synced_other": "Back online: {{count}} saved items sent.",
+    "attendanceQueued": "No connection, so this register is saved on the phone. It will be sent automatically when the connection returns."
   }
 }

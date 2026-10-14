@@ -1,5 +1,6 @@
 import { ATTENDANCE_STATUSES, isoDate, type AttendanceStatus } from '@digital-madrasa/shared';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import NetInfo from '@react-native-community/netinfo';
 import { useLocalSearchParams } from 'expo-router';
 import { QrCode } from 'phosphor-react-native';
 import { useEffect, useState } from 'react';
@@ -21,6 +22,7 @@ import {
   SkeletonList,
 } from '@/components/ui';
 import { useApiError } from '@/hooks/useApiError';
+import { isNetworkError, queueAttendance } from '@/offline/outbox';
 import { useTheme } from '@/theme/ThemeProvider';
 import { MIN_TOUCH_TARGET } from '@/theme/tokens';
 import { longDate } from '@/utils/dates';
@@ -44,6 +46,8 @@ export default function Attendance() {
   const [marks, setMarks] = useState<Record<string, AttendanceStatus>>({});
   const [qrMode, setQrMode] = useState(false);
   const [saved, setSaved] = useState(false);
+  // Saved on the phone, waiting for a connection (offline/outbox.ts).
+  const [queued, setQueued] = useState(false);
 
   const classes = useQuery({ queryKey: qk.classes(), queryFn: () => api.listClasses() });
 
@@ -66,16 +70,39 @@ export default function Attendance() {
   }, [roster.data]);
 
   const save = useMutation({
-    mutationFn: () =>
-      api.markAttendance({
+    // React Query pauses mutations while offline; this one handles offline
+    // itself (it keeps the register on the phone), so it must always run.
+    networkMode: 'always',
+    mutationFn: async (): Promise<'sent' | 'queued'> => {
+      const input = {
         classId,
         sessionDate,
-        method: 'manual',
+        method: 'manual' as const,
         entries: Object.entries(marks).map(([studentId, status]) => ({ studentId, status })),
-      }),
-    onSuccess: () => {
+      };
+      // No connection: keep the register on the phone; it is sent automatically later.
+      // Ask the phone, but never wait long: a hung check must not freeze the button.
+      const net = await Promise.race([
+        NetInfo.fetch(),
+        new Promise<null>((resolve) => setTimeout(() => resolve(null), 1500)),
+      ]);
+      if (net && net.isConnected === false) {
+        await queueAttendance(input);
+        return 'queued';
+      }
+      try {
+        await api.markAttendance(input);
+        return 'sent';
+      } catch (err) {
+        if (!isNetworkError(err)) throw err;
+        await queueAttendance(input);
+        return 'queued';
+      }
+    },
+    onSuccess: (result) => {
       setSaved(true);
-      void queryClient.invalidateQueries();
+      setQueued(result === 'queued');
+      if (result === 'sent') void queryClient.invalidateQueries();
     },
   });
 
@@ -128,6 +155,11 @@ export default function Attendance() {
       />
 
       <View style={{ marginTop: theme.spacing.lg, gap: theme.spacing.lg }}>
+        {saved && queued ? (
+          <AppText variant="body" color="warning">
+            {t('offline.attendanceQueued')}
+          </AppText>
+        ) : null}
         {(classes.data ?? []).length > 1 ? (
           <Segmented
             options={(classes.data ?? []).slice(0, 4).map((klass) => ({
