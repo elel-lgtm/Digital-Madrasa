@@ -1,0 +1,167 @@
+[
+ [
+  "no placeholders remain",
+  true,
+  ""
+ ],
+ [
+  "contains \"Mohammednur Sukyan\"",
+  true,
+  ""
+ ],
+ [
+  "contains \"MOHAMMEDNUR SUKYAN\"",
+  true,
+  ""
+ ],
+ [
+  "contains \"BSCS/2024/52324\"",
+  true,
+  ""
+ ],
+ [
+  "contains \"PATRICK MUCHIRI ALIANDA\"",
+  true,
+  ""
+ ],
+ [
+  "contains \"Mr. Patrick Muchiri Alianda\"",
+  true,
+  ""
+ ],
+ [
+  "contains \"School of Business and Technology\"",
+  true,
+  ""
+ ],
+ [
+  "contains \"Umma University\"",
+  true,
+  ""
+ ],
+ [
+  "contains \"Kajiado, Kenya\"",
+  true,
+  ""
+ ],
+ [
+  "contains \"November 2026\"",
+  true,
+  ""
+ ],
+ [
+  "registration number not used as an app admission number",
+  true,
+  ""
+ ],
+ [
+  "Chapter Four analyses 12 questions (4 owners/teachers, 4 parents, 4 students)",
+  true,
+  "[4, 4, 4]"
+ ],
+ [
+  "one chart per analysed question (Figures 4.1-4.12)",
+  true,
+  "[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]"
+ ],
+ [
+  "every analysed question has an Analysis and a System solution",
+  true,
+  "12 / 12"
+ ],
+ [
+  "figure captions",
+  true,
+  "41 figures, numbers unique"
+ ],
+ [
+  "table captions",
+  true,
+  "15 tables, numbers unique"
+ ],
+ [
+  "every figure mentioned in the text exists",
+  true,
+  "[]"
+ ],
+ [
+  "every table mentioned in the text exists",
+  true,
+  "[]"
+ ],
+ [
+  "every figure caption has an embedded image",
+  true,
+  "42 images (incl. the cover logo)"
+ ],
+ [
+  "every reference is cited in the text",
+  true,
+  ""
+ ],
+ [
+  "every in-text citation is in the reference list",
+  true,
+  ""
+ ],
+ [
+  "references in alphabetical order (letter by letter)",
+  true,
+  "[]"
+ ],
+ [
+  "no outdated \"\\b40 tables\"",
+  true,
+  "0"
+ ],
+ [
+  "no outdated \"84 policies\"",
+  true,
+  "0"
+ ],
+ [
+  "no outdated \"27 migrations\"",
+  true,
+  "0"
+ ],
+ [
+  "no outdated \"\\b74 unit\"",
+  true,
+  "0"
+ ],
+ [
+  "no outdated \"\\b56 functional\"",
+  true,
+  "0"
+ ],
+ [
+  "no outdated \"Appendix A\\.1\"",
+  true,
+  "0"
+ ],
+ [
+  "no outdated \"12 Edge Functions\"",
+  true,
+  "0"
+ ],
+ [
+  "no blank pages",
+  true,
+  "[]"
+ ],
+ [
+  "fonts embedded in the PDF",
+  true,
+  "BCDEEE+TimesNewRomanPSMT, BCDFEE+TimesNewRomanPS-BoldMT, BCDGEE+TimesNewRomanPS-BoldMT, BCDHEE+TimesNewRomanPSMT, BCDIEE+Cambria, BCDJEE+TimesNewRomanPS-ItalicM"
+ ],
+ [
+  "all pages portrait",
+  true,
+  "[]"
+ ],
+ [
+  "page count",
+  true,
+  "99"
+ ]
+]

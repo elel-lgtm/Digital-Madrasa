@@ -1,0 +1,107 @@
+[
+ [
+  "3.3.3 Development Phase",
+  "B text ending 30 September",
+  "A's sprint paragraph plus a paragraph on the October sprints from the Git history"
+ ],
+ [
+  "3.3.5 Deployment Phase",
+  "B: APK build profiles prepared",
+  "A: APK built and installed; plus web hosting"
+ ],
+ [
+  "3.3.1",
+  "(Appendix A.1)",
+  "(Appendix 1)"
+ ],
+ [
+  "3.3.1",
+  "Requirements was identified",
+  "Requirements were identified"
+ ],
+ [
+  "4.5.2",
+  "Appendix A.1",
+  "Appendix 1"
+ ],
+ [
+  "5.4.2",
+  "PostgreSQL database of 40 tables",
+  "PostgreSQL database of 42 tables"
+ ],
+ [
+  "5.4.2",
+  "enabled and forced on all 40 tables, governed by 84 policies",
+  "enabled and forced on all 42 tables, governed by 89 policies"
+ ],
+ [
+  "5.4.2",
+  "how the 40 tables are distributed",
+  "how the 42 tables are distributed"
+ ],
+ [
+  "5.4.2",
+  "Communication is the largest area (8 tables, 20.0%)",
+  "Communication is the largest area (8 tables, 19.0%)"
+ ],
+ [
+  "5.4.2",
+  "Tenancy and identity, learning and finance each account for 6 tables (15.0%)",
+  "Learning has 7 tables (16.7%), including the class video library, and tenancy and identity and finance each account for 6 tables (14.3%)"
+ ],
+ [
+  "5.6",
+  "organises the 40 tables",
+  "organises the 42 tables"
+ ],
+ [
+  "Table 6.1",
+  "B's table (12 Edge Functions, mock providers, Expo Go)",
+  "updated to the final tool set"
+ ],
+ [
+  "6.3",
+  "The following screenshots, captured on an Android phone screen, show",
+  "The following screenshots, captured from the running application on an Android emulator connected to the live backend and, for some panels of Figures 6.8 and 6.9, from the web build at phone size, show"
+ ],
+ [
+  "6.4.1",
+  "B's four lead-in paragraphs",
+  "plus three from A's later challenges (RTL, AI honesty, live and offline)"
+ ],
+ [
+  "7.2.1",
+  "Table 7.1 shows representative cases.",
+  "Figure 7.1 shows their distribution by area, and Table 7.1 lists representative cases."
+ ],
+ [
+  "7.3",
+  "Appendix A.1 (Section E)",
+  "Appendix 1 (Section E)"
+ ],
+ [
+  "7.4",
+  "backed up every three days.",
+  "backed up every three days. Figure 7.2 shows the deployment."
+ ],
+ [
+  "8.2 Objectives 3 and 4",
+  "B's text (74 unit tests, 56 functional cases)",
+  "A's updated text (185 unit tests, 78 functional cases, 145 guarantees, 30 of 31 UI checks, M-Pesa sandbox)"
+ ],
+ [
+  "8.3",
+  "The application supports four user roles: student, teacher, parent and administrator.",
+  "The application supports four user roles, the madrasa owner, teacher, parent and student, together with a platform administrator."
+ ],
+ [
+  "8.3",
+  "This project set out",
+  "This project, implemented under the brand ILMORA, set out"
+ ],
+ [
+  "Appendix 2",
+  "B's work plan",
+  "one row added for the October sprints recorded in the Git history"
+ ]
+]

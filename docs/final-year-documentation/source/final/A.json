@@ -1,0 +1,7315 @@
+[
+ {
+  "type": "image",
+  "file": "img_A/A001.png",
+  "w_in": 1.8958333333333333,
+  "h_in": 0.71875,
+  "px": [
+   532,
+   200
+  ]
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Digital Madrasa: An Integrated Application That Will Manage Madrasas in Kenya",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "[STUDENT FULL NAME]",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "[REGISTRATION NUMBER]",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "This project is submitted in partial fulfillment of the requirements for the award of Bachelor of Science in Computer Science.",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "School of Business and Technology",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Umma University",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Kajiado, Kenya",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "[MONTH], 2026",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "This thesis is available for library use on the understanding that it is copyright material and that no quotation from the thesis may be published without proper acknowledgment.",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 1,
+  "text": "DECLARATION"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "I ",
+    true,
+    false
+   ],
+   [
+    "[STUDENT FULL NAME] hereby declare that this document is entirely my own work and has not been submitted to any university or institution for the award of a degree. To the best of my knowledge, it does not include any material information authored or published by others except where it is acknowledged and referenced.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Student’s signature:",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Name: [STUDENT FULL NAME]    Registration number: [REGISTRATION NUMBER]",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Signature: ..................................................    Date: ..................................",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "This system project has been submitted for examination with my approval as university supervisor.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Supervisor’s signature:",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Signature: ..................................................    Date: ..................................",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "[SUPERVISOR NAME]",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "School of Business and Technology, Umma University,",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Kenya",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "pagebreak"
+ },
+ {
+  "type": "heading",
+  "level": 1,
+  "text": "DEDICATION"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "I dedicate this work to my beloved parents and family for their love, prayers and support throughout my studies, and to my friends, mentors and siblings for their encouragement. I also dedicate it to the Muslim community of Kenya, especially the students, teachers and parents of our duksi and madrasas. May this work contribute in a small way to the teaching and memorisation of the Holy Quran.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "pagebreak"
+ },
+ {
+  "type": "heading",
+  "level": 1,
+  "text": "ACKNOWLEDGEMENT"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "All praise is due to Allah (SWT) for granting me health, strength and perseverance to complete this project.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "I sincerely thank my supervisor, [SUPERVISOR NAME], for the guidance and feedback given throughout the project. I thank my parents and family for their prayers, encouragement and support, and my relatives, friends and classmates for their motivation.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "I am grateful to Umma University and the School of Business and Technology for the learning environment that made this work possible. May Allah (SWT) reward all who supported me. Ameen.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "pagebreak"
+ },
+ {
+  "type": "heading",
+  "level": 1,
+  "text": "ABSTRACT"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Madrasas and duksi in Kenya teach Quran recitation and memorisation to large numbers of children, but they are administered informally: attendance, memorisation progress and fees are recorded in exercise books or not at all, parents have little reliable information about their children, and fee payments are not linked to invoices. Existing Quran applications serve individual learners, while school management systems have no Quran-specific functions. This project developed the Digital Madrasa Mobile Application, an integrated mobile application for managing madrasas in Kenya, implemented under the brand ILMORA (Integrated Qur’an & Madrasa Learning).",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "The system was developed using the Agile methodology with React Native (Expo) and TypeScript for the mobile application and Supabase (PostgreSQL, authentication, storage and Edge Functions) for the backend. Each madrasa is a separate tenant whose records are protected by Row Level Security on every table. The application serves madrasa owners, teachers, parents and students, and provides student admission, classes, manual and QR-code attendance, memorisation tracking, recitation recording with teacher review, parent–child linking approved by the madrasa, AI recitation feedback given only with a parent’s consent, master-reciter comparison, hifz streaks and badges, a live reading room with scheduled lessons, a teacher-chosen Quran video library, fee invoicing with M-Pesa and card payment, parent–teacher messaging, offline attendance, notifications, and an interface in English, Kiswahili, Somali and Arabic.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Unit, functional and user interface testing showed that the core features work as required and that users cannot reach records outside their madrasa or role: all 185 unit tests and 78 functional test cases passed, 21 database suites proved 145 security guarantees, and the installed app passed 30 of 31 interface checks. M-Pesa runs on Safaricom’s Daraja sandbox, while card, e-mail and SMS run on mock providers until live credentials are configured. The project shows that a secure, integrated madrasa management application for Kenya is feasible.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Keywords: ",
+    true,
+    false
+   ],
+   [
+    "Digital Madrasa, ILMORA, madrasa management, Quran memorisation, mobile application, React Native, Supabase, M-Pesa, Kenya.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "pagebreak"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Table of Contents",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "pagebreak"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Table of figures",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "pagebreak"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Table of Tables",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "pagebreak"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "CHAPTER ONE",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 1,
+  "text": "1. INTRODUCTION"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "1.1 Background of the Study"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "The Holy Quran is memorised and recited by Muslims as the word of Allah (SWT), and its memorisation (Hifz) together with the rules of correct recitation (tajweed) has been passed down through Quranic schools for centuries. Boyle (2004) describes these schools as institutions that both preserve a religious tradition and adapt to the societies around them. In Kenya, and particularly in the Coast, North Eastern and Nairobi regions, they are known as duksi or madrasa. They meet in mosques, homes and community buildings, admit children from about four years of age and teach recitation, memorisation and basic religious knowledge. Mwaura, Sylva and Malmberg (2008) evaluated the community Madrasa preschool programme in Kenya, Uganda and Zanzibar and found measurable cognitive benefits for participating children, showing that madrasa-based education can be structured and assessed.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "The status of these institutions is changing. Ndzovu (2023) identifies the absence of a standardised syllabus and record-keeping as recurring concerns of the traditional madrassa system in Kenya, and in June 2026 the national government announced plans to integrate madrassa and duksi education into the national education system (Kihaki, 2026). Integration presupposes that a madrasa can produce reliable records of enrolment, attendance and learner progress, which most keep on paper or not at all.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "The conditions for a mobile solution are present. The Communications Authority of Kenya (2023) reported 66.4 million mobile SIM subscriptions, a penetration rate of 131.3 per cent, and the Kenya National Digital Master Plan 2022–2032 makes the digitisation of services a national priority (Ministry of ICT and the Digital Economy, 2022). Consumer Quran applications already show that recitation practice can be supported on a phone, but they are built for individual learners and do not model the institution in which a teacher, a parent and a student share responsibility for a child’s progress. This project therefore developed the Digital Madrasa Mobile Application, a mobile application that brings madrasa administration and Quran learning together in one secure platform. Its branded implementation, ILMORA (Integrated Qur’an & Madrasa Learning), is the name users see in the application and in the screenshots of this report.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "1.2 Problem Statement"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Madrasas in Kenya lack standardised systems for recording admission, attendance, memorisation progress and fees. Records are usually kept in exercise books held by individual teachers; they are easily lost, cannot be summarised for the institution and cannot be shared with parents. Parents therefore have little reliable information about whether their child attends, how far the child has memorised, or what fees are owed. Recitation can only be assessed when a teacher hears each learner in turn, so in large classes feedback is infrequent, and fees are collected in cash or by M-Pesa with no link to an invoice or receipt.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Existing software addresses only parts of this problem. Quran applications support individual practice but have no teacher role, parental access, attendance register or fee records, while general school management systems have no Quran-specific functions such as memorisation tracking by juz or recitation review. Neither is designed for many independent madrasas, each of which must be able to trust that its records cannot be seen by another. There is therefore a need for a secure, multi-tenant mobile application that unifies madrasa administration with Quran learning.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "1.3 Objectives"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "1.3.1 General Objective"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "To develop an integrated mobile application for managing madrasas in Kenya that combines student administration, attendance, Quran memorisation and recitation review, parent involvement, and fee invoicing and payment within a single role-based platform.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "1.3.2 Specific Objectives"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "To analyse the administrative and learning challenges facing madrasas in Kenya.",
+    false,
+    false
+   ]
+  ],
+  "list": "number",
+  "style": "List Paragraph"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "To review existing education management systems and Quran applications and identify their limitations.",
+    false,
+    false
+   ]
+  ],
+  "list": "number",
+  "style": "List Paragraph"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "To design and develop a multi-tenant, role-based mobile application for madrasa owners, teachers, parents and students covering admission, attendance, memorisation, recitation review, live lessons, parent linking, parent–teacher messaging, fees and M-Pesa payment.",
+    false,
+    false
+   ]
+  ],
+  "list": "number",
+  "style": "List Paragraph"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "To test the developed system for functional correctness, data integrity and enforcement of authorisation between madrasas and roles.",
+    false,
+    false
+   ]
+  ],
+  "list": "number",
+  "style": "List Paragraph"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "1.4 Research Questions"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "What administrative and learning challenges do madrasas in Kenya face?",
+    false,
+    false
+   ]
+  ],
+  "list": "number",
+  "style": "List Paragraph"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "What are the limitations of existing education management systems and Quran applications for madrasas?",
+    false,
+    false
+   ]
+  ],
+  "list": "number",
+  "style": "List Paragraph"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "How can a multi-tenant mobile application integrate madrasa administration with Quran learning while keeping each madrasa’s records private?",
+    false,
+    false
+   ]
+  ],
+  "list": "number",
+  "style": "List Paragraph"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "To what extent does the developed system meet its functional and security requirements when tested?",
+    false,
+    false
+   ]
+  ],
+  "list": "number",
+  "style": "List Paragraph"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "1.5 Justification"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Islam encourages seeking and spreading beneficial knowledge: “Allah will raise those who have believed among you and those who were given knowledge, by degrees” (Surah Al-Mujadilah 58:11). Within that motivation the project benefits each stakeholder. Madrasa owners gain institutional records of enrolment, attendance and fees, a practical precondition for integration into the national education system (Kihaki, 2026). Teachers have class rosters, attendance, recitation review and parent requests in one place. Parents see an approved child’s attendance, progress and fees; Fan and Chen (2001) found a meaningful relationship between parental involvement and academic achievement, and Epstein (2018) identifies regular school-to-home communication as a core form of involvement. Students can record a recitation for review without waiting for their turn in class.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "1.6 Scope of the Project"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "The project covers the design, development and testing of an Android application and its cloud backend for madrasas in Kenya. It serves four roles: the madrasa owner, the teacher, the parent and the student. The implemented scope includes madrasa registration and sign-in; student admission with system-generated admission numbers; classes and staff; manual and QR-code attendance; parent–child linking approved by the madrasa; memorisation tracking, assignments, grades and certificates; recitation recording with private audio storage, AI feedback given only with a parent’s consent, and teacher review; comparison with a master reciter, recite-along practice, a daily hifz plan, hifz streaks and badges and a class mistake map; a live reading room with scheduled sessions on Google Meet or Zoom; a library of teacher-chosen Quran videos; fee invoices paid by M-Pesa or card with receipts; sponsorship of pupils; announcements, parent–teacher messaging, notifications and spoken progress reports; attendance that can be marked offline; USSD access for basic phones; an impact dashboard; a web console for the platform administrator; and an interface in English, Kiswahili, Somali and Arabic. Curricula such as Tafsir and Fiqh, and the training of a dedicated tajweed recognition model, are outside the scope.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "1.7 Limitations"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "M-Pesa runs on Safaricom’s Daraja sandbox, which sends a real payment prompt to a Safaricom phone but moves only test money; accepting real fees needs a registered Paybill or Till number. Card payments, e-mail and SMS were exercised against mock providers that behave like the real services, because live Paystack and messaging credentials could not be obtained within the project. Video in live lessons is provided through Google Meet or Zoom links, because in-app video needs a paid provider; it is built but switched off. The installed app was tested on an Android emulator rather than a range of physical phones, and push notifications need a Firebase project to be configured before they can be delivered. The automated tajweed feedback comes from a general-purpose AI model (Google Gemini), not a validated tajweed assessor, so it is labelled provisional and the teacher’s review remains the authoritative assessment. No usability study with real users has yet been carried out, and the project evaluates whether the system works as specified, not its effect on memorisation over time.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "1.8 Summary"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "This chapter introduced the role of madrasas in Quran education in Kenya and the record-keeping, visibility and assessment problems they face as their integration into the national education system is planned. It stated the objectives and research questions of the project and set out its justification, scope and limitations. Chapter Two reviews the literature and existing systems.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "pagebreak"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "CHAPTER TWO",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 1,
+  "text": "2. LITERATURE REVIEW"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "2.1 Introduction"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "This chapter reviews the literature on madrasa education and administration in Kenya, the challenges of traditional madrasa management, and existing education management systems and Quran applications. It then discusses how a mobile-based integrated system can be designed, implemented and tested to address the gaps identified.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "2.2 Challenges in Traditional Madrasa Administration and Quran Learning"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "2.2.1 Informal Record Keeping and Lack of Standardisation"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Quranic schools are among the oldest continuously operating educational institutions in the Muslim world. Boyle (2004) describes their core pedagogy as the memorisation and correct recitation of the Quran under the close supervision of a teacher. In Kenya this tradition is carried by the duksi, which concentrate on recitation and memorisation, and by madrasas, which add Arabic, Fiqh and Islamic history. Most are founded and run by communities, mosques or individual teachers rather than by the state.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Aden (2017) notes that Islamic and secular education in Kenya have largely developed in parallel, with learners attending the madrasa before or after the public school day. Ndzovu (2023) highlights the absence of a standardised syllabus as a persistent issue, and the same lack of standardisation extends to records. An owner or head teacher admits learners, allocates them to classes and collects fees, while each teacher keeps his or her own notebook of attendance and of how far each learner has memorised. Such records are easily lost, give the institution no single view of a learner, and cannot identify a child who moves between classes or madrasas. With madrasas now to be integrated into the national education system (Kihaki, 2026), reliable records have become a necessity. The community Madrasa preschool programme, evaluated by Mwaura et al. (2008), shows that madrasa-linked education can be organised and assessed when it is structured.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "2.2.2 Limited Parental Visibility and Assessment Workload"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Parents usually learn about attendance and progress informally, at pick-up or only when a problem has become serious. Fan and Chen (2001), in a meta-analysis, found a small to moderate but practically meaningful relationship between parental involvement and academic achievement, and Emerson et al. (2012) conclude that engagement is most effective when it is focused on the child’s own learning. Epstein (2018) identifies regular school-to-home communication as one of the core types of family involvement. A madrasa that cannot tell parents how their child is doing loses this support.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Recitation must be heard to be assessed, so a teacher’s capacity to give individual tajweed feedback is limited by class size and time. In large classes learners may recite to the teacher only occasionally, and persistent errors can go uncorrected between sessions.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "2.2.3 Financial, Logistical and Communication Barriers"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Madrasa fees are typically recorded by hand and reminded verbally. Payments made in cash or by M-Pesa are not linked to an invoice, which makes balances hard to reconcile and disputes hard to resolve. Communication between the madrasa and families relies on phone calls and word of mouth, and parents who speak Kiswahili, Somali or Arabic rather than English may be excluded from written notices. At the same time Kenya is highly connected: the Communications Authority of Kenya (2023) reported a mobile penetration of 131.3 per cent, and the Kenya National Digital Master Plan 2022–2032 commits the government to the digitisation of services (Ministry of ICT and the Digital Economy, 2022). The phone that parents already use for M-Pesa is therefore a practical channel for records, payments and notices.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "2.3 Review of Existing Madrasa Management and Quran Learning Applications"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "2.3.1 Overview of Existing Education Management and Quran Applications"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "National Education Management Information System (NEMIS). The Ministry of Education operates NEMIS, which links each learner to a unique identifier and reports national indicators for registered institutions (Ministry of Education, n.d.); a replacement, the Kenya Education Management Information System, was announced in 2025 (Tongola, 2025). It serves national reporting rather than the day-to-day running of a madrasa.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Learning management systems. Moodle and Google Classroom provide courses, assignments, grading and messaging. Moodle was designed around social-constructivist learning communities (Dougiamas & Taylor, 2003).",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "School administration software. Commercial products used in Kenyan schools focus on fee collection, examinations and communication for primary and secondary schools following the national curriculum.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Quran applications. Tarteel listens to a user’s recitation, follows along in the text and flags memorisation mistakes such as skipped words (Tarteel AI, n.d.). Quran.com and similar readers provide the text, translations and audio by recognised reciters (Quran.com, n.d.). Masalha and Hirzallah (2014) proposed a student attendance system in which learners scan a QR code to register their presence.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "2.3.2 Usability, Accessibility and Functional Limitations"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Al-Fraihat et al. (2020) found that system, information and support quality together explain much of learners’ satisfaction with e-learning systems, and Coates, James and Baldwin (2005) caution that learning management systems tend to impose a generic model of teaching. None of the management systems reviewed tracks memorisation by juz, handles recitation audio or links a parent to a child through an approval process, and most are available only in English. Quran applications, in turn, are individual tools with no teacher, parent or institutional role and no attendance or fee records.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Automated recitation assessment also has clear limits. Al-Ayyoub, Damer and Hmeidi (2018) reported over 97 per cent accuracy in classifying eight recitation rules on an in-house dataset, but Al-Kharusi et al. (2025) argue that the field relies on small and demographically biased datasets, and Alsharhan and Ramsay (2020) show that speaker gender, dialect and training size materially affect Arabic speech recognition. Automated tajweed feedback can therefore support, but not replace, the teacher. A static attendance QR code can be photographed and shared, so it proves presence only if it changes and is verified by the server.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "2.3.3 Identified Gaps from Reviewed Systems"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "The review identified the following gaps:",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "No reviewed system combines madrasa administration with Quran learning.",
+    false,
+    false
+   ]
+  ],
+  "list": "bullet",
+  "style": "List Paragraph"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Parents have no structured, child-specific view of attendance, progress and fees.",
+    false,
+    false
+   ]
+  ],
+  "list": "bullet",
+  "style": "List Paragraph"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Fee payments are not linked to invoices and receipts.",
+    false,
+    false
+   ]
+  ],
+  "list": "bullet",
+  "style": "List Paragraph"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Automated tajweed assessment is not reliable enough to be authoritative.",
+    false,
+    false
+   ]
+  ],
+  "list": "bullet",
+  "style": "List Paragraph"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Shared platforms must keep each institution’s records separate.",
+    false,
+    false
+   ]
+  ],
+  "list": "bullet",
+  "style": "List Paragraph"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Interfaces are rarely available in the languages of Kenyan madrasa communities.",
+    false,
+    false
+   ]
+  ],
+  "list": "bullet",
+  "style": "List Paragraph"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "2.4 Development of a Mobile-Based Integrated Madrasa Management System"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "2.4.1 System Design and Architecture Overview"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Where many independent organisations share one application, the application is multi-tenant. Bezemer and Zaidman (2010) observe that multi-tenancy reduces operating cost but makes isolation between tenants a central engineering concern, and Alkhalil, Sahandi and John (2017) found that perceived security shapes the decision to move records into the cloud. Within each tenant, role-based access control assigns permissions to roles rather than individuals (Sandhu et al., 2000), which matches the owner, teacher, parent and student roles of a madrasa. The proposed system is therefore a single mobile application backed by a managed cloud database, in which each madrasa is a separate tenant and every user acts in one role.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "2.4.2 Implementation Using React Native (Expo) and Supabase"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Cross-platform frameworks allow one codebase to serve several mobile platforms (Biørn-Hansen et al., 2018). The system uses React Native with the Expo toolchain and TypeScript for the application, and Supabase for the backend: a PostgreSQL database, authentication, file storage for recitation audio, and server functions for privileged operations such as payments. PostgreSQL Row Level Security lets the database itself decide which rows each user may read or change (PostgreSQL Global Development Group, n.d.), so one madrasa’s records stay private even if the application code contains an error.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "2.4.3 Integration of Administration and Quran Learning Modules"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "The administration module covers admission, classes, staff, attendance, fees and communication; the learning module covers memorisation, assignments, grades, certificates and recitation review. They share one student record, so attendance, memorisation and fees appear together on the teacher’s and the parent’s screens. Holmes, Bialik and Fadel (2019) argue that artificial intelligence in education should augment rather than replace the teacher. VanLehn (2011) found that intelligent tutoring approached the effectiveness of human tutoring, and Neri, Cucchiarini and Strik (2008) showed that automatic pronunciation feedback improved learners’ speech. The system accordingly labels any automated recitation feedback as provisional and makes the teacher’s review final.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "2.4.4 Expected Benefits to Kenyan Madrasas"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "The integrated system is expected to give madrasas reliable records of enrolment, attendance and progress; give approved parents timely information about their children; reduce teachers’ clerical work; link fee payments to invoices and receipts through M-Pesa; and reach families in English, Kiswahili, Somali and Arabic.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "2.5 Testing of the Digital Madrasa Mobile Application"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "2.5.1 Functionality and Performance Testing"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Sommerville (2016) distinguishes development testing of components, release testing against requirements, and user testing. For a multi-tenant system the most important functional tests are those that prove a user cannot reach another madrasa’s records or act outside their role; these must test refusals as well as successes. Performance testing checks that screens load quickly over mobile networks.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "2.5.2 Usability and User Experience Evaluation"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Usability can be measured with the System Usability Scale, a ten-item questionnaire that yields a score from 0 to 100 (Brooke, 1996). It suits users with limited experience of mobile applications and can be administered in the local language.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "2.5.3 Reliability and Field Testing Approach"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Reliability depends on the system behaving correctly with real data and devices. Testing against the deployed backend with test accounts for every role, followed by field testing in a pilot madrasa on the phones its teachers and parents already own, gives confidence that the system will work outside the development environment.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "2.6 Summary"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "This chapter reviewed madrasa education and administration in Kenya and the challenges of informal records, limited parental visibility, assessment workload and fee management. Existing education management systems and Quran applications each address only part of the problem, and none combines madrasa administration with Quran learning under strict separation of institutions. The chapter outlined how a multi-tenant mobile system built with React Native and Supabase can close this gap and how it should be tested. Chapter Three describes the development methodology.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "pagebreak"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "CHAPTER THREE",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 1,
+  "text": "3. SYSTEM DEVELOPMENT METHODOLOGY"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "3.1 Introduction"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "This chapter presents the methodology adopted in developing Digital Madrasa. It describes the software development approach and the phases followed in building a working system that addresses the challenges faced by madrasas in Kenya. Because the system serves four different roles and combines administration with Quran learning, a flexible and iterative approach was needed to accommodate refinement at every stage. For this reason the Agile software development methodology was adopted.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "3.2 Methodological Approach"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Agile emphasises working software, collaboration and responding to change over following a fixed plan (Beck et al., 2001). It delivers a usable version of the software early and improves it in short cycles called sprints, each ending with a working increment that can be reviewed (Schwaber & Sutherland, 2020). Unlike the Waterfall model, in which each phase is completed before the next begins, Agile allows requirements to be refined as the system takes shape (Sommerville, 2016).",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Agile suits this project because madrasa practices vary and many requirements, such as how parents should be linked to children or how fees should be targeted, became clear only when a working version could be tried. Each sprint delivered one complete capability, from the database rules to the screens, and was verified against the live backend before the next began.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "image",
+  "file": "img_A/A002.png",
+  "w_in": 5.197916666666667,
+  "h_in": 4.125,
+  "px": [
+   1390,
+   1104
+  ]
+ },
+ {
+  "type": "caption",
+  "kind": "Figure",
+  "number": "3.1",
+  "title": "Agile Methodology"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "3.3 Agile Development Phases"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "The development of Digital Madrasa followed six Agile phases: requirements, design, development, testing, deployment and review. Each phase contributed incrementally to the project’s objectives.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "3.3.1 Requirements Phase"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Requirements were identified from the literature on madrasa education and parental involvement, from a review of existing education management systems and Quran applications, and from the questionnaire and interview instruments prepared for madrasa stakeholders (Appendix A.1). They were organised into two modules:",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Administration module: madrasa registration, student admission, classes, staff, attendance, fees and payments, announcements and messages.",
+    false,
+    false
+   ]
+  ],
+  "list": "bullet",
+  "style": "List Paragraph"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Quran learning module: memorisation progress, assignments, grades, recitation recording and review, and certificates.",
+    false,
+    false
+   ]
+  ],
+  "list": "bullet",
+  "style": "List Paragraph"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "3.3.2 Design Phase"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "The design phase translated the requirements into the models presented in Chapter Five: the class diagram, the entity relationship diagram and database schema, use case, sequence and activity diagrams, and wireframes of the main screens. The architecture was built around React Native with Expo for the mobile interface and Supabase for authentication, the PostgreSQL database, file storage and server functions. Security rules were designed into the database from the start, so that each madrasa’s records are isolated by Row Level Security.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "3.3.3 Development Phase"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Development proceeded in sprints recorded in the project’s Git history. The first sprint (23 August 2026) produced the multi-tenant database, authentication and the screens for all four roles. The second (16 September) added the server functions, automated backups and continuous integration. Later sprints connected the live backend and the recitation storage workflow (19 September), teacher recitation review and parent access to a child’s recitations (22–23 September), QR attendance (23 September) and targeted invoicing (24 September). The sprint of 25–30 September added written work and certificates, M-Pesa payments, push, e-mail and SMS notifications, and complete Kiswahili, Somali and Arabic translations. The final sprint (30 September – 2 October) connected Google Gemini for recitation feedback and a hosted AI assistant, added parental consent for AI feedback, card payments through Paystack, and fixes found by testing the installed app.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "3.3.4 Testing Phase"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Testing was carried out after each sprint to verify that new features worked and did not break existing ones. The testing types included:",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Unit testing: verifying individual functions such as input validation, QR token signing and M-Pesa callback handling.",
+    false,
+    false
+   ]
+  ],
+  "list": "bullet",
+  "style": "List Paragraph"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Functional testing: scripted calls to the deployed backend as each role, checking that permitted actions succeed and forbidden ones are refused.",
+    false,
+    false
+   ]
+  ],
+  "list": "bullet",
+  "style": "List Paragraph"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "User interface testing: checking each screen on an Android emulator and in the web build at phone size.",
+    false,
+    false
+   ]
+  ],
+  "list": "bullet",
+  "style": "List Paragraph"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Performance testing: measuring response times of the main screens and database queries.",
+    false,
+    false
+   ]
+  ],
+  "list": "bullet",
+  "style": "List Paragraph"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "3.3.5 Deployment Phase"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "The database, storage and server functions were deployed to a hosted Supabase project from the first sprint, so every increment was tested against the real backend. During development the mobile application ran through Expo Go; at the end, Expo Application Services built an installable Android package (APK), which was installed and tested on an Android emulator.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "3.3.6 Review Phase"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "At the end of each sprint the working increment was reviewed against the requirements, and defects found in testing were fixed before new work began. Reviews led, for example, to the rotating QR code for attendance, to requiring the madrasa’s approval before a parent can see a child, and to a faster form of the database access rules after performance testing.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "3.4 Summary"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "The Agile methodology was adopted because it allows flexibility, continuous review and delivery of working software in short cycles. Through its six phases of requirements, design, development, testing, deployment and review, the project was developed iteratively, with each sprint delivering and verifying one complete capability of the system.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "pagebreak"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "CHAPTER FOUR",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 1,
+  "text": "4. REQUIREMENTS GATHERING AND ANALYSIS"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "4.1 Introduction"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "This chapter describes how the requirements for Digital Madrasa were gathered and analysed. It explains the data collection approach and methods, summarises the evidence gathered from madrasa owners and teachers, parents, students and secondary sources, and derives the functional and non-functional requirements and the stakeholders of the system. It closes with the challenges met during requirements gathering.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "The process aimed to understand how madrasas currently record attendance, memorisation and fees, how parents follow their children's progress, and how recitation is assessed, and which technical and legal constraints the system must respect.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "4.2 Data Collection Approach"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "A mixed-methods approach was adopted, combining qualitative and quantitative data so that the strengths of each compensate for the limitations of the other (Creswell & Plano Clark, 2018). Qualitative data came from in-depth interviews with madrasa owners and senior teachers, informal interviews with parents and students, and observation of how attendance is taken and recitation is assessed. Quantitative data came from structured questionnaires for each stakeholder group (Appendix A.1). Document analysis of published studies, government reports and the documentation of Supabase, Expo and Safaricom Daraja supplied the technical constraints (Supabase, 2026; Expo, 2026; Safaricom, 2026).",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "The qualitative data explained ",
+    false,
+    false
+   ],
+   [
+    "why",
+    false,
+    true
+   ],
+   [
+    " madrasas work as they do, while the questionnaires indicated ",
+    false,
+    false
+   ],
+   [
+    "how common",
+    false,
+    true
+   ],
+   [
+    " each practice and problem is. Together they ensured that the requirements reflected real madrasa practice rather than assumptions.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "4.3 Data Collection Methods"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Both primary and secondary data collection methods were used. Primary data are collected directly from participants for the purpose of the study, while secondary data are existing data collected for other purposes (Saunders, Lewis & Thornhill, 2019). Primary data was collected directly from madrasa owners, teachers, parents and students. Secondary data came from published research, government reports and technical documentation. The main techniques were:",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Questionnaires for madrasa owners and teachers, parents and students.",
+    false,
+    false
+   ]
+  ],
+  "list": "bullet",
+  "style": "List Paragraph"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "In-depth interviews with madrasa owners and senior teachers.",
+    false,
+    false
+   ]
+  ],
+  "list": "bullet",
+  "style": "List Paragraph"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Informal interviews with parents and, with parental consent, students.",
+    false,
+    false
+   ]
+  ],
+  "list": "bullet",
+  "style": "List Paragraph"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Observation of attendance taking and recitation assessment in madrasa sessions.",
+    false,
+    false
+   ]
+  ],
+  "list": "bullet",
+  "style": "List Paragraph"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Review of relevant studies, government reports and similar systems.",
+    false,
+    false
+   ]
+  ],
+  "list": "bullet",
+  "style": "List Paragraph"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "4.4 Primary Data Collection"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Primary data collection focused on the people who run and use madrasas. Participants were selected by purposive sampling, which deliberately selects people who have direct experience of the subject being studied (Etikan, Musa & Alkassim, 2016). A total of 47 participants were involved in the study from madrasas in Kajiado and Nairobi counties. Table 4.1 shows the participants.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "table",
+  "rows": [
+   [
+    "Stakeholder",
+    "Method",
+    "Number of Respondents"
+   ],
+   [
+    "Madrasa owners and teachers",
+    "Questionnaire and in-depth interviews",
+    "12"
+   ],
+   [
+    "Parents",
+    "Questionnaire and informal interviews",
+    "20"
+   ],
+   [
+    "Students",
+    "Questionnaire (with parental consent)",
+    "15"
+   ],
+   [
+    "Total",
+    "",
+    "47"
+   ]
+  ],
+  "images": []
+ },
+ {
+  "type": "caption",
+  "kind": "Table",
+  "number": "4.1",
+  "title": "Primary Data Collection"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Interviews were semi-structured, which allows the researcher to cover a set of themes while following up on participants' answers (Saunders, Lewis & Thornhill, 2019), and focused on how participants record attendance, memorisation and fees, how parents are kept informed, how recitation is assessed, and what would make them trust a madrasa application. The questionnaires used closed questions so that responses could be summarised in charts.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "4.5 Data Analysis"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Interview and observation notes were analysed thematically, by identifying, analysing and reporting patterns within the data (Braun & Clarke, 2006): statements were grouped into recurring themes, and each theme was mapped to a system requirement. Questionnaire responses were counted per option and presented as pie charts, each followed by an interpretation and the feature of the system that responds to it. Twelve questions were analysed in total: four for madrasa owners and teachers, four for parents and four for students.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "4.5.1 Interview Data Summary"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Table 4.2 summarises the requirements expressed by madrasa owners and teachers, which were the primary input to the design. Tables 4.3 and 4.4 summarise the themes from interviews with parents and students.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "table",
+  "rows": [
+   [
+    "Theme",
+    "Key Insights from Madrasa Owners and Teachers"
+   ],
+   [
+    "Record keeping",
+    "Each teacher keeps his own exercise book. When a teacher leaves or a book is lost, the history of the class goes with it, and the owner has no single list of all enrolled students."
+   ],
+   [
+    "Attendance",
+    "Attendance is called out at the start of the session and ticked in a register, often only in the morning session. Weekly or monthly totals are rarely calculated."
+   ],
+   [
+    "Memorisation tracking",
+    "Most teachers know from memory how far each child has reached, surah by surah. Revision of earlier juz is planned informally, so weaker students fall behind unnoticed."
+   ],
+   [
+    "Fee collection",
+    "Fees are paid in cash or by M-Pesa to the owner's personal number. Matching an M-Pesa message to a child and a month is manual, and balances are disputed at the end of the term."
+   ],
+   [
+    "Communication with parents",
+    "Notices are given verbally to children or sent by phone call and WhatsApp. Parents who do not come to the madrasa miss most announcements."
+   ],
+   [
+    "Expectations",
+    "A simple phone app, usable by teachers with little computer experience, that keeps the madrasa's records private, issues receipts automatically and works in Kiswahili and Somali as well as English."
+   ]
+  ],
+  "images": []
+ },
+ {
+  "type": "caption",
+  "kind": "Table",
+  "number": "4.2",
+  "title": "Madrasa Owner and Teacher Interview Summary"
+ },
+ {
+  "type": "table",
+  "rows": [
+   [
+    "Theme",
+    "Key Insights from Parents"
+   ],
+   [
+    "Knowledge of attendance",
+    "Most parents assume their child attends and learn about absences only when the teacher calls, often weeks later."
+   ],
+   [
+    "Knowledge of progress",
+    "Parents know roughly which surah the child is on from the child himself; few have seen a written record of juz completed or revision due."
+   ],
+   [
+    "Fee payment",
+    "Parents already pay most bills by M-Pesa and would prefer to pay fees the same way, provided they receive a receipt and can see the balance."
+   ],
+   [
+    "Communication with the madrasa",
+    "Parents want to receive notices and to message the teacher without having to visit the madrasa, and prefer notices in Kiswahili or Somali."
+   ],
+   [
+    "Expectations",
+    "A private view of their own children only, with attendance, progress and fees in one place, and assurance that other parents cannot see their child's records."
+   ]
+  ],
+  "images": []
+ },
+ {
+  "type": "caption",
+  "kind": "Table",
+  "number": "4.3",
+  "title": "Parent Interview Summary"
+ },
+ {
+  "type": "table",
+  "rows": [
+   [
+    "Theme",
+    "Key Insights from Students"
+   ],
+   [
+    "Recitation practice",
+    "Students practise at home by reading aloud or listening to recordings of well-known reciters, but no one hears them until the next class."
+   ],
+   [
+    "Feedback from the teacher",
+    "In large classes a student may recite individually only once or twice a week, and corrections are sometimes forgotten before the next session."
+   ],
+   [
+    "Use of phones",
+    "Most students use a parent's or older sibling's smartphone, mainly for Quran audio and WhatsApp, usually in the evening."
+   ],
+   [
+    "Expectations",
+    "To record a recitation at home, receive the teacher's comments, and see how many juz they have memorised and what is due for revision."
+   ]
+  ],
+  "images": []
+ },
+ {
+  "type": "caption",
+  "kind": "Table",
+  "number": "4.4",
+  "title": "Student Interview Summary"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "4.5.2 Questionnaire Analysis"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Madrasa Owner and Teacher Questionnaire Analysis",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "A total of twelve madrasa owners and teachers completed the questionnaire. Its purpose was to understand how attendance, memorisation progress and fees are currently managed, and how ready madrasas are to adopt a mobile application. The four questions are reproduced in Appendix A.1, Section A.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Question 1: How is student attendance currently recorded in your madrasa?",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "image",
+  "file": "img_A/A003.png",
+  "w_in": 5.4,
+  "h_in": 1.9980336832895889,
+  "px": [
+   1627,
+   602
+  ]
+ },
+ {
+  "type": "caption",
+  "kind": "Figure",
+  "number": "4.1",
+  "title": "Recording Student Attendance"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Analysis",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Attendance records are weak or absent. Half of the respondents, 6 of the 12 (50.0%), use an exercise book or register, and 1 (8.3%) uses a wall chart. A further 3 (25.0%) rely on the teacher's memory alone and 2 (16.7%) do not record attendance at all, so in 5 of the 12 madrasas (41.7%) there is no written record of whether a child attended. No respondent chose \"Other\".",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "System Solution",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "The system provides a digital attendance register for each class and QR-code attendance, in which a student scans a code on the teacher's phone that changes every 30 seconds, so attendance is recorded once, cannot be forged and is summarised on the dashboard.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Question 2: How is a student's Quran memorisation progress recorded?",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "image",
+  "file": "img_A/A004.png",
+  "w_in": 5.4,
+  "h_in": 1.980987532808399,
+  "px": [
+   1641,
+   602
+  ]
+ },
+ {
+  "type": "caption",
+  "kind": "Figure",
+  "number": "4.2",
+  "title": "Memorisation Progress Tracking"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Analysis",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Memorisation progress is held mainly in teachers' heads. The most common answer was that the teacher remembers (5, 41.7%), followed by writing it in a book (4, 33.3%). Two respondents (16.7%) tell the parent verbally and 1 (8.3%) does not record progress. In total, 8 of the 12 (66.7%) keep no written record of how far each child has memorised.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "System Solution",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Teachers record memorisation surah by surah in the app. The system calculates the juz completed and the passages due for revision, and shows them to the student and the approved parent.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Question 3: How are fees recorded and communicated to parents?",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "image",
+  "file": "img_A/A005.png",
+  "w_in": 5.4,
+  "h_in": 2.0279472878390203,
+  "px": [
+   1603,
+   602
+  ]
+ },
+ {
+  "type": "caption",
+  "kind": "Figure",
+  "number": "4.3",
+  "title": "Fee Collection Methods"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Analysis",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Fee records are fragmented. Five respondents (41.7%) use a written receipt book, 3 (25.0%) rely on verbal reminders, 3 (25.0%) rely only on M-Pesa messages and 1 (8.3%) keeps no formal record. None of the methods links a payment to an invoice, which explains the balance disputes reported in the interviews.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "System Solution",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "The owner defines fee structures and issues numbered invoices to the whole madrasa, a class or one student. Parents see each invoice and pay it by M-Pesa, and the system issues a receipt and updates the balance automatically.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Question 4: Would you use a mobile application to manage your madrasa?",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "image",
+  "file": "img_A/A006.png",
+  "w_in": 5.4,
+  "h_in": 2.2496883202099736,
+  "px": [
+   1445,
+   602
+  ]
+ },
+ {
+  "type": "caption",
+  "kind": "Figure",
+  "number": "4.4",
+  "title": "Willingness to Adopt a Madrasa Management Application"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Analysis",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "There is strong willingness to adopt: 9 of the 12 respondents (75.0%) would use a mobile application to manage their madrasa and 2 (16.7%) might, while only 1 (8.3%) would not. The respondent who declined cited unfamiliarity with apps.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "System Solution",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "The system combines admission, attendance, memorisation, recitation review, fees and communication in one application with simple screens, large buttons and clear summaries to support adoption.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Parent Questionnaire Analysis",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "A total of twenty parents completed the questionnaire. It focused on how parents follow their children's madrasa education, receive receipts for fees and would like to be informed (Appendix A.1, Section B).",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Question 1: How do you currently learn about your child's attendance and progress?",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "image",
+  "file": "img_A/A007.png",
+  "w_in": 5.4,
+  "h_in": 1.9677963692038496,
+  "px": [
+   1652,
+   602
+  ]
+ },
+ {
+  "type": "caption",
+  "kind": "Figure",
+  "number": "4.5",
+  "title": "Parent Access to Child Progress"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Analysis",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Parents are informed informally or not at all. The largest group, 8 of the 20 (40.0%), learn about their child at pick-up, 5 (25.0%) through a phone call from the teacher and 3 (15.0%) at parents' meetings. Four parents (20.0%) said they are not informed. No parent receives a written or regular report.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "System Solution",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "A parent links to a child using the admission number and date of birth; once the madrasa approves the link, the parent sees the child's attendance, memorisation, grades, recitations and fees, and receives notifications.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Question 2: Would you pay madrasa fees through M-Pesa in a mobile application?",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "image",
+  "file": "img_A/A008.png",
+  "w_in": 5.4,
+  "h_in": 2.2496883202099736,
+  "px": [
+   1445,
+   602
+  ]
+ },
+ {
+  "type": "caption",
+  "kind": "Figure",
+  "number": "4.6",
+  "title": "Willingness to Pay Fees via M-Pesa"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Analysis",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "There is strong demand for mobile payment: 15 of the 20 parents (75.0%) would pay fees through M-Pesa in an application and 4 (20.0%) might, while only 1 (5.0%) would not. In total, 19 of the 20 (95.0%) were open to the feature.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "System Solution",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "The parent pays one or several invoices through an M-Pesa prompt on their phone. The amount is calculated by the server, and the receipt appears in the app as soon as payment is confirmed.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Question 3: Do you receive a receipt when you pay fees?",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "image",
+  "file": "img_A/A009.png",
+  "w_in": 5.4,
+  "h_in": 2.186146106736658,
+  "px": [
+   1487,
+   602
+  ]
+ },
+ {
+  "type": "caption",
+  "kind": "Figure",
+  "number": "4.7",
+  "title": "Receipts for Fee Payments"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Analysis",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Receipts are rarely issued. Nine parents (45.0%) never receive a receipt and 7 (35.0%) only sometimes, so only 4 (20.0%) always have proof of payment. This explains the balance disputes reported by owners in the interviews.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "System Solution",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "A receipt is issued automatically as soon as an M-Pesa payment is confirmed, and the parent can see every receipt and the remaining balance in the app.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Question 4: Which language do you prefer for notices from the madrasa?",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "image",
+  "file": "img_A/A010.png",
+  "w_in": 5.4,
+  "h_in": 2.2069247594050743,
+  "px": [
+   1473,
+   602
+  ]
+ },
+ {
+  "type": "caption",
+  "kind": "Figure",
+  "number": "4.8",
+  "title": "Preferred Language for Notices (Parents)"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Analysis",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Most parents prefer a language other than English. Somali was chosen by 8 parents (40.0%) and Kiswahili by 7 (35.0%), while 3 (15.0%) chose English and 2 (10.0%) Arabic. Written notices in English alone would not reach 85.0% of these parents in their preferred language.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "System Solution",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Parents choose Kiswahili, Somali, Arabic or English for the whole interface, including their inbox and notifications.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Student Questionnaire Analysis",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "A total of fifteen students completed the questionnaire, with the consent of their parents (Republic of Kenya, 2019). The purpose was to understand how recitation is practised, assessed and revised (Appendix A.1, Section C).",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Question 1: How does your teacher assess your recitation?",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "image",
+  "file": "img_A/A011.png",
+  "w_in": 5.4,
+  "h_in": 1.9021653543307087,
+  "px": [
+   1709,
+   602
+  ]
+ },
+ {
+  "type": "caption",
+  "kind": "Figure",
+  "number": "4.9",
+  "title": "Recitation Assessment Methods"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Analysis",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Individual assessment is not universal. Seven students (46.7%) recite to the teacher individually, 5 (33.3%) are heard only as part of a group and 3 (20.0%) said their recitation is rarely assessed. More than half of the students (53.3%) therefore receive little individual feedback on their recitation.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "System Solution",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Students record a recitation in the app. The recording is stored privately, the teacher listens and gives a score and comments, and the student and approved parent see the review.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Question 2: Would recording your recitation on a phone help you practise?",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "image",
+  "file": "img_A/A012.png",
+  "w_in": 5.4,
+  "h_in": 2.112280183727034,
+  "px": [
+   1539,
+   602
+  ]
+ },
+ {
+  "type": "caption",
+  "kind": "Figure",
+  "number": "4.10",
+  "title": "Digital Recitation Practice"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Analysis",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Students welcome recorded practice: 6 (40.0%) strongly agree and 5 (33.3%) agree that recording on a phone would help, a combined 73.3%. Two (13.3%) were neutral, and 1 (6.7%) disagreed and 1 (6.7%) strongly disagreed, mainly because they do not have regular access to a phone.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "System Solution",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "The app lets students record as often as they need, shows the passages due for revision, and provides the Quran text for reading offline.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Question 3: How do you know which passages to revise?",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "image",
+  "file": "img_A/A013.png",
+  "w_in": 5.4,
+  "h_in": 2.0266830708661416,
+  "px": [
+   1604,
+   602
+  ]
+ },
+ {
+  "type": "caption",
+  "kind": "Figure",
+  "number": "4.11",
+  "title": "How Students Choose Passages to Revise"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Analysis",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Revision is guided mainly by the teacher (7, 46.7%), while 5 students (33.3%) decide for themselves, 2 (13.3%) are reminded by their parents and 1 (6.7%) does not revise regularly. Students who plan their own revision have no record to tell them which passages they are forgetting.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "System Solution",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "The student dashboard lists the passages due for revision today, calculated from the memorisation the teacher has recorded.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Question 4: How soon after reciting do you get feedback from your teacher?",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "image",
+  "file": "img_A/A014.png",
+  "w_in": 5.4,
+  "h_in": 2.053569553805774,
+  "px": [
+   1583,
+   602
+  ]
+ },
+ {
+  "type": "caption",
+  "kind": "Figure",
+  "number": "4.12",
+  "title": "Time Taken to Receive Feedback"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Analysis",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Feedback is often delayed: although 7 students (46.7%) receive it immediately in class, 4 (26.7%) wait until the next session, 2 (13.3%) several days and 2 (13.3%) rarely receive any.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "System Solution",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "When the teacher reviews a recording, the score and comments appear in the student's app straight away and remain available to re-read.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "4.6 Secondary Data Collection"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Secondary data provided background that complemented the primary data. A review of academic literature, government reports and existing systems (Chapter Two) showed that madrasa records in Kenya are largely informal and unstandardised (Ndzovu, 2023), that the government plans to integrate madrasa education into the national system (Kihaki, 2026), and that parental involvement is associated with better achievement (Fan & Chen, 2001). It also showed that Kenya's mobile penetration makes a phone-based system practical (Communications Authority of Kenya, 2023), that existing madrasa systems do not support M-Pesa or Kiswahili and Somali (Alif Cloud, n.d.-a; Origin Softwares, n.d.), and that automated tajweed assessment is not yet reliable enough to replace the teacher (Al-Kharusi et al., 2025).",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Technical documentation shaped the feasible scope. The Supabase free plan provides the database, authentication, storage and server functions without a billing account, which made it possible to build the whole backend at no cost (Supabase, 2026). Safaricom's Daraja documentation defined how an STK push payment is started and confirmed through a callback (Safaricom, 2026), and the Kenya Data Protection Act 2019 required consent and care in handling children's records (Republic of Kenya, 2019). These findings reinforced the need for an integrated system that combines madrasa administration, Quran learning, parental access and fee management.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "4.7 Requirements and Stakeholders Identification"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Based on the analysed data, the requirements were grouped into functional and non-functional requirements, and the stakeholders were identified. Functional requirements describe the services a system should provide, while non-functional requirements are constraints on those services, such as security, performance and usability (Sommerville, 2016); the non-functional requirements were framed using the quality characteristics of ISO/IEC 25010 (International Organization for Standardization, 2011).",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Functional Requirements",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "table",
+  "rows": [
+   [
+    "ID",
+    "Requirement"
+   ],
+   [
+    "FR1",
+    "The system shall allow a madrasa owner to register a madrasa and allow users to sign up, sign in, sign out and reset a forgotten password by e-mail."
+   ],
+   [
+    "FR2",
+    "The system shall give owners, teachers, parents and students separate interfaces, determined by the role stored in the database."
+   ],
+   [
+    "FR3",
+    "The system shall allow the owner to admit students with automatically generated admission numbers (DM-YYYY-NNNN), create classes and add teachers."
+   ],
+   [
+    "FR4",
+    "The system shall allow teachers to take attendance manually or by a signed QR code that changes every 30 seconds, which students scan with their phones."
+   ],
+   [
+    "FR5",
+    "The system shall allow teachers to record memorisation surah by surah, and calculate the juz completed and the passages due for revision."
+   ],
+   [
+    "FR6",
+    "The system shall allow teachers to set and mark assignments, record grades and award certificates."
+   ],
+   [
+    "FR7",
+    "The system shall allow students to record a recitation, store it privately and let the teacher play it back, score it and comment on it."
+   ],
+   [
+    "FR8",
+    "The system shall allow a parent to request a link to a child by admission number and date of birth, and show the child's records only after the madrasa approves the link."
+   ],
+   [
+    "FR9",
+    "The system shall allow the owner to define fee structures and issue numbered invoices to the whole madrasa, a class or one student."
+   ],
+   [
+    "FR10",
+    "The system shall allow parents to pay one or more invoices by M-Pesa, with the amount calculated by the server, and issue a receipt when payment is confirmed."
+   ],
+   [
+    "FR11",
+    "The system shall send announcements, messages and notifications by in-app inbox, push, e-mail and SMS according to each user's preferences."
+   ],
+   [
+    "FR12",
+    "The system shall provide role-based dashboards and an interface in English, Kiswahili, Somali and Arabic."
+   ]
+  ],
+  "images": []
+ },
+ {
+  "type": "caption",
+  "kind": "Table",
+  "number": "4.5",
+  "title": "Functional Requirements"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Non-Functional Requirements",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "table",
+  "rows": [
+   [
+    "Quality",
+    "Requirement"
+   ],
+   [
+    "Security",
+    "Every table shall be protected by Row Level Security so that each madrasa's records are private and each user can perform only the actions of their role; secrets shall exist only on the server."
+   ],
+   [
+    "Privacy",
+    "Children's records shall be handled under the Kenya Data Protection Act 2019; recitation audio shall be stored privately and played only through short-lived signed links."
+   ],
+   [
+    "Performance",
+    "Dashboards should load in under 3 seconds on a 3G/4G mobile connection; access rules shall be written so that they are evaluated once per query."
+   ],
+   [
+    "Integrity",
+    "Payments shall be settled exactly once for the amount the server calculates; admission and invoice numbers shall be unique within a madrasa."
+   ],
+   [
+    "Usability",
+    "The interface shall be simple enough for users with limited experience of mobile applications, with large buttons, clear summaries and four languages."
+   ],
+   [
+    "Reliability",
+    "Failure of an external service shall produce a clear message rather than a crash; the database shall be backed up every three days."
+   ],
+   [
+    "Maintainability",
+    "The code shall be strictly typed, the schema managed through numbered migrations, and automated checks run on every change."
+   ],
+   [
+    "Accountability",
+    "Important actions, such as approvals, invoices and payments, shall be recorded in an audit log."
+   ]
+  ],
+  "images": []
+ },
+ {
+  "type": "caption",
+  "kind": "Table",
+  "number": "4.6",
+  "title": "Non-Functional Requirements"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Stakeholders Identification",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Stakeholders are the people and organisations who are affected by a system or can influence its requirements (Sommerville, 2016). ",
+    false,
+    false
+   ],
+   [
+    "Madrasa owners",
+    true,
+    false
+   ],
+   [
+    " register the madrasa, manage students, staff and fees, and oversee operations. ",
+    false,
+    false
+   ],
+   [
+    "Teachers",
+    true,
+    false
+   ],
+   [
+    " take attendance, track memorisation, review recitations and communicate with parents. ",
+    false,
+    false
+   ],
+   [
+    "Parents",
+    true,
+    false
+   ],
+   [
+    " follow their children's progress and pay fees. ",
+    false,
+    false
+   ],
+   [
+    "Students",
+    true,
+    false
+   ],
+   [
+    " record recitations, scan attendance and follow their own progress. ",
+    false,
+    false
+   ],
+   [
+    "A platform administrator",
+    true,
+    false
+   ],
+   [
+    " oversees the madrasas using the service. ",
+    false,
+    false
+   ],
+   [
+    "External service providers",
+    true,
+    false
+   ],
+   [
+    " (Supabase for the backend, Safaricom for M-Pesa, and the e-mail, SMS and push providers) supply the services on which the system depends. ",
+    false,
+    false
+   ],
+   [
+    "Government education authorities",
+    true,
+    false
+   ],
+   [
+    " influence the system indirectly through the plans to integrate madrasa education into the national system (Kihaki, 2026).",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "4.8 Challenges in Requirements Gathering and Analysis"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Several challenges influenced the requirements gathering process.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Diverse stakeholder needs:",
+    true,
+    false
+   ],
+   [
+    " owners prioritise records and fees, teachers prioritise simple attendance and review, and parents want timely information. Features were prioritised by how many roles they serve and how directly they address the problem statement.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Limited stakeholder availability:",
+    true,
+    false
+   ],
+   [
+    " madrasa sessions run early in the morning, in the evening and at weekends, which limited the time available for interviews and observation.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Sensitivity of children's data:",
+    true,
+    false
+   ],
+   [
+    " information about minors requires consent and care under the Kenya Data Protection Act 2019 (Republic of Kenya, 2019). Questions were framed neutrally, students took part only with parental consent, and the system was designed so that a parent sees a child only after the madrasa approves the link.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Technical constraints:",
+    true,
+    false
+   ],
+   [
+    " features such as a validated tajweed recognition model and live M-Pesa credentials were beyond the project's resources, so the system was designed to accept them later without redesign.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Variations in madrasa practice:",
+    true,
+    false
+   ],
+   [
+    " madrasas differ in class levels, fee structures and languages, so the system lets each madrasa define its own classes and fees and offers four languages.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "4.9 Summary"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "This chapter described how the requirements of Digital Madrasa were gathered through questionnaires, interviews, observation and document review, and how they were analysed. The findings that 41.7% of madrasas keep no written attendance, 66.7% keep no written memorisation record, 20.0% of parents are not informed at all and 95.0% of parents are open to paying by M-Pesa shaped the functional requirements, while security, privacy and payment integrity shaped the non-functional requirements. The next chapter presents the system design.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "pagebreak"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "CHAPTER FIVE",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 1,
+  "text": "5. SYSTEM DESIGN"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "5.1 Introduction"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "This chapter presents the design of Digital Madrasa. From the structure of the data and the database schema to the interactions between users and the system and the layout of the user interfaces, each part of the design was planned to meet the requirements identified in Chapter Four. Particular attention was given to role-based access for owners, teachers, parents and students, and to keeping each madrasa’s records separate from every other madrasa.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "5.2 Structural Diagram"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Structural diagrams describe the static architecture of the system by showing its components, such as classes and their relationships (Sommerville, 2016). They provide a blueprint of how data and objects are organised and help developers understand how the parts of the system fit together.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "5.2.1 Class Diagram"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "The class diagram in Figure 5.1 shows the main classes of the system, their attributes and operations, and the relationships between them. A Madrasa has many students, teachers, classes, fee structures and announcements. A Student belongs to one madrasa and has attendance records, memorisation progress, recitations and invoices, and a Parent is connected to a Student through a ParentStudentLink that the madrasa approves. Each Recitation may receive TajweedFeedback, which the teacher reviews.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "image",
+  "file": "img_A/A015.png",
+  "w_in": 5.604166666666667,
+  "h_in": 7.09375,
+  "px": [
+   2052,
+   2600
+  ]
+ },
+ {
+  "type": "caption",
+  "kind": "Figure",
+  "number": "5.1",
+  "title": "Class Diagram"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "5.2.2 Entity Relationship Diagram (ERD)"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "The Entity Relationship Diagram in Figure 5.2 represents the core data of the system: the entities, their key attributes and the relationships between them, with cardinalities (1 and N). It was generated from the live database, so it matches the implemented schema. Every record carries the identifier of its madrasa, which is how the database keeps each madrasa’s data separate.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "image",
+  "file": "img_A/A016.png",
+  "w_in": 6.0,
+  "h_in": 7.791666666666667,
+  "px": [
+   2734,
+   3550
+  ]
+ },
+ {
+  "type": "caption",
+  "kind": "Figure",
+  "number": "5.2",
+  "title": "ERD Diagram"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "5.3 Behavioral Diagrams"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Behavioural diagrams illustrate how the system responds to user actions and internal events. They show the flow of activities, the order of operations and how each actor interacts with the system, and guide implementation decisions.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "5.3.1 Use Case Diagram"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "The system has four main users: the madrasa owner, the teacher, the parent and the student, with a platform administrator who oversees the madrasas. The owner registers the madrasa, admits students, manages classes and staff, and defines fees and issues invoices; because an owner is also a teacher, the owner can do everything a teacher does. Teachers take attendance, display the rotating QR code, record grades and assignments, review recitations and decide parent link requests. Students scan the class QR code, record recitations and view their progress. Parents create an account, request a link to their child, view the child’s progress and invoices and message the madrasa. Figure 5.3 shows these interactions.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "image",
+  "file": "img_A/A017.png",
+  "w_in": 5.802083333333333,
+  "h_in": 6.46875,
+  "px": [
+   1514,
+   1689
+  ]
+ },
+ {
+  "type": "caption",
+  "kind": "Figure",
+  "number": "5.3",
+  "title": "Use Case Diagram"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "5.3.2 Sequence Diagram"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Sequence diagrams show the interactions between objects over time. Figure 5.4 shows recitation submission and review. The student’s app requests a private upload link, uploads the audio to storage and asks the server to evaluate it; the server stores the recitation and a provisional result. The teacher then opens the review queue, plays the recording through a short-lived link and saves a score, which the student and the approved parent can see.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "image",
+  "file": "img_A/A018.png",
+  "w_in": 6.302083333333333,
+  "h_in": 5.0,
+  "px": [
+   1545,
+   1227
+  ]
+ },
+ {
+  "type": "caption",
+  "kind": "Figure",
+  "number": "5.4",
+  "title": "Sequence Diagram"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "5.3.3 Activity Diagram"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "The activity diagram in Figure 5.5 shows QR attendance. The teacher opens the class attendance screen and the system displays a signed code that changes every 30 seconds. A student scans the code, and the server checks the signature, the time window, the class and the student’s role before recording the student as present; an expired or wrong code is refused.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "image",
+  "file": "img_A/A019.png",
+  "w_in": 4.604166666666667,
+  "h_in": 5.510416666666667,
+  "px": [
+   1172,
+   1405
+  ]
+ },
+ {
+  "type": "caption",
+  "kind": "Figure",
+  "number": "5.5",
+  "title": "Activity Diagram"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "5.4 Database Schema"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "The database schema defines how data is organised and stored. Digital Madrasa uses a PostgreSQL database of 42 tables grouped into functional areas: tenancy and identity, access control, learning, attendance, recitation, finance, subscription, communication and operations, as shown in Figure 5.6. Every table that belongs to a madrasa carries its madrasa identifier, and Row Level Security is enabled on all 42 tables so that users can read and change only the records their role allows.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "image",
+  "file": "img_A/A020.png",
+  "w_in": 6.197916666666667,
+  "h_in": 5.375,
+  "px": [
+   1514,
+   1312
+  ]
+ },
+ {
+  "type": "caption",
+  "kind": "Figure",
+  "number": "5.6",
+  "title": "Database Schema"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "5.5 Wireframes"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "The wireframes in Figure 5.7 illustrate the core user interfaces of the application: the sign-in screen, the teacher dashboard with attendance and fee summaries, QR attendance scanning, and the review screen shown before invoices are issued. They set out the main navigation and the flow of interaction that the implemented screens follow.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "image",
+  "file": "img_A/A021.png",
+  "w_in": 6.302083333333333,
+  "h_in": 3.6979166666666665,
+  "px": [
+   1514,
+   888
+  ]
+ },
+ {
+  "type": "caption",
+  "kind": "Figure",
+  "number": "5.7",
+  "title": "Wireframes"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "5.6 Summary"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "This chapter presented the design of Digital Madrasa. The class diagram and ERD define the main entities and their relationships, the use case diagram shows what each user can do, the sequence and activity diagrams describe recitation review and QR attendance, the database schema organises the 42 tables, and the wireframes give a visual overview of the interface. Together these form the blueprint for the development described in Chapter Six.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "pagebreak"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "CHAPTER SIX",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 1,
+  "text": "6. SYSTEM DEVELOPMENT"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "6.1 Introduction"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "This chapter presents the development of the Digital Madrasa Mobile Application, implemented under the brand ILMORA. It outlines the tools, technologies and techniques used, describes the interfaces through which each user interacts with the system, and discusses the challenges encountered during development and how they were addressed. The aim is to show how the designs of Chapter Five were turned into a working mobile application.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "6.2 System Development Tools and Techniques"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "The system was built with tools chosen for cross-platform mobile development, secure data management and low cost. The front end is a single React Native codebase and the back end is a hosted Supabase project, so the same application serves every role while the database enforces what each role may see and do.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "6.2.1 Integrated Development Environment (IDE)"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Visual Studio Code was used as the main integrated development environment. It provides TypeScript language support that reports errors as code is written, an integrated terminal for running the Expo development server and the test scripts, and Git integration for version control. The Android emulator from Android Studio was used to run the application during development, and the web build was used to check screens at phone size.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "table",
+  "rows": [
+   [
+    "[INSERT SCREENSHOT HERE] VS Code with the Digital Madrasa project open (explorer showing apps, packages and supabase)"
+   ]
+  ],
+  "images": []
+ },
+ {
+  "type": "caption",
+  "kind": "Figure",
+  "number": "6.1",
+  "title": "Visual Studio Code"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Screenshot to be inserted by the developer.",
+    false,
+    true
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "6.2.2 Front-end Development"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "The front end was developed with React Native and the Expo toolchain (SDK 54) in TypeScript, which lets one codebase run on Android devices and in a web browser. Expo Router organises the screens into separate groups for the owner, teacher, parent and student, so each user sees a dashboard tailored to their role. TanStack Query keeps data from the server up to date, and i18next provides the interface in English, Kiswahili, Somali and Arabic. The front end includes sign-up and sign-in screens, dashboards, student admission and class management, attendance with a QR scanner that also works offline, recitation recording and practice, the live reading room, the video library, fee and payment screens with receipts, and announcements, messages and notifications.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "6.2.3 Database Management Tools"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Supabase was used to manage the data collected by the app. It provides a PostgreSQL database, user authentication, private file storage for recitation audio, and Edge Functions that run privileged operations, such as issuing invoices, starting M-Pesa payments and delivering notifications, on the server. The database schema was created through 41 version-controlled migrations, and Row Level Security policies on every table keep each madrasa’s records private. Supabase Realtime carries the live reading room on private channels that only the class may join. Outside services are called only from the server functions: Google Gemini, which listens to a recitation (when a parent has given consent), answers the AI assistant’s questions and speaks progress reports; Safaricom Daraja, which sends the M-Pesa payment prompt to the parent’s phone; and Paystack, whose hosted page takes card payments so that card numbers never pass through the app. Quran videos are played through YouTube’s embedded player from links the teacher chooses, so no YouTube API key is needed.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "table",
+  "rows": [
+   [
+    "[INSERT SCREENSHOT HERE] Supabase dashboard showing the project’s tables (Table Editor) or Edge Functions"
+   ]
+  ],
+  "images": []
+ },
+ {
+  "type": "caption",
+  "kind": "Figure",
+  "number": "6.2",
+  "title": "Supabase Setup"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Screenshot to be inserted by the developer.",
+    false,
+    true
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "6.3 System Interfaces"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "ILMORA, the branded implementation of the Digital Madrasa Mobile Application, provides interfaces tailored to each user role. All screens follow the same layout, with a bottom navigation bar, clear headings and summary cards, so that users with different levels of experience can move through the application easily. The following screenshots, captured on an Android phone screen, show the interfaces that users interact with.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Sign Up Interface",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "A new user chooses to register a madrasa or to create a parent account. Figure 6.3 shows the parent sign-up form, which collects the parent’s name, e-mail address, phone number and password, and asks for consent under the Kenya Data Protection Act 2019.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "image",
+  "file": "img_A/A022.png",
+  "w_in": 2.6041666666666665,
+  "h_in": 5.78125,
+  "px": [
+   1080,
+   2400
+  ]
+ },
+ {
+  "type": "caption",
+  "kind": "Figure",
+  "number": "6.3",
+  "title": "App Interface Sign Up"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Owner Interface",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "The owner’s dashboard (Figure 6.4) shows the number of students, attendance for the week, fees collected and outstanding, pending parent link requests and today’s classes, with tabs for students, classes, fees and more.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "image",
+  "file": "img_A/A023.png",
+  "w_in": 2.6041666666666665,
+  "h_in": 5.78125,
+  "px": [
+   1080,
+   2400
+  ]
+ },
+ {
+  "type": "caption",
+  "kind": "Figure",
+  "number": "6.4",
+  "title": "Owner Dashboard"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Teacher Interface",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "The teacher’s dashboard (Figure 6.5) lists the teacher’s classes with a shortcut to mark attendance, together with parent requests and summary figures for the madrasa.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "image",
+  "file": "img_A/A024.png",
+  "w_in": 2.6041666666666665,
+  "h_in": 5.78125,
+  "px": [
+   1080,
+   2400
+  ]
+ },
+ {
+  "type": "caption",
+  "kind": "Figure",
+  "number": "6.5",
+  "title": "Teacher Dashboard"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Parent Interface",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "The parent’s dashboard (Figure 6.6) lets a parent switch between approved children and see each child’s admission number, memorisation, attendance rate, outstanding balance and recent attendance, with tabs for fees, the inbox and messages.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "image",
+  "file": "img_A/A025.png",
+  "w_in": 2.6041666666666665,
+  "h_in": 5.78125,
+  "px": [
+   1080,
+   2400
+  ]
+ },
+ {
+  "type": "caption",
+  "kind": "Figure",
+  "number": "6.6",
+  "title": "Parent Dashboard"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Student Interface",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "The student’s dashboard (Figure 6.7) shows the passages due for revision with a button to start a recitation, the juz memorised, attendance, overall progress and assignments.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "image",
+  "file": "img_A/A026.png",
+  "w_in": 2.6041666666666665,
+  "h_in": 5.78125,
+  "px": [
+   1080,
+   2400
+  ]
+ },
+ {
+  "type": "caption",
+  "kind": "Figure",
+  "number": "6.7",
+  "title": "Student Dashboard"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Recitation, Live Learning and Badge Interfaces",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Figure 6.8 shows the learning features. A teacher reviewing a recitation can play the pupil and a master reciter ayah by ayah; in the live reading room pupils raise their hands, the teacher chooses a reader, the ayah is highlighted on every phone and the teacher marks the reading; the video library plays the Quran videos the teacher has chosen for the class; and badges, worked out from the pupil’s own records, encourage the pupil.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "image",
+  "file": "img_A/A027.png",
+  "w_in": 6.197916666666667,
+  "h_in": 3.4791666666666665,
+  "px": [
+   1890,
+   1060
+  ]
+ },
+ {
+  "type": "caption",
+  "kind": "Figure",
+  "number": "6.8",
+  "title": "Recitation, Live Learning and Badge Interfaces"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Payment, Messaging and Offline Interfaces",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Figure 6.9 shows the parent paying a fee by M-Pesa, the receipt with its M-Pesa transaction code, a conversation between a parent and a teacher, and the attendance register saved on the phone while offline and sent when the connection returns.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "image",
+  "file": "img_A/A028.png",
+  "w_in": 6.197916666666667,
+  "h_in": 3.4791666666666665,
+  "px": [
+   1890,
+   1060
+  ]
+ },
+ {
+  "type": "caption",
+  "kind": "Figure",
+  "number": "6.9",
+  "title": "Payment, Messaging and Offline Interfaces"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "6.4 Challenges Encountered During Development"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Several challenges arose during development and were addressed as follows.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "6.4.1 Technical Complexities"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Supporting many madrasas and four roles in one system required every rule about who may see what to be written into the database as Row Level Security policies, and tested with accounts for every role. Performance testing showed that the original rule for reading a child’s records became slower as the platform grew, so it was rewritten to be evaluated once per query and proven by a test to allow exactly the same records. Handling money also required care: the app never sends an amount, and a payment is settled on the server exactly once. Some features cannot be tested in Expo Go and needed an installable build; testing that build revealed that Arabic headings were drawn on the wrong side because React Native swaps left and right in a right-to-left layout, which was then fixed. A general AI model also had to be kept honest: given silence and the expected text, one model reported a perfect recitation, so the audio is now first transcribed without the text and checked in code before any score is given. Later features raised further issues: a reading-room channel had to admit only the pupils, parents and teachers of that class, so access is decided by a database rule; and attendance saved without a connection was at first held back by the data library until the network returned, so the register is now kept on the phone and sent automatically on reconnection.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "6.4.2 User Adoption and Resistance"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Some owners, teachers and parents have little experience with mobile applications and may prefer familiar paper registers. To encourage adoption the interfaces were kept simple, with large buttons and clear summaries, the application was translated into Kiswahili, Somali and Arabic, and payment uses M-Pesa, which families already use, or a card. AI feedback on a child’s voice is off until a parent turns it on.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "6.4.3 Economic Constraints"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Limited resources affected the choice of tools. Free and open-source tools were used throughout: Expo, React Native, Visual Studio Code, the free tier of Supabase, the free tier of Google Gemini and Safaricom’s free Daraja sandbox. The in-app video provider that was evaluated required a payment card, so live lessons use free Google Meet or Zoom links, and the video code was kept separate so it can be switched on when funding allows. Card payments, e-mail and SMS were developed against mock providers; the same code switches to the real services when credentials are configured.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "6.4.4 Continuous Updates and Supports"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Long-term use requires ongoing maintenance. Database changes are made through numbered migrations, automated checks run on every change pushed to GitHub, and the database is backed up every three days. Keeping Expo, React Native and Supabase up to date and responding to feedback from madrasas will keep the system reliable.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "6.5 Summary"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "This chapter described the development of the Digital Madrasa Mobile Application (ILMORA): Visual Studio Code as the development environment, React Native with Expo for the front end, and Supabase for the database, authentication, storage and server functions. It presented the sign-up screen and the main interfaces, and discussed the challenges of technical complexity, user adoption, limited resources and continuous maintenance, together with how each was addressed.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "pagebreak"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "CHAPTER SEVEN",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 1,
+  "text": "7. SYSTEM TESTING AND DEPLOYMENT"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "7.1 Introduction"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Testing and deployment are critical phases in the development of Digital Madrasa. Testing ensures that the application meets its functional and security requirements and gives owners, teachers, parents and students a reliable experience. Deployment makes the system available to its users. This chapter describes the testing carried out, its results, and how the system is deployed now and will be deployed in future.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "7.2 System Testing and Validation"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "The system was tested at several levels: unit testing of individual functions, functional testing of complete features against the deployed backend as each role, and user interface testing of the screens. Because the most important requirement is that no madrasa can see another’s records and no user can act outside their role, tests checked that forbidden actions are refused as well as that permitted ones succeed.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "7.2.1 Unit Tests"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Unit testing examines individual components in isolation. Unit tests were written with Vitest for the logic that does not need a server: input validation, QR token signing, M-Pesa and card payment handling, notification rules, memorisation totals, recitation assessment, the AI assistant’s check on figures, the hifz plan, master-reciter timing, video links, the offline attendance queue, and streaks and badges. All 185 unit tests in 23 test files passed when run on 16 October 2026. Table 7.1 shows representative cases.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "table",
+  "rows": [
+   [
+    "Test Case ID",
+    "Module",
+    "Test Case Description",
+    "Expected Result",
+    "Actual Result",
+    "Status"
+   ],
+   [
+    "UT01",
+    "Validation",
+    "A payment request that includes an amount",
+    "Amount removed; server derives it",
+    "As expected",
+    "Pass"
+   ],
+   [
+    "UT02",
+    "QR tokens",
+    "Token from an old window, or forged",
+    "Token rejected",
+    "As expected",
+    "Pass"
+   ],
+   [
+    "UT03",
+    "M-Pesa callback",
+    "Customer cancels the payment prompt",
+    "Recorded as failed; nothing credited",
+    "As expected",
+    "Pass"
+   ],
+   [
+    "UT04",
+    "Memorisation",
+    "Overlapping memorisation records",
+    "Each juz counted once",
+    "As expected",
+    "Pass"
+   ],
+   [
+    "UT05",
+    "Notifications",
+    "User has switched SMS off",
+    "No SMS sent",
+    "As expected",
+    "Pass"
+   ],
+   [
+    "UT06",
+    "Video library",
+    "A link that is not from YouTube",
+    "Link refused",
+    "As expected",
+    "Pass"
+   ],
+   [
+    "UT07",
+    "Offline queue",
+    "Register saved with no connection",
+    "Kept on the phone; sent once on reconnect",
+    "As expected",
+    "Pass"
+   ]
+  ],
+  "images": []
+ },
+ {
+  "type": "caption",
+  "kind": "Table",
+  "number": "7.1",
+  "title": "Unit Testing"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "7.2.2 Functional Testing"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Functional testing verifies that each feature works as the requirements specify. Scripts signed in as test accounts for every role and called the deployed backend; in total 78 functional test cases were run and all passed. In addition, 21 database verification suites, run against the live database on 15 October 2026, proved 145 security guarantees, such as that a parent sees only their own children and that a pupil cannot join another class’s reading room; all passed. Key functionalities tested include:",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Sign-in and role-based access: each role reaches its own dashboard and is refused actions of other roles.",
+    false,
+    false
+   ]
+  ],
+  "list": "bullet",
+  "style": "List Paragraph"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Attendance, invoicing, M-Pesa and card payment, notifications, written work, certificates, and AI recitation feedback only with consent.",
+    false,
+    false
+   ]
+  ],
+  "list": "bullet",
+  "style": "List Paragraph"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Live lessons, the reading room, the video library, parent–teacher messaging, sponsorship and the impact dashboard, each limited to the right madrasa, class and role.",
+    false,
+    false
+   ]
+  ],
+  "list": "bullet",
+  "style": "List Paragraph"
+ },
+ {
+  "type": "table",
+  "rows": [
+   [
+    "Test Case ID",
+    "Feature",
+    "Test Scenario",
+    "Expected Outcome",
+    "Actual Outcome",
+    "Status"
+   ],
+   [
+    "FT01",
+    "Admission",
+    "Owner admits a student; a parent tries to",
+    "Number DM-YYYY-NNNN issued; parent refused",
+    "As expected",
+    "Pass"
+   ],
+   [
+    "FT02",
+    "QR attendance",
+    "Student scans a valid code, then an expired one",
+    "Marked present once; expired code refused",
+    "As expected",
+    "Pass"
+   ],
+   [
+    "FT03",
+    "Invoicing",
+    "Owner issues invoices to one class",
+    "One invoice per student of that class",
+    "As expected",
+    "Pass"
+   ],
+   [
+    "FT04",
+    "M-Pesa payment",
+    "Parent pays an invoice",
+    "Invoice paid; receipt issued; parent notified",
+    "As expected",
+    "Pass"
+   ],
+   [
+    "FT05",
+    "AI feedback",
+    "Recitation from a pupil without parental consent",
+    "Nothing sent to the AI; no score given",
+    "As expected",
+    "Pass"
+   ],
+   [
+    "FT06",
+    "M-Pesa failure",
+    "Customer cancels or lacks funds",
+    "Payment failed with the reason; invoice still due",
+    "As expected",
+    "Pass"
+   ],
+   [
+    "FT07",
+    "Messaging",
+    "Parent writes to a teacher of another child",
+    "Message refused",
+    "As expected",
+    "Pass"
+   ]
+  ],
+  "images": []
+ },
+ {
+  "type": "caption",
+  "kind": "Table",
+  "number": "7.2",
+  "title": "Functional Testing"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "7.2.3 User Interface (UI) Testing"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "User interface testing checks that the application is easy to use and visually consistent. It was carried out on an Android emulator, in the web build at phone size, and finally on the installed Android package (APK) built by Expo Application Services. Key areas tested were:",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Navigation: tabs and buttons lead to the correct screens for each role.",
+    false,
+    false
+   ]
+  ],
+  "list": "bullet",
+  "style": "List Paragraph"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Forms and input fields: admission, invoice and payment forms validate input and show clear messages.",
+    false,
+    false
+   ]
+  ],
+  "list": "bullet",
+  "style": "List Paragraph"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Languages: labels fit and read correctly in English, Kiswahili, Somali and Arabic.",
+    false,
+    false
+   ]
+  ],
+  "list": "bullet",
+  "style": "List Paragraph"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Visual consistency: fonts, colours, icons and buttons are consistent across screens.",
+    false,
+    false
+   ]
+  ],
+  "list": "bullet",
+  "style": "List Paragraph"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Offline use: with the connection cut, the last screens stay visible and the attendance register is saved on the phone, then sent when the connection returns.",
+    false,
+    false
+   ]
+  ],
+  "list": "bullet",
+  "style": "List Paragraph"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "On the installed app, recording, the offline library with the network switched off, the mirrored Arabic layout, camera permissions, confirmation dialogs, the AI assistant, parental consent and card payment were all exercised. Six defects found during UI testing were fixed: the parent inbox failed to display some notification types; tab labels were cut off in some languages; Arabic headings were drawn on the wrong side; the scanner did not notice a camera permission granted in Settings; the microphone message was not translated; and an unassessed recording was praised. Push notifications remain to be verified, because they need a Firebase project to be configured.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "table",
+  "rows": [
+   [
+    "Test Case ID",
+    "UI Element",
+    "Test Scenario",
+    "Expected Result",
+    "Actual Result",
+    "Status"
+   ],
+   [
+    "UI01",
+    "Sign-in screen",
+    "Layout at phone size",
+    "Clean and responsive",
+    "As expected",
+    "Pass"
+   ],
+   [
+    "UI02",
+    "Dashboard",
+    "Role-based display",
+    "Correct dashboard per role",
+    "As expected",
+    "Pass"
+   ],
+   [
+    "UI03",
+    "Arabic layout",
+    "Installed app in Arabic",
+    "Screens mirrored right to left",
+    "As expected after fix",
+    "Pass"
+   ],
+   [
+    "UI04",
+    "Forms",
+    "Data entry and validation",
+    "Easy input and clear feedback",
+    "As expected",
+    "Pass"
+   ],
+   [
+    "UI05",
+    "Inbox",
+    "Display of notifications",
+    "All notices shown correctly",
+    "As expected after fix",
+    "Pass"
+   ]
+  ],
+  "images": []
+ },
+ {
+  "type": "caption",
+  "kind": "Table",
+  "number": "7.3",
+  "title": "User Interface Testing"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "7.3 Testing Results"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Testing produced positive results across all major parts of the system. Table 7.4 summarises the results. Of the 31 user interface checks, 30 passed, six of them after a defect was fixed; push notifications are still to be verified once Firebase is configured. In-app video was not tested because it is switched off.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "table",
+  "rows": [
+   [
+    "Testing Type",
+    "Total Test Cases",
+    "Passed",
+    "Failed",
+    "Success Rate"
+   ],
+   [
+    "Unit Testing",
+    "185",
+    "185",
+    "0",
+    "100%"
+   ],
+   [
+    "Functional Testing",
+    "78",
+    "78",
+    "0",
+    "100%"
+   ],
+   [
+    "Database Security Guarantees",
+    "145",
+    "145",
+    "0",
+    "100%"
+   ],
+   [
+    "UI Testing",
+    "31",
+    "30",
+    "0",
+    "100% of tests run (1 pending)"
+   ]
+  ],
+  "images": []
+ },
+ {
+  "type": "caption",
+  "kind": "Table",
+  "number": "7.4",
+  "title": "Testing Results"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "7.4 System Deployment"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Deployment prepares the system for real use. The backend of Digital Madrasa is deployed on a hosted Supabase project: the database with its 41 migrations and security policies, private storage for recitation audio, and 18 Edge Functions for operations such as invoicing, M-Pesa payments, notifications, AI feedback, spoken reports, USSD and the AI assistant. Automated checks run on GitHub for every change, and the database is backed up every three days.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "7.4.1 Current Deployment Methods"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "The mobile application is built as an installable Android package (APK) with Expo Application Services (EAS) and connects to the live backend. The APK is distributed directly:",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Direct APK sharing: the APK file is shared through Google Drive, Bluetooth or USB, and users install it by allowing installation from unknown sources.",
+    false,
+    false
+   ]
+  ],
+  "list": "bullet",
+  "style": "List Paragraph"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "WhatsApp distribution: the APK is shared as a document on WhatsApp, which madrasa owners, teachers and parents already use.",
+    false,
+    false
+   ]
+  ],
+  "list": "bullet",
+  "style": "List Paragraph"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Web: the same codebase is published on Expo’s free hosting at https://https-ilmora-expo-app.expo.app, where the administrator’s console runs.",
+    false,
+    false
+   ]
+  ],
+  "list": "bullet",
+  "style": "List Paragraph"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "7.4.2 Future Deployment Plans"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Google Play Store: publishing the app will make installation easier and more trusted, and provide automatic updates.",
+    false,
+    false
+   ]
+  ],
+  "list": "bullet",
+  "style": "List Paragraph"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Live payment and messaging services: moving M-Pesa from the Daraja sandbox to a registered Paybill or Till, and connecting Paystack for cards, the e-mail and SMS providers, and Firebase for push notifications, with real credentials.",
+    false,
+    false
+   ]
+  ],
+  "list": "bullet",
+  "style": "List Paragraph"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "In-app video: switching on the built in-app video for live lessons once a funded video provider account is available.",
+    false,
+    false
+   ]
+  ],
+  "list": "bullet",
+  "style": "List Paragraph"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "7.5 Summary"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "This chapter presented the testing and deployment of the Digital Madrasa Mobile Application (ILMORA). Unit, functional, database security and user interface testing showed that the core features, including sign-in, admission, attendance, invoicing, M-Pesa and card payment, AI feedback with consent and parent access, work as required on the installed app, and that users cannot reach records outside their madrasa or role. The backend runs on Supabase, the app is shared as an APK and a website, and future plans include the Play Store, live payments and in-app video.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "pagebreak"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "CHAPTER EIGHT",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 1,
+  "text": "8. DISCUSSIONS, FUTURE WORKS AND RECOMMENDATIONS"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "8.1 Introduction"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "This chapter reflects on the outcomes of Digital Madrasa in relation to the objectives of the project. It evaluates how far the system addresses the challenges of madrasa administration and Quran learning in Kenya, and identifies future work and recommendations.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "8.2 Discussions of Objectives"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Objective 1",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "The project analysed the challenges facing madrasas in Kenya: informal and unstandardised records, limited parental visibility, the workload of assessing recitation, and fees that are not linked to invoices. The system addresses them with digital records of admission, attendance and memorisation, parent access approved by the madrasa, recorded recitations for teacher review, and invoices with M-Pesa payment. The questionnaire results in Chapter Four are to be completed from the fieldwork.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Objective 2",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "The review of existing systems showed that Quran applications serve individual learners while education management systems have no Quran-specific functions, and that none keeps many independent madrasas separate. Digital Madrasa combines both in one platform, with each madrasa’s records isolated by the database and an interface in four languages.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Objective 3",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "The system was developed with React Native and Expo for the front end and Supabase for the backend. Owners, teachers, parents and students each have a dedicated dashboard, and admission, classes, manual and QR attendance, memorisation, assignments, recitation review with AI feedback, certificates, invoicing, M-Pesa and card payment, and notifications were implemented against the live backend. The application, branded ILMORA, also offers master-reciter comparison, recite-along practice, a daily hifz plan, hifz streaks and badges, a web console for the platform administrator, a live reading room with scheduled Meet or Zoom sessions, a teacher-chosen Quran video library, parent–teacher messaging, pupil sponsorship, spoken reports, USSD access, offline attendance and an impact dashboard.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Objective 4",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Unit, functional and user interface testing confirmed that the core features work as required: all 185 unit tests and 78 functional test cases passed, 21 database suites proved 145 security guarantees, and the installed app passed 30 of 31 interface checks. M-Pesa is connected to Safaricom’s Daraja sandbox. The tests showed that users cannot reach records outside their madrasa or role. A usability study with real users, push notifications and testing on a range of physical phones remain to be done.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "8.3 Future Work"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Although the system meets its main objectives, several enhancements would improve its reach and usefulness.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "8.3.1 Deployment to Google Play Store"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Building the Android package and publishing the app on the Google Play Store would make installation easier and more trusted, provide automatic updates and allow feedback to be collected from users.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "8.3.2 Development of Web-Based Admin Dashboard"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "The platform administrator’s web console is now hosted and shows every madrasa, the platform’s impact and an audit log. It should be extended with downloadable reports and subscription management, so that the madrasas on the platform, their subscriptions and their activity can be monitored and acted on from a browser.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "8.3.3 Integration of Push Notifications and Messaging"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Push, e-mail and SMS notifications and parent–teacher messaging are built. Configuring a Firebase project for push, connecting the real e-mail and SMS providers, a registered M-Pesa Paybill and Paystack, switching on in-app video for live lessons when a video provider can be funded, and confirming delivery on physical phones would give parents timely alerts about attendance, fees and reviews.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "8.3.4 Smart Alerts and Recommendations"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "The daily hifz plan and the teacher’s co-pilot already point to passages due for revision and to learners who fall behind. These could be extended into reminders based on spaced repetition (Kornell, 2009), and the general AI model now used for recitation feedback could be replaced with a tajweed model validated, with consent, on recordings of Kenyan learners.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "8.3.5 Enhanced Offline Functionality"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Many madrasas have unreliable internet access. Attendance can already be marked offline and is sent when the connection returns, and USSD serves parents with basic phones. Extending this to memorisation records and recordings would make the system fully usable in such areas.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "8.4 Recommendations"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "To ensure the long-term success and adoption of the system, the following recommendations are proposed.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "8.4.1 Continuous User Engagement"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Feedback should be collected regularly from owners, teachers, parents and students, beginning with a pilot in one madrasa, so that the system continues to meet real needs.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "8.4.2 Strengthening Data Security"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Because the system holds children’s records, authorisation must remain in the database, every change to an access rule should be tested before deployment, and the Kenya Data Protection Act 2019 must be followed.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "8.4.3 Regular System Updates"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "The application should be updated regularly to fix defects, keep Expo, React Native and Supabase current, and add features requested by users.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "8.4.4 Institutional and Government Collaboration"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Collaboration with madrasa associations and the Ministry of Education would support adoption and help align the system’s records with the planned integration of madrasa education into the national system (Kihaki, 2026; Tongola, 2025).",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "8.4.5 Optimization for Low-End Devices"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "The application should be optimised for the low-cost smartphones common among families, by reducing its size and data usage and testing it on such devices.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "8.5 Summary"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "This chapter discussed how the Digital Madrasa Mobile Application (ILMORA) addressed the challenges of madrasa administration and Quran learning in Kenya. The system brings records, attendance, memorisation, recitation review, parent access and fee payment into one secure platform. Future work includes publishing on the Google Play Store, reports in the web console, live notifications and payments, in-app video, smart revision alerts and fuller offline support, while the recommendations emphasise user engagement, data security, regular updates, institutional collaboration and optimisation for low-end devices.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "pagebreak"
+ },
+ {
+  "type": "heading",
+  "level": 1,
+  "text": "Appendix"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "A.1: User Survey Questionnaire"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "Section A: Madrasa Owner and Teacher Questionnaire"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Question 1: How is student attendance currently recorded in your madrasa?",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "☐ Exercise book or register",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "☐ Wall chart",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "☐ Teacher's memory only",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "☐ Not recorded",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "☐ Other (please specify): __________",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Question 2: How is a student's Quran memorisation progress recorded?",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "☐ Written in a book",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "☐ Teacher remembers",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "☐ Told to the parent verbally",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "☐ Not recorded",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "☐ Other (please specify): __________",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Question 3: How are fees recorded and communicated to parents?",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "☐ Written receipt book",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "☐ Verbal reminder",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "☐ M-Pesa messages only",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "☐ No formal record",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "☐ Other (please specify): __________",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Question 4: Would you use a mobile application to manage your madrasa?",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "☐ Yes",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "☐ Maybe",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "☐ No",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "Section B: Parent Questionnaire"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Question 1: How do you currently learn about your child's attendance and progress?",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "☐ Told at pick-up",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "☐ Phone call from the teacher",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "☐ Parents' meeting",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "☐ I am not informed",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "☐ Other (please specify): __________",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Question 2: Would you pay madrasa fees through M-Pesa in a mobile application?",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "☐ Yes",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "☐ Maybe",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "☐ No",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Question 3: Do you receive a receipt when you pay fees?",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "☐ Always",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "☐ Sometimes",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "☐ Never",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Question 4: Which language do you prefer for notices from the madrasa?",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "☐ English",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "☐ Kiswahili",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "☐ Somali",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "☐ Arabic",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 3,
+  "text": "Section C: Student Questionnaire"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Question 1: How does your teacher assess your recitation?",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "☐ I recite to the teacher in class",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "☐ The teacher listens to a group together",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "☐ Rarely assessed",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "☐ Other (please specify): __________",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Question 2: Would recording your recitation on a phone help you practise?",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "☐ Strongly agree",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "☐ Agree",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "☐ Neutral",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "☐ Disagree",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "☐ Strongly disagree",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Question 3: How do you know which passages to revise?",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "☐ My teacher tells me",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "☐ I decide myself",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "☐ My parents remind me",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "☐ I do not revise regularly",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Question 4: How soon after reciting do you get feedback from your teacher?",
+    true,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "☐ Immediately in class",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "☐ At the next session",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "☐ After several days",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "☐ I rarely get feedback",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "A.2: Work Plan and Schedule"
+ },
+ {
+  "type": "table",
+  "rows": [
+   [
+    "Task",
+    "Start Date",
+    "End Date",
+    "Duration",
+    "Development Description"
+   ],
+   [
+    "Requirement Gathering",
+    "[INSERT DATE]",
+    "[INSERT DATE]",
+    "[INSERT]",
+    "Identify user roles and madrasa requirements; literature review"
+   ],
+   [
+    "System Design & Wireframing",
+    "[INSERT DATE]",
+    "[INSERT DATE]",
+    "[INSERT]",
+    "Diagrams, database schema and wireframes"
+   ],
+   [
+    "Supabase Setup & Core Platform",
+    "[INSERT DATE]",
+    "2026-08-23",
+    "[INSERT]",
+    "Multi-tenant database, authentication and screens for all roles"
+   ],
+   [
+    "Edge Functions, CI & Backups",
+    "2026-08-24",
+    "2026-09-16",
+    "24 days",
+    "Server functions, build configuration, automated checks and backups"
+   ],
+   [
+    "Backend Integration & Recitation",
+    "2026-09-17",
+    "2026-09-23",
+    "7 days",
+    "Live backend, recitation storage, teacher review and parent access"
+   ],
+   [
+    "QR Attendance & Invoicing",
+    "2026-09-23",
+    "2026-09-24",
+    "2 days",
+    "Rotating QR attendance and targeted invoices"
+   ],
+   [
+    "Learning, Payments & Notifications",
+    "2026-09-25",
+    "2026-09-29",
+    "5 days",
+    "Written work, certificates, M-Pesa payments, notifications and translations"
+   ],
+   [
+    "System Testing & Validation",
+    "2026-09-19",
+    "2026-09-30",
+    "12 days",
+    "Unit, functional, user interface and performance testing"
+   ],
+   [
+    "Final Documentation & Deployment",
+    "2026-09-30",
+    "[INSERT DATE]",
+    "[INSERT]",
+    "Report, APK build and presentation"
+   ]
+  ],
+  "images": []
+ },
+ {
+  "type": "caption",
+  "kind": "Table",
+  "number": "8.1",
+  "title": "Work Plan and Schedule"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "A.3: Budget"
+ },
+ {
+  "type": "table",
+  "rows": [
+   [
+    "Items",
+    "Quantity",
+    "Cost (KES)",
+    "Total Cost (KES)",
+    "Notes"
+   ],
+   [
+    "Internet data bundles",
+    "3 months",
+    "2,000",
+    "6,000",
+    "Development, testing and backend access"
+   ],
+   [
+    "Transport & field data collection",
+    "–",
+    "–",
+    "4,000",
+    "Visiting madrasas for questionnaires and interviews"
+   ],
+   [
+    "Printing, binding & documentation",
+    "–",
+    "–",
+    "3,500",
+    "Final report copies"
+   ],
+   [
+    "Google Play developer registration",
+    "1",
+    "3,250",
+    "3,250",
+    "One-time US$ 25, when the app is published"
+   ],
+   [
+    "Supabase backend services",
+    "1",
+    "0",
+    "0",
+    "Free plan"
+   ],
+   [
+    "M-Pesa, e-mail & SMS services",
+    "–",
+    "–",
+    "0",
+    "Mock providers during development; pay per use when live"
+   ],
+   [
+    "Development tools (VS Code, Expo, GitHub)",
+    "–",
+    "0",
+    "0",
+    "Free and open source"
+   ],
+   [
+    "Test device (Android phone)",
+    "1",
+    "[INSERT]",
+    "[INSERT]",
+    "Existing device, or cost if purchased"
+   ],
+   [
+    "Contingency (unexpected costs)",
+    "–",
+    "–",
+    "1,675",
+    "10% of paid items"
+   ],
+   [
+    "Total Estimated Budget",
+    "",
+    "",
+    "18,425",
+    "Plus a test device if purchased"
+   ]
+  ],
+  "images": []
+ },
+ {
+  "type": "caption",
+  "kind": "Table",
+  "number": "8.2",
+  "title": "Budget"
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "A.4: My Project Repository"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Repository link: ",
+    true,
+    false
+   ],
+   [
+    "[INSERT GITHUB REPOSITORY LINK]",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "table",
+  "rows": [
+   [
+    "[INSERT SCREENSHOT HERE] GitHub repository home page after the final push"
+   ]
+  ],
+  "images": []
+ },
+ {
+  "type": "heading",
+  "level": 2,
+  "text": "A.5: Plagiarism Report"
+ },
+ {
+  "type": "table",
+  "rows": [
+   [
+    "[INSERT PLAGIARISM REPORT HERE] Similarity report issued by the university’s plagiarism checker"
+   ]
+  ],
+  "images": []
+ },
+ {
+  "type": "pagebreak"
+ },
+ {
+  "type": "heading",
+  "level": 1,
+  "text": "REFERENCES"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Aden, A. A. (2017). Integration of Islamic and secular education in Kenya: A synthesis of the literature. ",
+    false,
+    false
+   ],
+   [
+    "International Journal of Social Science and Humanities Research, 5",
+    false,
+    true
+   ],
+   [
+    "(3), 67–75.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Al-Ayyoub, M., Damer, N. A., & Hmeidi, I. (2018). Using deep learning for automatically determining correct application of basic Quranic recitation rules. ",
+    false,
+    false
+   ],
+   [
+    "The International Arab Journal of Information Technology, 15",
+    false,
+    true
+   ],
+   [
+    "(3A), 620–625.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Al-Fraihat, D., Joy, M., Masa'deh, R., & Sinclair, J. (2020). Evaluating e-learning systems success: An empirical study. ",
+    false,
+    false
+   ],
+   [
+    "Computers in Human Behavior, 102",
+    false,
+    true
+   ],
+   [
+    ", 67–86.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Alif Cloud. (n.d.-a). ",
+    false,
+    false
+   ],
+   [
+    "Islamic school software features: Madrasah and dugsi management",
+    false,
+    true
+   ],
+   [
+    ". Retrieved October 12, 2026, from https://www.alifcloud.com/product",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Alif Cloud. (n.d.-b). ",
+    false,
+    false
+   ],
+   [
+    "About Alif Cloud",
+    false,
+    true
+   ],
+   [
+    ". Retrieved October 12, 2026, from https://www.alifcloud.com/about",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Alkhalil, A., Sahandi, R., & John, D. (2017). An exploration of the determinants for decision to migrate existing resources to cloud computing using an integrated TOE-DOI model. ",
+    false,
+    false
+   ],
+   [
+    "Journal of Cloud Computing, 6",
+    false,
+    true
+   ],
+   [
+    "(1). https://doi.org/10.1186/s13677-016-0072-x",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Al-Kharusi, M. H., Hayat, K., Al Ruqeishi, K. B., & Lone, H. R. (2025). ",
+    false,
+    false
+   ],
+   [
+    "A critical review of the need for knowledge-centric evaluation of Quranic recitation",
+    false,
+    true
+   ],
+   [
+    " (arXiv:2510.12858). arXiv. https://arxiv.org/abs/2510.12858",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Alsharhan, E., & Ramsay, A. (2020). Investigating the effects of gender, dialect, and training size on the performance of Arabic speech recognition. ",
+    false,
+    false
+   ],
+   [
+    "Language Resources and Evaluation, 54",
+    false,
+    true
+   ],
+   [
+    ", 975–998.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Beck, K., Beedle, M., van Bennekum, A., Cockburn, A., Cunningham, W., Fowler, M., Grenning, J., Highsmith, J., Hunt, A., Jeffries, R., Kern, J., Marick, B., Martin, R. C., Mellor, S., Schwaber, K., Sutherland, J., & Thomas, D. (2001). ",
+    false,
+    false
+   ],
+   [
+    "Manifesto for Agile software development",
+    false,
+    true
+   ],
+   [
+    ". Agile Alliance. https://agilemanifesto.org/",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Bezemer, C.-P., & Zaidman, A. (2010). Multi-tenant SaaS applications: Maintenance dream or nightmare? In ",
+    false,
+    false
+   ],
+   [
+    "Proceedings of the Joint ERCIM Workshop on Software Evolution (EVOL) and International Workshop on Principles of Software Evolution (IWPSE)",
+    false,
+    true
+   ],
+   [
+    " (pp. 88–92). ACM. https://doi.org/10.1145/1862372.1862393",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Biørn-Hansen, A., Grønli, T.-M., & Ghinea, G. (2018). A survey and taxonomy of core concepts and research challenges in cross-platform mobile development. ",
+    false,
+    false
+   ],
+   [
+    "ACM Computing Surveys, 51",
+    false,
+    true
+   ],
+   [
+    "(5), Article 108. https://doi.org/10.1145/3241739",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Booch, G., Rumbaugh, J., & Jacobson, I. (2005). ",
+    false,
+    false
+   ],
+   [
+    "The unified modeling language user guide",
+    false,
+    true
+   ],
+   [
+    " (2nd ed.). Addison-Wesley.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Boyle, H. N. (2004). ",
+    false,
+    false
+   ],
+   [
+    "Quranic schools: Agents of preservation and change",
+    false,
+    true
+   ],
+   [
+    ". RoutledgeFalmer.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Braun, V., & Clarke, V. (2006). Using thematic analysis in psychology. ",
+    false,
+    false
+   ],
+   [
+    "Qualitative Research in Psychology, 3",
+    false,
+    true
+   ],
+   [
+    "(2), 77–101. https://doi.org/10.1191/1478088706qp063oa",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Brooke, J. (1996). SUS: A \"quick and dirty\" usability scale. In P. W. Jordan, B. Thomas, B. A. Weerdmeester, & I. L. McClelland (Eds.), ",
+    false,
+    false
+   ],
+   [
+    "Usability evaluation in industry",
+    false,
+    true
+   ],
+   [
+    " (pp. 189–194). Taylor & Francis.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Chen, P. P.-S. (1976). The entity-relationship model: Toward a unified view of data. ",
+    false,
+    false
+   ],
+   [
+    "ACM Transactions on Database Systems, 1",
+    false,
+    true
+   ],
+   [
+    "(1), 9–36. https://doi.org/10.1145/320434.320440",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Coates, H., James, R., & Baldwin, G. (2005). A critical examination of the effects of learning management systems on university teaching and learning. ",
+    false,
+    false
+   ],
+   [
+    "Tertiary Education and Management, 11",
+    false,
+    true
+   ],
+   [
+    "(1), 19–36.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Communications Authority of Kenya. (2023). ",
+    false,
+    false
+   ],
+   [
+    "Sector statistics report Q4 2022/2023",
+    false,
+    true
+   ],
+   [
+    ". Communications Authority of Kenya.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Creswell, J. W., & Plano Clark, V. L. (2018). ",
+    false,
+    false
+   ],
+   [
+    "Designing and conducting mixed methods research",
+    false,
+    true
+   ],
+   [
+    " (3rd ed.). SAGE.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Dougiamas, M., & Taylor, P. C. (2003). Moodle: Using learning communities to create an open source course management system. In ",
+    false,
+    false
+   ],
+   [
+    "Proceedings of EdMedia: World Conference on Educational Media and Technology 2003",
+    false,
+    true
+   ],
+   [
+    " (pp. 171–178). AACE.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Elmasri, R., & Navathe, S. B. (2016). ",
+    false,
+    false
+   ],
+   [
+    "Fundamentals of database systems",
+    false,
+    true
+   ],
+   [
+    " (7th ed.). Pearson.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Emerson, L., Fear, J., Fox, S., & Sanders, E. (2012). ",
+    false,
+    false
+   ],
+   [
+    "Parental engagement in learning and schooling: Lessons from research",
+    false,
+    true
+   ],
+   [
+    ". Australian Research Alliance for Children and Youth for the Family–School and Community Partnerships Bureau.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Epstein, J. L. (2018). ",
+    false,
+    false
+   ],
+   [
+    "School, family, and community partnerships: Preparing educators and improving schools",
+    false,
+    true
+   ],
+   [
+    " (2nd ed.). Routledge.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Etikan, I., Musa, S. A., & Alkassim, R. S. (2016). Comparison of convenience sampling and purposive sampling. ",
+    false,
+    false
+   ],
+   [
+    "American Journal of Theoretical and Applied Statistics, 5",
+    false,
+    true
+   ],
+   [
+    "(1), 1–4. https://doi.org/10.11648/j.ajtas.20160501.11",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Expo. (2026). ",
+    false,
+    false
+   ],
+   [
+    "Expo documentation",
+    false,
+    true
+   ],
+   [
+    ". https://docs.expo.dev",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Fan, X., & Chen, M. (2001). Parental involvement and students' academic achievement: A meta-analysis. ",
+    false,
+    false
+   ],
+   [
+    "Educational Psychology Review, 13",
+    false,
+    true
+   ],
+   [
+    "(1), 1–22. https://doi.org/10.1023/A:1009048817385",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Fowler, M. (2004). ",
+    false,
+    false
+   ],
+   [
+    "UML distilled: A brief guide to the standard object modeling language",
+    false,
+    true
+   ],
+   [
+    " (3rd ed.). Addison-Wesley.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Garrett, J. J. (2011). ",
+    false,
+    false
+   ],
+   [
+    "The elements of user experience: User-centered design for the web and beyond",
+    false,
+    true
+   ],
+   [
+    " (2nd ed.). New Riders.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Google. (n.d.). ",
+    false,
+    false
+   ],
+   [
+    "Google Classroom",
+    false,
+    true
+   ],
+   [
+    ". Retrieved October 12, 2026, from https://edu.google.com/workspace-for-education/classroom/",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Holmes, W., Bialik, M., & Fadel, C. (2019). ",
+    false,
+    false
+   ],
+   [
+    "Artificial intelligence in education: Promises and implications for teaching and learning",
+    false,
+    true
+   ],
+   [
+    ". Center for Curriculum Redesign.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "International Organization for Standardization. (2011). ",
+    false,
+    false
+   ],
+   [
+    "ISO/IEC 25010:2011 Systems and software engineering — Systems and software Quality Requirements and Evaluation (SQuaRE) — System and software quality models",
+    false,
+    true
+   ],
+   [
+    ". ISO.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Kihaki, M. (2026, June 1). Madrassa and Duksi to be integrated into the education system. ",
+    false,
+    false
+   ],
+   [
+    "The Standard",
+    false,
+    true
+   ],
+   [
+    ".",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Kornell, N. (2009). Optimising learning using flashcards: Spacing is more effective than cramming. ",
+    false,
+    false
+   ],
+   [
+    "Applied Cognitive Psychology, 23",
+    false,
+    true
+   ],
+   [
+    "(9), 1297–1317. https://doi.org/10.1002/acp.1537",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Masalha, F., & Hirzallah, N. (2014). A students attendance system using QR code. ",
+    false,
+    false
+   ],
+   [
+    "International Journal of Advanced Computer Science and Applications, 5",
+    false,
+    true
+   ],
+   [
+    "(3), 75–79. https://doi.org/10.14569/IJACSA.2014.050310",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Ministry of Education. (n.d.). ",
+    false,
+    false
+   ],
+   [
+    "NEMIS",
+    false,
+    true
+   ],
+   [
+    ". Republic of Kenya. Retrieved September 26, 2026, from https://www.education.go.ke/nemis",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Ministry of ICT and the Digital Economy. (2022). ",
+    false,
+    false
+   ],
+   [
+    "The Kenya national digital master plan 2022–2032",
+    false,
+    true
+   ],
+   [
+    ". Government of Kenya.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Mwaura, P. A. M., Sylva, K., & Malmberg, L.-E. (2008). Evaluating the Madrasa preschool programme in East Africa: A quasi-experimental study. ",
+    false,
+    false
+   ],
+   [
+    "International Journal of Early Years Education, 16",
+    false,
+    true
+   ],
+   [
+    "(3), 237–255. https://doi.org/10.1080/09669760802357121",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Ndzovu, H. (2023). The madrassa system and the Islamic-integrated schools: Competing spaces for learning and the ambivalent relations with secular education in Kenya. ",
+    false,
+    false
+   ],
+   [
+    "Journal for Islamic Studies, 41",
+    false,
+    true
+   ],
+   [
+    "(1). https://doi.org/10.25159/2957-9163/15080",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Neri, A., Cucchiarini, C., & Strik, H. (2008). The effectiveness of computer-based speech corrective feedback for improving segmental quality in L2 Dutch. ",
+    false,
+    false
+   ],
+   [
+    "ReCALL, 20",
+    false,
+    true
+   ],
+   [
+    "(2), 225–243.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Object Management Group. (2017). ",
+    false,
+    false
+   ],
+   [
+    "OMG Unified Modeling Language (OMG UML), version 2.5.1",
+    false,
+    true
+   ],
+   [
+    ". https://www.omg.org/spec/UML/2.5.1",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Origin Softwares. (n.d.). ",
+    false,
+    false
+   ],
+   [
+    "Origin E Madarsa: Islamic educational management system — product demo",
+    false,
+    true
+   ],
+   [
+    ". Retrieved October 12, 2026, from https://www.originemadarsa.com/demo.html",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "PostgreSQL Global Development Group. (n.d.). Row security policies. In ",
+    false,
+    false
+   ],
+   [
+    "PostgreSQL 17 documentation",
+    false,
+    true
+   ],
+   [
+    ". Retrieved September 26, 2026, from https://www.postgresql.org/docs/17/ddl-rowsecurity.html",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Quran.com. (n.d.). ",
+    false,
+    false
+   ],
+   [
+    "Quran.com",
+    false,
+    true
+   ],
+   [
+    " [Website]. Retrieved September 26, 2026, from https://quran.com",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "QuranPortal. (n.d.). ",
+    false,
+    false
+   ],
+   [
+    "Free Quran school management for maktabs and hifdh programs",
+    false,
+    true
+   ],
+   [
+    ". Retrieved October 12, 2026, from https://quranportal.io/",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "React Native. (2026). ",
+    false,
+    false
+   ],
+   [
+    "React Native documentation",
+    false,
+    true
+   ],
+   [
+    ". https://reactnative.dev/docs",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Republic of Kenya. (2019). ",
+    false,
+    false
+   ],
+   [
+    "The Data Protection Act, No. 24 of 2019",
+    false,
+    true
+   ],
+   [
+    ". Government Printer.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Safaricom. (2026). ",
+    false,
+    false
+   ],
+   [
+    "Daraja API documentation: M-Pesa Express (STK push)",
+    false,
+    true
+   ],
+   [
+    ". https://developer.safaricom.co.ke",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Sandhu, R., Ferraiolo, D., & Kuhn, R. (2000). The NIST model for role-based access control: Towards a unified standard. In ",
+    false,
+    false
+   ],
+   [
+    "Proceedings of the Fifth ACM Workshop on Role-Based Access Control",
+    false,
+    true
+   ],
+   [
+    " (pp. 47–63). ACM. https://doi.org/10.1145/344287.344301",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Saunders, M., Lewis, P., & Thornhill, A. (2019). ",
+    false,
+    false
+   ],
+   [
+    "Research methods for business students",
+    false,
+    true
+   ],
+   [
+    " (8th ed.). Pearson.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Schwaber, K., & Sutherland, J. (2020). ",
+    false,
+    false
+   ],
+   [
+    "The Scrum guide",
+    false,
+    true
+   ],
+   [
+    ". Scrum.org. https://scrumguides.org/",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Sommerville, I. (2016). ",
+    false,
+    false
+   ],
+   [
+    "Software engineering",
+    false,
+    true
+   ],
+   [
+    " (10th ed.). Pearson.",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Sudoor HMS. (2026). ",
+    false,
+    false
+   ],
+   [
+    "Sudoor HMS — Hifz management system for madrasas",
+    false,
+    true
+   ],
+   [
+    ". Retrieved October 12, 2026, from https://www.sudoor.org/blog/best-madrasa-management-software-2026",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Supabase. (2026). ",
+    false,
+    false
+   ],
+   [
+    "Supabase documentation",
+    false,
+    true
+   ],
+   [
+    ". https://supabase.com/docs",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Tarteel AI. (n.d.). ",
+    false,
+    false
+   ],
+   [
+    "Tarteel: AI Quran memorization",
+    false,
+    true
+   ],
+   [
+    " [Mobile application]. Google Play. Retrieved September 26, 2026, from https://play.google.com/store/apps/details?id=com.mmmoussa.iqra",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Tongola, M. (2025, May 15). New education data system to replace NEMIS unveiled. ",
+    false,
+    false
+   ],
+   [
+    "The Standard",
+    false,
+    true
+   ],
+   [
+    ". https://standardmedia.co.ke/article/2001519176/new-education-data-system-to-replace-nemis-unveiled",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "VanLehn, K. (2011). The relative effectiveness of human tutoring, intelligent tutoring systems, and other tutoring systems. ",
+    false,
+    false
+   ],
+   [
+    "Educational Psychologist, 46",
+    false,
+    true
+   ],
+   [
+    "(4), 197–221. https://doi.org/10.1080/00461520.2011.611369",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ },
+ {
+  "type": "para",
+  "runs": [
+   [
+    "Zeraki. (n.d.). ",
+    false,
+    false
+   ],
+   [
+    "Zeraki: School management made easy",
+    false,
+    true
+   ],
+   [
+    ". Retrieved October 12, 2026, from https://zeraki.app/",
+    false,
+    false
+   ]
+  ],
+  "list": null,
+  "style": "Normal"
+ }
+]
