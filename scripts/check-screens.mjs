@@ -24,6 +24,15 @@ function loadEnv(path) {
   return out;
 }
 
+/** The platform admin the checks sign in as, from supabase/.env (never committed). */
+function adminCredentials() {
+  const e = loadEnv('supabase/.env');
+  if (!e.ADMIN_TEST_EMAIL || !e.ADMIN_TEST_PASSWORD) {
+    throw new Error('supabase/.env is missing ADMIN_TEST_EMAIL or ADMIN_TEST_PASSWORD');
+  }
+  return { email: e.ADMIN_TEST_EMAIL, password: e.ADMIN_TEST_PASSWORD };
+}
+
 const env = loadEnv('apps/mobile/.env');
 const url = env.EXPO_PUBLIC_SUPABASE_URL;
 const anon = env.EXPO_PUBLIC_SUPABASE_ANON_KEY;
@@ -33,7 +42,7 @@ const ACCOUNTS = [
   ['teacher', 'fatuma@annur.example', 'Madrasa2026!'],
   ['parent', 'parent@example.com', 'Madrasa2026!'],
   ['student', 'aisha.hassan@annur.example', 'Madrasa2026!'],
-  ['admin', 'mohammednursukyan98@gmail.com', 'Roman@4567'],
+  ['admin', adminCredentials().email, adminCredentials().password],
 ];
 
 /** table?query -> the screen that would break if it errored. */

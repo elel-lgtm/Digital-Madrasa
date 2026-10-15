@@ -22,11 +22,20 @@ function loadEnv(path) {
   return out;
 }
 
+/** The platform admin the checks sign in as, from supabase/.env (never committed). */
+function adminCredentials() {
+  const e = loadEnv('supabase/.env');
+  if (!e.ADMIN_TEST_EMAIL || !e.ADMIN_TEST_PASSWORD) {
+    throw new Error('supabase/.env is missing ADMIN_TEST_EMAIL or ADMIN_TEST_PASSWORD');
+  }
+  return { email: e.ADMIN_TEST_EMAIL, password: e.ADMIN_TEST_PASSWORD };
+}
+
 const client = loadEnv('apps/mobile/.env');
 const url = client.EXPO_PUBLIC_SUPABASE_URL;
 const anon = client.EXPO_PUBLIC_SUPABASE_ANON_KEY;
 
-const ADMIN = { email: 'mohammednursukyan98@gmail.com', password: 'Roman@4567' };
+const ADMIN = adminCredentials();
 const OWNER = { email: 'owner@annur.example', password: 'Madrasa2026!' };
 
 async function signIn({ email, password }) {

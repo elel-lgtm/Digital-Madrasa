@@ -43,6 +43,15 @@ function loadEnv(path) {
   return out;
 }
 
+/** The platform admin the checks sign in as, from supabase/.env (never committed). */
+function adminCredentials() {
+  const e = loadEnv('supabase/.env');
+  if (!e.ADMIN_TEST_EMAIL || !e.ADMIN_TEST_PASSWORD) {
+    throw new Error('supabase/.env is missing ADMIN_TEST_EMAIL or ADMIN_TEST_PASSWORD');
+  }
+  return { email: e.ADMIN_TEST_EMAIL, password: e.ADMIN_TEST_PASSWORD };
+}
+
 const env = loadEnv('apps/mobile/.env');
 const URL_BASE = env.EXPO_PUBLIC_SUPABASE_URL;
 const ANON = env.EXPO_PUBLIC_SUPABASE_ANON_KEY;
@@ -386,7 +395,8 @@ try {
   const owner = await signIn('owner@annur.example');
   const parent = await signIn(fixture.email, fixture.password);
   const student = await signIn('aisha.hassan@annur.example');
-  const admin = await signIn('mohammednursukyan98@gmail.com', 'Roman@4567');
+  const { email: adminEmail, password: adminPassword } = adminCredentials();
+  const admin = await signIn(adminEmail, adminPassword);
 
   console.log('create-student');
   const made = await call('create-student', owner, {

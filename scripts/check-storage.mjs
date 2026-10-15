@@ -30,6 +30,15 @@ function loadEnv(path) {
   return out;
 }
 
+/** The platform admin the checks sign in as, from supabase/.env (never committed). */
+function adminCredentials() {
+  const e = loadEnv('supabase/.env');
+  if (!e.ADMIN_TEST_EMAIL || !e.ADMIN_TEST_PASSWORD) {
+    throw new Error('supabase/.env is missing ADMIN_TEST_EMAIL or ADMIN_TEST_PASSWORD');
+  }
+  return { email: e.ADMIN_TEST_EMAIL, password: e.ADMIN_TEST_PASSWORD };
+}
+
 const env = loadEnv('apps/mobile/.env');
 const adminEnv = loadEnv('supabase/.env');
 const URL_BASE = env.EXPO_PUBLIC_SUPABASE_URL;
@@ -471,7 +480,8 @@ try {
   ck('7. parent, different madrasa -> DENY', farSign.status !== 200, 'HTTP ' + farSign.status);
 
   // 10. the platform admin keeps the reach it already had
-  const adminToken = await signIn('mohammednursukyan98@gmail.com', 'Roman@4567');
+  const { email: adminEmail, password: adminPassword } = adminCredentials();
+  const adminToken = await signIn(adminEmail, adminPassword);
   const adminSign = await signAs(adminToken, up.body.path);
   ck('10. platform admin -> ALLOW (unchanged)', adminSign.status === 200, 'HTTP ' + adminSign.status);
 
