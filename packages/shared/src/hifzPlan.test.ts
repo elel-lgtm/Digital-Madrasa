@@ -46,7 +46,7 @@ describe('daily hifz plan (sabaq, sabqi, manzil)', () => {
       row(78, 'mastered', 20, { nextReviewAt: daysAgo(1) }),
     ];
     const plan = dailyHifzPlan(rows, today, { cycleDays: 30 });
-    expect(plan.manzil[0].surahNo).toBe(78); // overdue
+    expect(plan.manzil[0]?.surahNo).toBe(78); // overdue
   });
 
   it('spreads a large manzil over the cycle rather than all in one day', () => {

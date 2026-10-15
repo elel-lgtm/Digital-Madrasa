@@ -20,7 +20,7 @@ describe('tajweed mistake map', () => {
   });
 
   it('adds rules on the same ayah together, most frequent first', () => {
-    const ikhlas = summariseHeatmap(cells).surahs[1];
+    const ikhlas = summariseHeatmap(cells).surahs[1]!;
     expect(ikhlas.ayahs.map((a) => a.ayahNo)).toEqual([2, 4]);
     expect(ikhlas.ayahs[0]).toMatchObject({ mistakes: 4, rules: [{ rule: 'ghunnah' }, { rule: 'madd' }] });
   });
