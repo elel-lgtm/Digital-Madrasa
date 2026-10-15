@@ -40,6 +40,7 @@ All demo accounts use the password `Madrasa2026!`. The APK talks to the live ser
 | 14 | **Parent ↔ teacher messaging** | Parent, then Fatuma | Messages → *New message* |
 | 15 | **Certificates with QR, ijazah with sanad:** scan the QR with any phone | Owner | A pupil → Award certificate → *Certificate PDF* |
 | 16 | **Impact dashboard** | Owner | More → *Impact* |
+| 16b | **Platform admin console** (all madrasas, impact, audit log) on a laptop | Platform admin | https://https-ilmora-expo-app.expo.app (password: `ADMIN_TEST_PASSWORD` in `supabase/.env`) |
 | 17 | **Security proof:** 21 suites, 145 guarantees | — | `docs/security-report.html` |
 | 18 | **USSD for feature phones** | — | Africa's Talking simulator; see `docs/ussd-setup.md` |
 
