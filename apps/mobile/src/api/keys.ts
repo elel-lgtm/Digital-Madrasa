@@ -25,6 +25,7 @@ export const qk = {
   recitations: (params: Record<string, unknown>) => ['recitations', params] as const,
   recitation: (id: string) => ['recitation', id] as const,
   hifz: (studentId: string) => ['hifz', studentId] as const,
+  achievements: (studentId: string) => ['achievements', studentId] as const,
 
   linkRequests: (status?: string) => ['link-requests', status ?? 'all'] as const,
   children: () => ['children'] as const,

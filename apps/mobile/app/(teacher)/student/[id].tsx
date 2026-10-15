@@ -10,6 +10,7 @@ import { api } from '@/api';
 import { qk } from '@/api/keys';
 import { AiConsentCard } from '@/components/AiFeedback';
 import { CertificateCard } from '@/components/CertificateCard';
+import { AchievementsCard } from '@/components/AchievementsCard';
 import { HifzPlanCard } from '@/components/HifzPlanCard';
 import { SponsorshipCard } from '@/components/SponsorshipCard';
 import {
@@ -219,6 +220,7 @@ export default function StudentDetail() {
         <AiConsentCard studentId={student.id} allowed={student.aiFeedbackConsent} audience="staff" />
 
         <HifzPlanCard studentId={student.id} />
+        <AchievementsCard studentId={student.id} />
 
         <SponsorshipCard key={String(student.sponsorshipOpen)} student={student} />
 

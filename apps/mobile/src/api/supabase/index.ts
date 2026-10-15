@@ -68,6 +68,7 @@ const implemented: Partial<ApiClient> = {
   listAttendance: q.listAttendance,
   listGrades: q.listGrades,
   listHifzProgress: q.listHifzProgress,
+  getAchievements: q.getAchievements,
   listAnnouncements: q.listAnnouncements,
 
   // --------------------------------------------------------------- parent

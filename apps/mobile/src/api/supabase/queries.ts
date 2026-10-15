@@ -1,6 +1,12 @@
 import {
+  activityDays,
   isoDate,
   liveSessionState,
+  streakFrom,
+  summariseAchievements,
+  toDay,
+  type Achievements,
+  type AttendanceStatus,
   summariseHifzRows,
   surahName,
   type Announcement,
@@ -293,6 +299,45 @@ export async function listHifzProgress(studentId?: string): Promise<HifzProgress
   return (data ?? []).map(mapHifz);
 }
 
+/**
+ * The records streaks and badges are worked out from (shared/achievements.ts).
+ * Row Level Security limits each query to pupils the caller may read, so a
+ * parent gets only their own child's and a stranger gets nothing.
+ */
+async function achievementInput(studentId: string) {
+  const [hifz, attendance, recitations] = await Promise.all([
+    listHifzProgress(studentId),
+    supabase
+      .from('attendance')
+      .select('session_date, status')
+      .eq('student_id', studentId)
+      .is('deleted_at', null)
+      .order('session_date', { ascending: false })
+      .limit(1000),
+    supabase
+      .from('recitations')
+      .select('created_at')
+      .eq('student_id', studentId)
+      .is('deleted_at', null)
+      .order('created_at', { ascending: false })
+      .limit(1000),
+  ]);
+  if (attendance.error) fail(attendance.error, 'Could not load attendance.');
+  if (recitations.error) fail(recitations.error, 'Could not load recitations.');
+  return {
+    hifz,
+    attendance: ((attendance.data ?? []) as Row[]).map((r) => ({
+      sessionDate: String(r.session_date),
+      status: r.status as AttendanceStatus,
+    })),
+    recitationDates: ((recitations.data ?? []) as Row[]).map((r) => String(r.created_at)),
+  };
+}
+
+export async function getAchievements(studentId: string): Promise<Achievements> {
+  return summariseAchievements(await achievementInput(studentId), toDay(new Date()));
+}
+
 export async function listAnnouncements(): Promise<Announcement[]> {
   const { data, error } = await supabase
     .from('announcements')
@@ -489,35 +534,6 @@ function summariseHifz(rows: HifzProgress[], currentStreak = 0): HifzSummary {
   return { ...summariseHifzRows(rows, isoDate()), currentStreak };
 }
 
-/**
- * Consecutive days, ending today or yesterday, on which the student was not
- * absent.
- *
- * Yesterday counts as the end of the run so a streak does not appear broken
- * first thing in the morning before that day's class has happened. A gap of
- * more than a day ends it.
- */
-function attendanceStreak(rows: AttendanceRecord[]): number {
-  const present = new Set(
-    rows.filter((r) => r.status !== 'absent').map((r) => r.sessionDate),
-  );
-  if (present.size === 0) return 0;
-
-  const DAY = 24 * 60 * 60 * 1000;
-  const today = new Date().toISOString().slice(0, 10);
-  const yesterday = new Date(Date.now() - DAY).toISOString().slice(0, 10);
-
-  let cursor = present.has(today) ? today : present.has(yesterday) ? yesterday : null;
-  if (!cursor) return 0;
-
-  let streak = 0;
-  while (present.has(cursor)) {
-    streak += 1;
-    cursor = new Date(new Date(cursor).getTime() - DAY).toISOString().slice(0, 10);
-  }
-  return streak;
-}
-
 function attendanceRate(rows: AttendanceRecord[]): number {
   if (rows.length === 0) return 0;
   const attended = rows.filter((r) => r.status === 'present' || r.status === 'late').length;
@@ -622,8 +638,8 @@ export async function getStudentDashboard(): Promise<StudentDashboard> {
   if (!studentRow) throw new ApiError('not_found', 'No student record for this account.');
   const student = mapStudent(studentRow);
 
-  const [hifz, attendance, lessons, assignments, submissions] = await Promise.all([
-    listHifzProgress(student.id),
+  const [activity, attendance, lessons, assignments, submissions] = await Promise.all([
+    achievementInput(student.id),
     recentAttendance(),
     listLessons({ classId: student.classId }),
     // The dashboard renders an assignments list that was fed a hardcoded
@@ -645,6 +661,8 @@ export async function getStudentDashboard(): Promise<StudentDashboard> {
     supabase.from('submissions').select('assignment_id').eq('student_id', student.id),
   ]);
 
+  const hifz = activity.hifz;
+  const streakDays = streakFrom(activityDays(activity), toDay(new Date())).current;
   const now = Date.now();
   const upcoming = [...lessons]
     .filter((l) => l.scheduledFor && new Date(l.scheduledFor).getTime() > now)
@@ -654,7 +672,7 @@ export async function getStudentDashboard(): Promise<StudentDashboard> {
     studentName: student.fullName,
     admissionNo: student.admissionNo,
     className: student.className,
-    streakDays: attendanceStreak(attendance),
+    streakDays,
     revisionDue: hifz.filter((h) => h.status === 'revising').slice(0, 5),
     nextLesson: upcoming[0] ?? null,
     liveLesson: findLive(lessons),
@@ -682,7 +700,7 @@ export async function getStudentDashboard(): Promise<StudentDashboard> {
           studentCount: 0,
         })) as Assignment[];
     })(),
-    hifzSummary: summariseHifz(hifz, attendanceStreak(attendance)),
+    hifzSummary: summariseHifz(hifz, streakDays),
     attendanceRate: attendanceRate(attendance),
     lastRecitation: null,
   };

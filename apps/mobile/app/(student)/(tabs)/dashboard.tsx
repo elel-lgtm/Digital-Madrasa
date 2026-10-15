@@ -24,6 +24,7 @@ import {
 } from '@/components/ui';
 import { useApiError } from '@/hooks/useApiError';
 import { useHijriToday } from '@/hooks/useHijriToday';
+import { AchievementsCard } from '@/components/AchievementsCard';
 import { HifzPlanCard } from '@/components/HifzPlanCard';
 import { useRequiredSession } from '@/hooks/useSession';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -141,6 +142,8 @@ export default function StudentDashboard() {
         </Card>
 
         {session.student?.id ? <HifzPlanCard studentId={session.student.id} /> : null}
+
+        {session.student?.id ? <AchievementsCard studentId={session.student.id} celebrate /> : null}
 
         <View style={{ flexDirection: 'row', gap: theme.spacing.md }}>
           <StatTile

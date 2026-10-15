@@ -1,4 +1,5 @@
 import type {
+  Achievements,
   AdminAuditEntry,
   AdminMadrasa,
   AdminOverview,
@@ -315,6 +316,8 @@ export interface ApiClient {
   saveTeacherOverride(input: TeacherOverrideInput): Promise<Recitation>;
 
   listHifzProgress(studentId: string): Promise<HifzProgress[]>;
+  /** Streaks and badges, worked out from the pupil's records (shared/achievements.ts). */
+  getAchievements(studentId: string): Promise<Achievements>;
   /** Staff record where a student has reached in one surah. */
   upsertHifzProgress(input: UpdateHifzProgressInput): Promise<HifzProgress>;
 

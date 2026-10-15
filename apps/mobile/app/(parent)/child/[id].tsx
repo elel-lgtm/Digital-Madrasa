@@ -8,6 +8,7 @@ import { api } from '@/api';
 import { qk } from '@/api/keys';
 import { AiConsentCard, recitationScore } from '@/components/AiFeedback';
 import { CertificateCard } from '@/components/CertificateCard';
+import { AchievementsCard } from '@/components/AchievementsCard';
 import { HifzPlanCard } from '@/components/HifzPlanCard';
 import { VoiceReportCard } from '@/components/VoiceReportCard';
 import { ScoreRing } from '@/components/TajweedFeedback';
@@ -192,6 +193,7 @@ export default function ChildDetail() {
             </View>
 
             <HifzPlanCard studentId={data.student.id} />
+            <AchievementsCard studentId={data.student.id} />
 
             {data.certificates.length > 0 ? (
               <View style={{ gap: theme.spacing.md }}>

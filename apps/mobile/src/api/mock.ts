@@ -1,5 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
+  activityDays,
+  streakFrom,
+  summariseAchievements,
+  toDay,
   MEMORISED_STATUSES,
   getSurah,
   juzForAyah,
@@ -364,29 +368,19 @@ function hifzSummaryFor(studentId: string): HifzSummary {
   return { ...summariseHifzRows(rows, isoDate()), currentStreak: streakFor(studentId) };
 }
 
-/** Consecutive days ending today on which the student recited or attended. */
-function streakFor(studentId: string): number {
+/** The records streaks and badges are worked out from (same as the Supabase client). */
+function achievementInputFor(studentId: string) {
   const data = requireDb();
-  const days = new Set<string>();
-  data.recitations
-    .filter((r) => r.studentId === studentId)
-    .forEach((r) => days.add(r.createdAt.slice(0, 10)));
-  data.attendance
-    .filter((a) => a.studentId === studentId && a.status !== 'absent')
-    .forEach((a) => days.add(a.sessionDate));
+  return {
+    hifz: data.hifz.filter((h) => h.studentId === studentId),
+    recitationDates: data.recitations.filter((r) => r.studentId === studentId).map((r) => r.createdAt),
+    attendance: data.attendance.filter((a) => a.studentId === studentId),
+  };
+}
 
-  let streak = 0;
-  const cursor = new Date();
-  for (let i = 0; i < 120; i += 1) {
-    const key = isoDate(cursor);
-    if (days.has(key)) {
-      streak += 1;
-    } else if (i > 0) {
-      break;
-    }
-    cursor.setDate(cursor.getDate() - 1);
-  }
-  return streak;
+/** Days in a row with activity (shared/achievements.ts). */
+function streakFor(studentId: string): number {
+  return streakFrom(activityDays(achievementInputFor(studentId)), toDay(new Date())).current;
 }
 
 function attendanceRateFor(studentId: string): number {
@@ -1540,6 +1534,13 @@ export const mockApi: ApiClient = {
     await delay();
     assertCanSeeStudent(studentId);
     return requireDb().hifz.filter((h) => h.studentId === studentId);
+  },
+
+  async getAchievements(studentId) {
+    await bootstrap();
+    await delay();
+    assertCanSeeStudent(studentId);
+    return summariseAchievements(achievementInputFor(studentId), toDay(new Date()));
   },
 
   async upsertHifzProgress(input) {

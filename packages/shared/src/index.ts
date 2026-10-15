@@ -7,6 +7,7 @@ export * from './meetings';
 export * from './billing';
 export * from './hijri';
 export * from './hifzPlan';
+export * from './achievements';
 export * from './heatmap';
 export * from './insights';
 export * from './voiceReport';
