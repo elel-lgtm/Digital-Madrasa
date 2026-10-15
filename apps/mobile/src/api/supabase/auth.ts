@@ -93,11 +93,11 @@ export async function buildSession(userId: string): Promise<Session> {
     children = (data ?? []).map(mapStudent);
   }
 
-  const { data: flags } = await supabase
-    .from('feature_flags')
-    .select('*')
-    .eq('madrasa_id', profile.madrasaId ?? '')
-    .maybeSingle();
+  // The platform admin belongs to no madrasa, so there are no flags to read
+  // (an empty id is not a uuid and the request would be refused).
+  const { data: flags } = profile.madrasaId
+    ? await supabase.from('feature_flags').select('*').eq('madrasa_id', profile.madrasaId).maybeSingle()
+    : { data: null };
 
   return {
     user: profile,
