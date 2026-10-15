@@ -25,8 +25,8 @@ module.exports = function ch7() {
       + 'Vitest for the logic that does not need a server: input validation, QR token signing, '
       + 'M-Pesa and card payment handling, notification rules, memorisation totals, recitation '
       + 'assessment, the AI assistant’s check on figures, the hifz plan, master-reciter timing, '
-      + 'video links and the offline attendance queue. All 172 unit tests in 22 test files passed '
-      + 'when run on 15 October 2026. Table 7.1 shows representative cases.'),
+      + 'video links, the offline attendance queue, and streaks and badges. All 185 unit tests in '
+      + '23 test files passed when run on 16 October 2026. Table 7.1 shows representative cases.'),
     ...table('7.1', 'Unit Testing', ['Test Case ID', 'Module', 'Test Case Description', 'Expected Result', 'Actual Result', 'Status'], [
       ['UT01', 'Validation', 'A payment request that includes an amount', 'Amount removed; server derives it', 'As expected', 'Pass'],
       ['UT02', 'QR tokens', 'Token from an old window, or forged', 'Token rejected', 'As expected', 'Pass'],
@@ -92,7 +92,7 @@ module.exports = function ch7() {
       + 'fixed; push notifications are still to be verified once Firebase is configured. In-app '
       + 'video was not tested because it is switched off.'),
     ...table('7.4', 'Testing Results', ['Testing Type', 'Total Test Cases', 'Passed', 'Failed', 'Success Rate'], [
-      ['Unit Testing', '172', '172', '0', '100%'],
+      ['Unit Testing', '185', '185', '0', '100%'],
       ['Functional Testing', '78', '78', '0', '100%'],
       ['Database Security Guarantees', '145', '145', '0', '100%'],
       ['UI Testing', '31', '30', '0', '100% of tests run (1 pending)'],
@@ -113,6 +113,8 @@ module.exports = function ch7() {
       + 'users install it by allowing installation from unknown sources.'),
     bullet('WhatsApp distribution: the APK is shared as a document on WhatsApp, which madrasa '
       + 'owners, teachers and parents already use.'),
+    bullet('Web: the same codebase is published on Expo’s free hosting at '
+      + 'https://https-ilmora-expo-app.expo.app, where the administrator’s console runs.'),
     h3('7.4.2 Future Deployment Plans'),
     bullet('Google Play Store: publishing the app will make installation easier and more trusted, '
       + 'and provide automatic updates.'),
@@ -121,16 +123,13 @@ module.exports = function ch7() {
       + 'providers, and Firebase for push notifications, with real credentials.'),
     bullet('In-app video: switching on the built in-app video for live lessons once a funded '
       + 'video provider account is available.'),
-    bullet('Web-based dashboard: hosting the platform administrator’s web console so that the '
-      + 'madrasas on the platform can be managed from a browser.'),
 
     h2('7.5 Summary'),
     p('This chapter presented the testing and deployment of the Digital Madrasa Mobile '
       + 'Application (ILMORA). Unit, functional, database security and user interface testing showed that the core features, including sign-in, admission, '
       + 'attendance, invoicing, M-Pesa and card payment, AI feedback with consent and parent access, '
       + 'work as required on the installed app, and that users cannot reach records outside their '
-      + 'madrasa or role. The backend is deployed on Supabase, the app is shared as an APK, and '
-      + 'future plans include the Google Play Store, live payment and messaging services, and a '
-      + 'hosted web dashboard.'),
+      + 'madrasa or role. The backend runs on Supabase, the app is shared as an APK and a website, '
+      + 'and future plans include the Play Store, live payments and in-app video.'),
   ];
 };

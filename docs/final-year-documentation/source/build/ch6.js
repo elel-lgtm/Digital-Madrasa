@@ -85,12 +85,13 @@ module.exports = function ch6() {
     p('The student’s dashboard (Figure 6.7) shows the passages due for revision with a button to '
       + 'start a recitation, the juz memorised, attendance, overall progress and assignments.'),
     ...figure('mobile/student.png', '6.7', 'Student Dashboard', PHONE),
-    p('Recitation and Live Learning Interfaces', { bold: true }),
+    p('Recitation, Live Learning and Badge Interfaces', { bold: true }),
     p('Figure 6.8 shows the learning features. A teacher reviewing a recitation can play the '
       + 'pupil and a master reciter ayah by ayah; in the live reading room pupils raise their hands, the teacher chooses a reader, '
-      + 'the ayah is highlighted on every phone and the teacher marks the reading; and the video '
-      + 'library plays the Quran videos the teacher has chosen for the class.'),
-    ...figure('mobile/learning.png', '6.8', 'Recitation and Live Learning Interfaces', 6.2),
+      + 'the ayah is highlighted on every phone and the teacher marks the reading; the video '
+      + 'library plays the Quran videos the teacher has chosen for the class; and badges, worked '
+      + 'out from the pupil’s own records, encourage the pupil.'),
+    ...figure('mobile/learning.png', '6.8', 'Recitation, Live Learning and Badge Interfaces', 6.2),
     p('Payment, Messaging and Offline Interfaces', { bold: true }),
     p('Figure 6.9 shows the parent paying a fee by M-Pesa, the receipt with its M-Pesa '
       + 'transaction code, a conversation between a parent and a teacher, and the attendance '
@@ -141,8 +142,7 @@ module.exports = function ch6() {
       + '(ILMORA): Visual Studio Code as the '
       + 'development environment, React Native with Expo for the front end, and Supabase for the '
       + 'database, authentication, storage and server functions. It presented the sign-up screen and '
-      + 'the dashboards for owners, teachers, parents and students together with the learning, payment '
-      + 'and messaging features, and discussed the challenges of '
+      + 'the main interfaces, and discussed the challenges of '
       + 'technical complexity, user adoption, limited resources and continuous maintenance, '
       + 'together with how each was addressed.'),
   ];

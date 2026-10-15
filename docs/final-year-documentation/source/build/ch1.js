@@ -100,12 +100,13 @@ module.exports = function ch1() {
       + 'manual and QR-code attendance; parent–child linking approved by the madrasa; memorisation '
       + 'tracking, assignments, grades and certificates; recitation recording with private audio '
       + 'storage, AI feedback given only with a parent’s consent, and teacher review; comparison '
-      + 'with a master reciter, recite-along practice, a daily hifz plan and a class mistake map; '
+      + 'with a master reciter, recite-along practice, a daily hifz plan, hifz streaks and badges and a class mistake map; '
       + 'a live reading room with scheduled sessions on Google Meet or Zoom; a library of '
       + 'teacher-chosen Quran videos; fee invoices paid by M-Pesa or card with receipts; '
       + 'sponsorship of pupils; announcements, parent–teacher messaging, notifications and spoken '
       + 'progress reports; attendance that can be marked offline; USSD access for basic phones; an '
-      + 'impact dashboard; and an interface in English, Kiswahili, Somali and Arabic. Curricula '
+      + 'impact dashboard; a web console for the platform administrator; and an interface in '
+      + 'English, Kiswahili, Somali and Arabic. Curricula '
       + 'such as Tafsir and Fiqh, and the training of a dedicated tajweed recognition model, are '
       + 'outside the scope.'),
 

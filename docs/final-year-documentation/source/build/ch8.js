@@ -31,12 +31,13 @@ module.exports = function ch8() {
       + 'review with AI feedback, certificates, invoicing, M-Pesa and card payment, and '
       + 'notifications were implemented against the live backend. The application, branded '
       + 'ILMORA, also offers master-reciter comparison, recite-along practice, a daily hifz plan, '
+      + 'hifz streaks and badges, a web console for the platform administrator, '
       + 'a live reading room with scheduled Meet or Zoom sessions, a teacher-chosen Quran video '
       + 'library, parent–teacher messaging, pupil sponsorship, spoken reports, USSD access, offline '
       + 'attendance and an impact dashboard.'),
     p('Objective 4', { bold: true, spacing: { after: 60 } }),
     p('Unit, functional and user interface testing confirmed that the core features work as '
-      + 'required: all 172 unit tests and 78 functional test cases passed, 21 database suites '
+      + 'required: all 185 unit tests and 78 functional test cases passed, 21 database suites '
       + 'proved 145 security guarantees, and the installed app passed 30 of 31 interface checks. '
       + 'M-Pesa is connected to Safaricom’s Daraja sandbox. The tests showed that users cannot reach records outside '
       + 'their madrasa or role. A usability study with real users, push notifications and testing '
@@ -50,9 +51,10 @@ module.exports = function ch8() {
       + 'installation easier and more trusted, provide automatic updates and allow feedback to be '
       + 'collected from users.'),
     h3('8.3.2 Development of Web-Based Admin Dashboard'),
-    p('The platform administrator’s web console should be hosted and extended with reports, so '
-      + 'that the madrasas on the platform, their subscriptions and their activity can be monitored '
-      + 'from a browser.'),
+    p('The platform administrator’s web console is now hosted and shows every madrasa, the '
+      + 'platform’s impact and an audit log. It should be extended with downloadable reports and '
+      + 'subscription management, so that the madrasas on the platform, their subscriptions and '
+      + 'their activity can be monitored and acted on from a browser.'),
     h3('8.3.3 Integration of Push Notifications and Messaging'),
     p('Push, e-mail and SMS notifications and parent–teacher messaging are built. Configuring a '
       + 'Firebase project for push, connecting the real e-mail and SMS providers, a registered '
@@ -96,7 +98,7 @@ module.exports = function ch8() {
     p('This chapter discussed how the Digital Madrasa Mobile Application (ILMORA) addressed the challenges of madrasa '
       + 'administration and Quran learning in Kenya. The system brings records, attendance, '
       + 'memorisation, recitation review, parent access and fee payment into one secure platform. '
-      + 'Future work includes publishing on the Google Play Store, a hosted web dashboard, live '
+      + 'Future work includes publishing on the Google Play Store, reports in the web console, live '
       + 'notifications and payments, in-app video, smart revision alerts and fuller offline '
       + 'support, while the '
       + 'recommendations emphasise user engagement, data security, regular updates, institutional '
