@@ -122,7 +122,7 @@ A few parts are still in test mode, and I'd rather be clear about them:
 
 ## How this was built
 
-I designed ILMORA, gathered the requirements from madrasa owners, teachers and parents, made the product and architecture decisions, and tested it on devices and against the live backend. I used Claude (Anthropic) as an AI coding assistant during development, which is why it appears as a co-author on many commits. Every change was reviewed, run and checked by me before it was kept.
+I designed ILMORA, gathered the requirements from madrasa owners, teachers and parents, made the product and architecture decisions, and tested it on devices and against the live backend. I used Claude (Anthropic) as an AI coding assistant during development, which is why it appears as a co-author on many commits.
 
 ## About me
 
