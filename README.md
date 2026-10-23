@@ -131,7 +131,7 @@ In **mock** mode the app runs entirely on built-in demo data and needs no backen
 ## Documentation
 
 - [Demo run sheet](docs/demo-run-sheet.md): the order to present every feature, with demo accounts
-- [How it works, A to Z](docs/ILMORA%20-%20How%20It%20Works%2C%20A%20to%20Z.docx): a step-by-step guide for every role
+- [How it works, A to Z](docs/ilmora-how-it-works.docx): a step-by-step guide for every role
 - [Security proof](docs/security-report.html): the latest run of the SQL suites
 - [USSD setup](docs/ussd-setup.md)
 - [Final-year project report](docs/final-year-documentation/Digital_Madrasa_Final_Project_Report.pdf)

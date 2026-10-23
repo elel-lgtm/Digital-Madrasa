@@ -1,41 +1,43 @@
-# Digital Madrasa — Final-Year Project Report
+# Final-year project report
+
+**Digital Madrasa: An Integrated Application That Will Manage Madrasas in Kenya**, by Mohammednur Sukyan (BSCS/2024/52324), School of Business and Technology, Umma University. Supervisor: Mr. Patrick Muchiri Alianda.
 
 | File | What it is |
-|---|---|
-| `Digital_Madrasa_Project_Documentation.pdf` | The final report (72 pages, portrait, US Letter), structured one-for-one on the table of contents of the reference report "Livestock Market and VetCare" |
-| `Digital_Madrasa_Project_Documentation.docx` | Editable version of the same report (open in Word; press F9 after edits to refresh the contents and lists) |
-| `figures/diagrams/` | Architecture, class, use case, sequence, activity, DFD level 0/1, context, workflow, schema, wireframes, Agile, conceptual framework |
-| `figures/erd/` | Complete ERD and seven module ERDs, generated from the live schema |
-| `figures/screenshots/` | Screenshot panels captured from the running app (Android emulator, and the web build for the final screens) |
-| `figures/front/` | University logo for the cover |
-| `figures/charts/` | Charts built from measured data only (database, test runs, perf:api, perf:db, check:i18n, git history) |
-| `placeholders/PLACEHOLDERS_TO_COMPLETE.md` | Every piece of evidence you still need to insert |
-| `source/` | Scripts that generate the report and figures |
-| `figures/mobile/` | Phone screenshots used in Chapter 6 (sign-up, the four dashboards and two feature panels) |
-| `previous/` | Earlier versions (v2; v3 = the 170-page version) |
+| --- | --- |
+| [`Digital_Madrasa_Final_Project_Report.pdf`](Digital_Madrasa_Final_Project_Report.pdf) | **The submitted report**: 99 pages, eight chapters, 41 figures, 15 tables |
+| [`Digital_Madrasa_Final_Project_Report.docx`](Digital_Madrasa_Final_Project_Report.docx) | Editable Word version of the same report |
+| [`FINAL_REPORT_QA.md`](FINAL_REPORT_QA.md) | Quality-assurance record: where each section came from, every wording change, and the automated checks |
+| `figures/` | Diagrams, ERDs, charts and phone screenshots used in the report |
+| `source/` | The scripts that generate the report and its figures |
+| `previous/` | Earlier drafts, kept for reference |
+
+## Chapters
+
+1. Introduction
+2. Literature Review
+3. System Development Methodology
+4. Requirements Gathering and Analysis
+5. System Design
+6. System Development and Implementation
+7. Testing and Deployment
+8. Discussions, Conclusions, Future Works and Recommendations
+
+Appendices: questionnaires and interview guide, work plan, budget, repository, plagiarism report.
 
 ## Rebuilding
 
-The report is generated rather than hand-formatted, so the diagrams and entity tables cannot drift from the database.
+The report is generated rather than hand-formatted, so its figures and figures-of-fact stay in step with the system.
 
 ```sh
-# 1. figures (Python 3 with matplotlib, Pillow, pymupdf; Node with docx and @hpcc-js/wasm-graphviz)
-python source/figures-src/figs5.py <out>            # Agile, Gantt
-python source/figures-src/figs7.py figures/diagrams figures/charts   # architecture, M-Pesa sequence, notification flow, Chapter 7/8 charts
-python source/figures-src/compose3.py <captures dir> figures/screenshots   # final-iteration panels (raw captures are not kept; the panels are)
-node   source/build/erd.mjs source/figures-src/schema2.json <out> && python source/figures-src/render.py <out> <out>
-node   source/build/flows.mjs <out>                  # context, DFDs, workflow
+# figures that reflect the finished system (component, deployment, table share, unit tests)
+python source/figures-src/figs_final.py figures/final <vitest-json>
 
-# 2. the Word document
-NODE_PATH=<dir with node_modules/docx> FIGDIR=figures SCHEMA=source/figures-src/schema2.json OUT=Digital_Madrasa_Project_Documentation.docx node source/build/main.js
-
-# 3. the PDF (Windows + Microsoft Word; updates the contents, figure and table lists)
-powershell -File source/figures-src/topdf.ps1 -Docx <full path to .docx> -Pdf <full path to .pdf>
-python source/figures-src/setmeta.py Digital_Madrasa_Project_Documentation.pdf
-python source/figures-src/qa.py Digital_Madrasa_Project_Documentation.pdf   # automated layout checks
+# the report: content assembled from the two source documents, rendered in the academic format
+cd source/final
+python manuscript.py            # writes final.json and edits.json
+python render.py final.json Digital_Madrasa_Final_Project_Report.docx
+powershell -File final-pdf.ps1 -Docx <full path to .docx> -Pdf <full path to .pdf>
+python qa_final.py Digital_Madrasa_Final_Project_Report.docx Digital_Madrasa_Final_Project_Report.pdf
 ```
 
-The simplest way to insert your own evidence is to edit the `.docx` directly in Word (replace each dashed yellow box), then export to PDF from Word.
-
-
-Personal details are left as placeholders (`[STUDENT FULL NAME]`, `[REGISTRATION NUMBER]`, `[SUPERVISOR NAME]`, `[MONTH], 2026`); see `placeholders/PLACEHOLDERS_TO_COMPLETE.md`.
+Requires Python 3 with `python-docx`, Pillow, matplotlib and pymupdf, and Microsoft Word on Windows for the PDF export.
