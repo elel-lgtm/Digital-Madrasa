@@ -120,6 +120,10 @@ A few parts are still in test mode, and I'd rather be clear about them:
 - [USSD setup](docs/ussd-setup.md)
 - [Final-year project report](docs/final-year-documentation/Digital_Madrasa_Final_Project_Report.pdf)
 
+## How this was built
+
+I designed ILMORA, gathered the requirements from madrasa owners, teachers and parents, made the product and architecture decisions, and tested it on devices and against the live backend. I used Claude (Anthropic) as an AI coding assistant during development, which is why it appears as a co-author on many commits. Every change was reviewed, run and checked by me before it was kept.
+
 ## About me
 
 I'm **Mohammednur Sukyan**, a Computer Science student at Umma University in Kenya, and this is my final-year project. If you have feedback or questions, feel free to open an issue.

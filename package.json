@@ -79,5 +79,12 @@
   },
   "devDependencies": {
     "vitest": "^4.1.11"
+  },
+  "overrides": {
+    "postcss": "^8.5.28",
+    "vite": "^8.3.5",
+    "@expo/metro-config": {
+      "postcss": "^8.5.28"
+    }
   }
 }
