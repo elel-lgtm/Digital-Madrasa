@@ -7,12 +7,11 @@
 </p>
 
 <p align="center">
-  <b>The Digital Madrasa Mobile Application.</b><br>
-  One platform to run a madrasa and support Quran learning, for owners, teachers, parents and pupils in Kenya.
+  A mobile app that helps madrasas in Kenya run their school and support their pupils' Quran learning.
 </p>
 
 <p align="center">
-  <a href="https://https-ilmora-expo-app.expo.app"><b>Live web build</b></a>
+  <a href="https://https-ilmora-expo-app.expo.app"><b>Try the web version</b></a>
   &nbsp;·&nbsp;
   <a href="docs/demo-run-sheet.md"><b>Demo guide</b></a>
   &nbsp;·&nbsp;
@@ -27,23 +26,27 @@
   <img src="docs/final-year-documentation/figures/mobile/signup.png" width="19%" alt="Parent sign-up">
 </p>
 
-## Why it exists
+## The story behind it
 
-Most madrasas and duksi in Kenya keep attendance, memorisation and fees in exercise books, or not at all. Parents rarely know how their child is doing, and fee payments are not linked to invoices. Quran apps serve individual learners, while school management systems have no Quran-specific features. ILMORA combines both, and keeps every madrasa's records private from every other.
+In many madrasas and duksi in Kenya, attendance, memorisation and fees are still written in exercise books, or not written down at all. The owners, teachers and parents I spoke to for this project described the same problems. When a book is lost, a child's history goes with it. Parents usually only find out how their child is doing when they come to pick them up.
 
-## What it does
+There are good Quran apps for individual learners, and there are school management systems, but nothing that does both for a madrasa. So I built ILMORA (the brand name of my final-year project, the *Digital Madrasa Mobile Application*). It's one app where the owner, the teachers, the parents and the pupils each see what they need, and where every madrasa's records stay private.
 
-| Role | Highlights |
-| --- | --- |
-| **Owner** | Registers the madrasa, admits pupils (admission numbers are issued by the database), manages classes and staff, issues numbered invoices, approves parent links, sees an impact dashboard |
-| **Teacher** | Manual and QR attendance (a code that changes every 30 seconds; registers marked offline sync later), surah-by-surah memorisation, recitation review with a master-reciter comparison, certificates and ijazah with QR verification, a live reading room, a video library |
-| **Parent** | Links to a child by admission number, follows attendance and progress, pays fees by M-Pesa, messages the child's teachers, hears a spoken progress report, can sponsor a pupil, or uses USSD on a basic phone |
-| **Pupil** | Daily hifz plan (Sabaq, Sabqi, Manzil), recitation recording with AI tajweed feedback when a parent consents, recite-along practice, streaks and badges |
-| **Platform admin** | Web console: every madrasa, impact across the platform, and an audit log |
+## What each person can do
 
-Every screen is available in English, Kiswahili, Somali and Arabic (right to left).
+**Madrasa owners** register their madrasa, admit pupils (each gets an admission number automatically), set up classes and teachers, send fee invoices, approve parents, and see how the madrasa is doing on an impact dashboard.
 
-## Architecture
+**Teachers** take attendance by hand or with a QR code that changes every 30 seconds, and the register still saves when the internet is down. They record memorisation surah by surah, listen to pupils' recordings and compare them with a master reciter, award certificates and ijazah, and run live reading sessions where the whole class follows the same ayah.
+
+**Parents** link to their child using the admission number, then follow attendance, progress and fees. They can pay by M-Pesa, message their child's teacher, listen to a spoken progress report in their own language, and even sponsor another pupil's fees. Parents without a smartphone can check on their children through a USSD menu.
+
+**Pupils** see a daily hifz plan (Sabaq, Sabqi and Manzil), record their recitation for the teacher, practise with recite-along, and earn streaks and badges. The AI only gives tajweed feedback if a parent has agreed to it.
+
+**The platform administrator** uses a web console to look after every madrasa on the system.
+
+The whole app works in English, Kiswahili, Somali and Arabic.
+
+## How it's put together
 
 ```mermaid
 flowchart LR
@@ -67,77 +70,56 @@ flowchart LR
     EF --> MS[E-mail, SMS, push]
 ```
 
-- **The database enforces every rule.** Row Level Security is enabled and forced on all 42 tables (89 policies), so a modified client still cannot read another madrasa's records or act outside its role.
-- **Privileged work runs on the server.** Payments, invoicing, AI feedback, notifications and USSD run in Edge Functions; secret keys never ship in the app.
-- **Money is derived, never sent.** The app names the invoices to pay; the server computes the amount, and a payment settles exactly once even if Safaricom's callback arrives twice.
+The app is written in TypeScript with React Native and Expo, and the backend runs on Supabase. A few decisions shaped how I built it:
 
-## Tech stack
+- **The database protects the data, not the app.** Every one of the 42 tables has Row Level Security, so even a tampered app can't read another madrasa's records or do something its role isn't allowed to.
+- **Anything sensitive happens on the server.** Payments, invoices, AI feedback, notifications and USSD run in server functions, and no secret key is ever stored in the app.
+- **The phone never decides how much to pay.** The server works out the amount from the invoices, and each payment is only counted once, even if Safaricom confirms it twice.
 
-| Layer | Tools |
-| --- | --- |
-| App | TypeScript, React Native, Expo SDK 54, Expo Router, TanStack Query, Zod, i18next |
-| Backend | Supabase: PostgreSQL with Row Level Security, Auth, Storage, Realtime, Edge Functions (Deno) |
-| Integrations | Safaricom Daraja (M-Pesa STK push), Google Gemini, Paystack, Africa's Talking (USSD), YouTube embeds |
-| Quality | Vitest, SQL verification suites, live check scripts, GitHub Actions |
-| Delivery | EAS Build (Android APK), EAS Hosting (web), Supabase CLI |
+**Tools I used:** TypeScript, React Native, Expo, Expo Router, TanStack Query, Zod, i18next, Supabase (PostgreSQL, Auth, Storage, Realtime, Edge Functions), Safaricom Daraja, Google Gemini, Africa's Talking, Vitest, GitHub Actions, and EAS for building and hosting.
 
-## Repository layout
+## Running it on your machine
 
-```text
-apps/mobile/          Expo app: routes per role under app/, components, API client (mock and Supabase)
-packages/shared/      Types, validation schemas and pure logic shared by the app and the server
-services/ai-gateway/  Optional self-hosted AI gateway
-supabase/migrations/  41 numbered migrations: schema, policies, functions, triggers
-supabase/functions/   18 Edge Functions (payments, invoices, QR attendance, AI, notifications, USSD...)
-supabase/tests/       SQL suites that prove the security guarantees
-scripts/              Migration runner, live checks, security report, backups
-docs/                 Demo guide, security report, final-year report and guides
-```
-
-## Getting started
-
-Requires Node.js 20.19.4 or newer.
+You'll need Node.js 20.19.4 or newer.
 
 ```bash
 npm install
-cp apps/mobile/.env.example apps/mobile/.env   # EXPO_PUBLIC_API_MODE=mock runs on demo data
-npm run mobile                                  # Expo dev server; scan with Expo Go or press w for web
+cp apps/mobile/.env.example apps/mobile/.env
+npm run mobile
 ```
 
-In **mock** mode the app runs entirely on built-in demo data and needs no backend. To use a real backend, set `EXPO_PUBLIC_API_MODE=supabase` with your project's URL and anon key, copy `supabase/.env.example` to `supabase/.env` for the scripts, and apply the schema with `npm run db:migrate`. Server secrets (M-Pesa, Gemini, messaging) belong in Supabase Edge Function secrets, never in the app's `.env`.
+That starts the app in demo mode, so it runs on sample data and you don't need a backend. Scan the QR code with Expo Go, or press `w` to open it in your browser.
 
-## Quality and security
+To connect it to a real Supabase project instead, set `EXPO_PUBLIC_API_MODE=supabase` in the `.env` file with your project's URL and anon key, copy `supabase/.env.example` to `supabase/.env`, and run `npm run db:migrate`. Keep the server keys (M-Pesa, Gemini, messaging) in Supabase's function secrets, never in the app's `.env`.
 
-| Command | What it proves |
-| --- | --- |
-| `npm test` | 185 unit tests (validation, payments, QR tokens, hifz plan, badges, offline queue...) |
-| `npm run typecheck` | Strict TypeScript across every workspace |
-| `npm run security:report` | Runs 21 SQL suites against the database and writes a report of the 145 guarantees they prove |
-| `npm run check:screens` | Every screen's queries succeed for every role on the live backend |
-| `npm run check:i18n` | All four languages are complete |
-| `npm run secret-scan` | No server secret has leaked into the app |
+## How I tested it
 
-## Status
+I wanted to be sure the app is not just working, but safe. These are the checks I run:
 
-| Area | State |
-| --- | --- |
-| Accounts, attendance, memorisation, recitations, fees, messaging, reading room, videos, badges, USSD | Working on the live backend |
-| M-Pesa | Safaricom Daraja **sandbox**: a real PIN prompt with test money; production needs a registered Paybill or Till |
-| Cards, e-mail, SMS | Test providers until live accounts are configured |
-| AI tajweed feedback | Provisional and clearly labelled; the teacher's review is final, and nothing is assessed without a parent's consent |
-| In-app video | Built but switched off; live lessons use Google Meet or Zoom links |
-| Push notifications | Built; needs a Firebase project to deliver |
+- `npm test` runs 185 unit tests, covering things like payments, QR codes, the hifz plan, badges and offline saving.
+- `npm run security:report` runs 21 database test suites that try to break the security rules, 145 checks in all, and writes the results to [a report](docs/security-report.html).
+- `npm run check:screens` signs in as every role and makes sure each screen loads on the live backend.
+- `npm run typecheck`, `npm run check:i18n` and `npm run secret-scan` check the types, the four translations, and that no secret has slipped into the app.
 
-## Documentation
+## Where things stand
 
-- [Demo run sheet](docs/demo-run-sheet.md): the order to present every feature, with demo accounts
-- [How it works, A to Z](docs/ilmora-how-it-works.docx): a step-by-step guide for every role
-- [Security proof](docs/security-report.html): the latest run of the SQL suites
+Most of the app works on the live backend: accounts, attendance, memorisation, recitations, fees, messaging, the reading room, videos, badges and USSD.
+
+A few parts are still in test mode, and I'd rather be clear about them:
+
+- **M-Pesa** runs on Safaricom's sandbox. You get a real PIN prompt, but with test money. Going live needs a registered Paybill or Till number.
+- **Card payments, e-mail and SMS** use test providers for now.
+- **AI tajweed feedback** is a helper, not a judge. The teacher's review always has the final say.
+- **Video inside the app** is built but switched off, so live lessons use Google Meet or Zoom links.
+- **Push notifications** are built, but need a Firebase project before they can be delivered.
+
+## More to read
+
+- [Demo guide](docs/demo-run-sheet.md): how I present every feature, with the demo accounts
+- [How it works, A to Z](docs/ilmora-how-it-works.docx): a step-by-step guide for each kind of user
 - [USSD setup](docs/ussd-setup.md)
 - [Final-year project report](docs/final-year-documentation/Digital_Madrasa_Final_Project_Report.pdf)
 
-## Author
+## About me
 
-Built by **Mohammednur Sukyan** as a final-year project for the BSc in Computer Science at Umma University, Kenya.
-
-No open-source licence has been applied to this repository yet.
+I'm **Mohammednur Sukyan**, a Computer Science student at Umma University in Kenya, and this is my final-year project. If you have feedback or questions, feel free to open an issue.
